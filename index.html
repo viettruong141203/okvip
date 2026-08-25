@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bảo Mật | Đăng nhập & Đăng ký</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        
+        <!-- Form Đăng Nhập -->
+        <div id="login-form" class="form-section active">
+            <h2>Đăng Nhập</h2>
+            <div class="input-group">
+                <input type="email" id="login-email" placeholder="Nhập E-mail của bạn" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
+            </div>
+            <button id="login-btn" onclick="login()">Đăng Nhập</button>
+            <p class="switch-text">Chưa có tài khoản? <span onclick="switchForm()">Đăng ký ngay</span></p>
+            <p id="login-msg" class="msg"></p>
+        </div>
+
+        <!-- Form Đăng Ký -->
+        <div id="register-form" class="form-section">
+            <h2>Đăng Ký</h2>
+            <div class="input-group">
+                <input type="email" id="reg-email" placeholder="Nhập E-mail của bạn" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="reg-password" placeholder="Tạo mật khẩu" required>
+            </div>
+            <button id="reg-btn" onclick="register()">Đăng Ký</button>
+            <p class="switch-text">Đã có tài khoản? <span onclick="switchForm()">Đăng nhập</span></p>
+            <p id="reg-msg" class="msg"></p>
+        </div>
+
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
