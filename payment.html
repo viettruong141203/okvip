@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        <h2>Tạo Giao Dịch</h2>
+        
+        <div style="text-align: center; margin-bottom: 25px; color: #aaa; font-size: 14px;">
+            Tài khoản: <b id="display-email" style="color: #fff;">Đang tải...</b>
+        </div>
+
+        <div class="input-group">
+            <input type="number" id="pay-amount" placeholder="Nhập số tiền (VNĐ)" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="pay-content" placeholder="Nội dung / Lời nhắn" required>
+        </div>
+        
+        <button id="pay-btn" onclick="submitPayment()">Xác Nhận Tạo Đơn</button>
+        <p id="pay-msg" class="msg"></p>
+        
+        <p class="switch-text" style="margin-top: 25px;">
+            <span onclick="logout()">Đăng xuất hệ thống</span>
+        </p>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
+
+        const userEmail = localStorage.getItem("userEmail");
+        const userId = localStorage.getItem("userId");
+
+        if (!userEmail || !userId) {
+            window.location.href = "index.html"; 
+        } else {
+            document.getElementById("display-email").innerText = userEmail;
+        }
+
+        async function submitPayment() {
+            const amount = document.getElementById("pay-amount").value.trim();
+            const content = document.getElementById("pay-content").value.trim();
+            const btn = document.getElementById("pay-btn");
+            const msgBox = document.getElementById("pay-msg");
+
+            if (!amount || !content) {
+                msgBox.style.color = "#ff4d4d";
+                msgBox.innerText = "Vui lòng nhập số tiền và nội dung!";
+                return;
+            }
+
+            btn.innerText = "Đang xử lý...";
+            btn.disabled = true;
+            msgBox.innerText = "";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: "create_payment",
+                        email: userEmail,
+                        userId: userId,
+                        amount: amount,
+                        content: content
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    msgBox.style.color = "#00e676";
+                    msgBox.innerText = `Thành công! Mã: ${result.transactionCode}`;
+                    document.getElementById("pay-amount").value = "";
+                    document.getElementById("pay-content").value = "";
+                } else {
+                    msgBox.style.color = "#ff4d4d";
+                    msgBox.innerText = result.message;
+                }
+            } catch (error) {
+                msgBox.style.color = "#ff4d4d";
+                msgBox.innerText = "Lỗi đường truyền tới máy chủ!";
+            } finally {
+                btn.innerText = "Xác Nhận Tạo Đơn";
+                btn.disabled = false;
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
