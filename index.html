@@ -1,42 +1,271 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Đăng Nhập</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+  <title>Hệ Thống Đăng Nhập</title>
+  
+  <!-- BƯỚC QUAN TRỌNG: Kiểm tra và chặn quay lại trang Đăng nhập -->
+  <script>
+    if (localStorage.getItem("userEmail") && localStorage.getItem("userId")) {
+        window.location.replace("dashboard.html"); // Dùng replace để xóa lịch sử trang này
+    }
+  </script>
+
+  <style>
+    :root {
+      /* ĐỒNG BỘ BẢNG MÀU AURORA GLASS VỚI DASHBOARD */
+      --bg-base: #f8fafc; 
+      --card-bg: rgba(255, 255, 255, 0.75); 
+      --card-border: rgba(255, 255, 255, 1); 
+      --text-main: #0f172a; 
+      --text-muted: #64748b;
+      
+      --brand-primary: #8b5cf6;
+      --brand-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      --brand-glow: rgba(236, 72, 153, 0.25);
+      
+      --status-success: #10b981; 
+      --status-failed: #f43f5e; 
+    }
+    
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--bg-base); color: var(--text-main); margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      
+      /* Nền Cực quang (Aurora) */
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.15), transparent 40%);
+      background-attachment: fixed;
+    }
+
+    /* Khung Glassmorphism */
+    .glass-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-section { display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .form-section.active { display: block; }
+
+    @keyframes fadeUp { 
+        from { opacity: 0; transform: translateY(15px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+
+    h2 { 
+        text-align: center; margin-bottom: 30px; font-size: 26px; 
+        font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;
+    }
+
+    .input-group { margin-bottom: 20px; }
+    
+    input {
+      width: 100%; padding: 16px 20px; border-radius: 20px;
+      border: 2px solid rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.6); 
+      color: var(--text-main); font-size: 15px; font-weight: 500;
+      outline: none; transition: 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+    input::placeholder { color: #94a3b8; font-weight: 500; }
+    input:focus { 
+        background: #ffffff; 
+        border-color: var(--brand-primary); 
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); 
+    }
+
+    button.btn-primary {
+      width: 100%; padding: 16px; border-radius: 20px; border: none;
+      background: var(--brand-gradient);
+      color: #fff; font-size: 16px; font-weight: 800; 
+      cursor: pointer; transition: 0.3s;
+      box-shadow: 0 10px 25px var(--brand-glow);
+      letter-spacing: 0.5px; margin-top: 10px;
+    }
+    button.btn-primary:active { 
+        transform: scale(0.96) translateY(2px); 
+        box-shadow: 0 5px 15px var(--brand-glow); 
+    }
+    button.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .switch-text { 
+        text-align: center; margin-top: 24px; font-size: 14px; 
+        color: var(--text-muted); font-weight: 500;
+    }
+    .switch-text span { 
+        color: var(--brand-primary); cursor: pointer; 
+        font-weight: 700; transition: 0.2s;
+    }
+    .switch-text span:hover { text-decoration: underline; }
+
+    .msg { 
+        text-align: center; margin-top: 16px; font-size: 14px; 
+        font-weight: 700; min-height: 20px; 
+    }
+
+    .loader { 
+        border: 3px solid rgba(139,92,246,0.2); 
+        border-top: 3px solid var(--brand-primary); 
+        border-radius: 50%; width: 24px; height: 24px; 
+        animation: spin 1s linear infinite; display: none; margin: 0 auto; 
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
-    <div class="glass-container">
-        <!-- Form Đăng Nhập -->
-        <div id="login-form" class="form-section active">
-            <h2>Đăng Nhập</h2>
-            <div class="input-group">
-                <input type="email" id="login-email" placeholder="Nhập E-mail" required>
-            </div>
-            <div class="input-group">
-                <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
-            </div>
-            <button id="login-btn" onclick="login()">Đăng Nhập</button>
-            <p class="switch-text">Chưa có tài khoản? <span onclick="switchForm()">Đăng ký ngay</span></p>
-            <p id="login-msg" class="msg"></p>
-        </div>
 
-        <!-- Form Đăng Ký -->
-        <div id="register-form" class="form-section">
-            <h2>Đăng Ký</h2>
-            <div class="input-group">
-                <input type="email" id="reg-email" placeholder="Nhập E-mail" required>
-            </div>
-            <div class="input-group">
-                <input type="password" id="reg-password" placeholder="Tạo mật khẩu" required>
-            </div>
-            <button id="reg-btn" onclick="register()">Xác nhận Đăng Ký</button>
-            <p class="switch-text">Đã có tài khoản? <span onclick="switchForm()">Đăng nhập</span></p>
-            <p id="reg-msg" class="msg"></p>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+  <div class="glass-container">
+      <!-- FORM ĐĂNG NHẬP -->
+      <div id="login-form" class="form-section active">
+          <h2>Đăng Nhập</h2>
+          <div class="input-group">
+              <input type="email" id="login-email" placeholder="Nhập E-mail của bạn" required>
+          </div>
+          <div class="input-group">
+              <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
+          </div>
+          
+          <button id="login-btn" class="btn-primary" onclick="login()">Đăng Nhập</button>
+          <div class="loader" id="login-loader" style="margin-top:20px;"></div>
+          
+          <p class="switch-text">Chưa có tài khoản? <span onclick="switchForm()">Đăng ký ngay</span></p>
+          <p id="login-msg" class="msg"></p>
+      </div>
+
+      <!-- FORM ĐĂNG KÝ -->
+      <div id="register-form" class="form-section">
+          <h2>Đăng Ký</h2>
+          <div class="input-group">
+              <input type="email" id="reg-email" placeholder="Nhập E-mail của bạn" required>
+          </div>
+          <div class="input-group">
+              <input type="password" id="reg-password" placeholder="Tạo mật khẩu an toàn" required>
+          </div>
+          
+          <button id="reg-btn" class="btn-primary" onclick="register()">Xác Nhận Đăng Ký</button>
+          <div class="loader" id="reg-loader" style="margin-top:20px;"></div>
+
+          <p class="switch-text">Đã có tài khoản? <span onclick="switchForm()">Đăng nhập ngay</span></p>
+          <p id="reg-msg" class="msg"></p>
+      </div>
+  </div>
+
+  <script>
+      // URL Web App của bạn
+      const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
+
+      // Chuyển đổi giữa Đăng nhập và Đăng ký
+      function switchForm() {
+          document.getElementById("login-form").classList.toggle("active");
+          document.getElementById("register-form").classList.toggle("active");
+          document.getElementById("login-msg").innerText = "";
+          document.getElementById("reg-msg").innerText = "";
+          document.querySelectorAll("input").forEach(input => input.value = "");
+      }
+
+      // Xử lý Gửi API Chung
+      async function sendAuthData(payload, btnElement, loaderElement, msgElement) {
+          btnElement.style.display = "none";
+          loaderElement.style.display = "block";
+          msgElement.innerText = "";
+
+          try {
+              const response = await fetch(API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "text/plain;charset=utf-8" },
+                  body: JSON.stringify(payload)
+              });
+              
+              const result = await response.json();
+              
+              if (result.status === "success") {
+                  msgElement.style.color = "var(--status-success)";
+                  msgElement.innerText = result.message;
+                  
+                  if (payload.action === "login") {
+                      // Lưu thông tin người dùng
+                      localStorage.setItem("userEmail", result.email);
+                      localStorage.setItem("userId", result.id);
+                      
+                      // Dùng replace để chặn quay lại trang đăng nhập bằng nút Back
+                      setTimeout(() => { window.location.replace("dashboard.html"); }, 1000);
+                  } 
+                  else if (payload.action === "register") {
+                      setTimeout(() => {
+                          switchForm();
+                          document.getElementById("login-email").value = payload.email;
+                          document.getElementById("login-msg").style.color = "var(--status-success)";
+                          document.getElementById("login-msg").innerText = "Đăng ký thành công! Vui lòng đăng nhập.";
+                      }, 1500);
+                  }
+              } else {
+                  msgElement.style.color = "var(--status-failed)";
+                  msgElement.innerText = result.message;
+                  btnElement.style.display = "block";
+                  loaderElement.style.display = "none";
+              }
+          } catch (error) {
+              msgElement.style.color = "var(--status-failed)";
+              msgElement.innerText = "Lỗi kết nối máy chủ!";
+              btnElement.style.display = "block";
+              loaderElement.style.display = "none";
+          }
+      }
+
+      // Hàm Đăng Ký
+      function register() {
+          const email = document.getElementById("reg-email").value.trim();
+          const pass = document.getElementById("reg-password").value.trim();
+          const msgBox = document.getElementById("reg-msg");
+          
+          if (!email || !pass) {
+              msgBox.style.color = "var(--status-failed)";
+              msgBox.innerText = "Vui lòng điền đủ thông tin!";
+              return;
+          }
+          
+          sendAuthData(
+              { action: "register", email: email, password: pass }, 
+              document.getElementById("reg-btn"), 
+              document.getElementById("reg-loader"),
+              msgBox
+          );
+      }
+
+      // Hàm Đăng Nhập
+      function login() {
+          const email = document.getElementById("login-email").value.trim();
+          const pass = document.getElementById("login-password").value.trim();
+          const msgBox = document.getElementById("login-msg");
+          
+          if (!email || !pass) {
+              msgBox.style.color = "var(--status-failed)";
+              msgBox.innerText = "Vui lòng điền đủ thông tin!";
+              return;
+          }
+          
+          sendAuthData(
+              { action: "login", email: email, password: pass }, 
+              document.getElementById("login-btn"), 
+              document.getElementById("login-loader"),
+              msgBox
+          );
+      }
+  </script>
 </body>
 </html>
