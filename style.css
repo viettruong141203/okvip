@@ -1,54 +1,30 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body {
     background: linear-gradient(135deg, #121212, #1e1e2f, #2a2a40);
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh;
 }
 
 /* Glassmorphism dùng chung */
 .glass-container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 35px;
-    width: 90%;
-    max-width: 380px;
+    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 35px; width: 90%; max-width: 380px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .form-section { display: none; }
 .form-section.active { display: block; animation: fadeIn 0.4s ease; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 h2 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: 600; }
-
 .input-group { margin-bottom: 18px; }
-
 input {
-    width: 100%; padding: 12px 15px; border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(0, 0, 0, 0.2); color: #fff; font-size: 15px; outline: none; transition: 0.3s;
 }
 input:focus { border-color: #4facfe; background: rgba(0, 0, 0, 0.4); box-shadow: 0 0 8px rgba(79, 172, 254, 0.3); }
 
 button {
-    width: 100%; padding: 12px; border-radius: 8px; border: none;
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    width: 100%; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(90deg, #4facfe, #00f2fe);
     color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s;
 }
 button:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
@@ -58,48 +34,47 @@ button:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
 .switch-text span { color: #00f2fe; cursor: pointer; font-weight: 600; }
 .msg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: 600; min-height: 20px; }
 
-/* --- CSS DASHBOARD --- */
-.dashboard-container {
-    width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px;
-    display: flex; flex-direction: column; gap: 30px; min-height: 100vh;
+/* --- BỐ CỤC DASHBOARD --- */
+.dashboard-layout {
+    display: flex; width: 100%; max-width: 1200px; margin: 0 auto; gap: 25px; align-items: flex-start;
+}
+.main-content {
+    flex: 1; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; min-height: 85vh;
+}
+.sidebar-right {
+    width: 280px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; 
+    display: flex; flex-direction: column; gap: 12px; position: sticky; top: 20px;
 }
 
-.dash-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 25px; background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);
+.nav-btn {
+    width: 100%; padding: 12px 15px; text-align: left; background: rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; 
+    cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; font-size: 15px;
 }
+.nav-btn:hover { background: rgba(79, 172, 254, 0.2); border-color: #4facfe; }
+.nav-btn.logout { background: rgba(255, 77, 77, 0.1); border-color: #ff4d4d; color: #ff4d4d; margin-top: 30px; }
+.nav-btn.logout:hover { background: #ff4d4d; color: #fff; }
 
-.user-info { font-size: 16px; font-weight: 500; }
-.user-info b { color: #00f2fe; }
-.btn-logout { 
-    background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; 
-    padding: 8px 15px; border-radius: 8px; width: auto; font-size: 14px; 
+/* Thẻ Lịch Sử (Deck) */
+.history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 25px; }
+.history-card {
+    background: rgba(0, 0, 0, 0.25); border-radius: 12px; padding: 18px;
+    border-left: 4px solid #4facfe; position: relative; transition: 0.3s;
 }
-.btn-logout:hover { background: #ff4d4d; color: #fff; box-shadow: 0 0 10px rgba(255, 77, 77, 0.4); }
+.history-card:hover { transform: translateY(-3px); background: rgba(0, 0, 0, 0.4); }
+.history-card.success { border-left-color: #00e676; }
+.history-card.pending { border-left-color: #f39c12; }
+.history-card.failed { border-left-color: #ff4d4d; }
 
-.deck-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.hc-top { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #aaa; }
+.hc-amount { font-size: 20px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+.hc-content { font-size: 14px; color: #00f2fe; margin-bottom: 10px; }
+.hc-status { display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.1); font-weight: bold;}
+.status-success { color: #00e676; } .status-pending { color: #f39c12; }
 
-.deck-card {
-    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;
-    padding: 30px 20px; text-align: center; transition: all 0.3s ease; position: relative;
-}
-.deck-card:hover { transform: translateY(-5px); border-color: #00f2fe; box-shadow: 0 10px 25px rgba(0, 242, 254, 0.2); }
-
-.deck-icon { font-size: 45px; color: #4facfe; margin-bottom: 15px; }
-.deck-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
-.deck-desc { font-size: 13px; color: #aaa; margin-bottom: 20px; }
-
-.btn-open-form {
-    width: 50px; height: 50px; border-radius: 50%;
-    background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 20px; margin: 0 auto; cursor: pointer; border: none; transition: 0.3s;
-}
-.btn-open-form:hover { transform: scale(1.1) rotate(90deg); }
-
-/* --- CSS MODAL NẠP TIỀN --- */
+/* Modal Nạp Tiền */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
@@ -107,10 +82,12 @@ button:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
     z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
 }
 .modal-overlay.active { opacity: 1; visibility: visible; }
-.modal-content { position: relative; transform: scale(0.8); transition: all 0.3s ease; }
+.modal-content { position: relative; transform: scale(0.8); transition: all 0.3s ease; max-width: 400px;}
 .modal-overlay.active .modal-content { transform: scale(1); }
-.close-btn {
-    position: absolute; top: 15px; right: 20px; font-size: 24px; 
-    color: #aaa; cursor: pointer; transition: 0.2s;
-}
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #aaa; cursor: pointer; transition: 0.2s; }
 .close-btn:hover { color: #ff4d4d; }
+
+@media (max-width: 768px) {
+    .dashboard-layout { flex-direction: column-reverse; }
+    .sidebar-right { width: 100%; position: static; }
+}
