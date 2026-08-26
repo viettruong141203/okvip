@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Quản Lý Giao Dịch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="align-items: flex-start; padding-top: 20px;">
+
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dash-header">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i> Xin chào, <b id="display-email">Đang tải...</b>
+            </div>
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+        </div>
+
+        <div>
+            <h2 style="text-align: left; margin-bottom: 20px;">Chọn phương thức nạp tiền</h2>
+            <!-- Giao diện Deck -->
+            <div class="deck-grid">
+                
+                <div class="deck-card">
+                    <i class="fas fa-university deck-icon"></i>
+                    <div class="deck-title">Chuyển khoản Ngân hàng</div>
+                    <div class="deck-desc">Nạp tiền qua mã QR tự động hóa 24/7.</div>
+                    <button class="btn-open-form" onclick="openModal('Chuyển khoản Ngân hàng')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <div class="deck-card">
+                    <i class="fas fa-wallet deck-icon"></i>
+                    <div class="deck-title">Ví Điện Tử</div>
+                    <div class="deck-desc">Xử lý giao dịch nhanh chóng qua ví điện tử.</div>
+                    <button class="btn-open-form" onclick="openModal('Ví điện tử')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form Giao Dịch Ẩn -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="glass-container modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Tạo Giao Dịch</h2>
+            
+            <div class="input-group">
+                <input type="number" id="pay-amount" placeholder="Nhập số tiền (VNĐ)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="pay-content" placeholder="Nội dung / Lời nhắn" required>
+            </div>
+            
+            <button id="pay-btn" onclick="submitPayment()">Xác Nhận Tạo Đơn</button>
+            <p id="pay-msg" class="msg"></p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
+        const userEmail = localStorage.getItem("userEmail");
+        const userId = localStorage.getItem("userId");
+
+        if (!userEmail || !userId) {
+            window.location.href = "index.html"; 
+        } else {
+            document.getElementById("display-email").innerText = userEmail;
+        }
+
+        const modal = document.getElementById("payment-modal");
+        
+        function openModal(method) {
+            document.getElementById("modal-title").innerText = "Nạp qua " + method;
+            document.getElementById("pay-content").value = "Nạp tiền - " + method;
+            document.getElementById("pay-msg").innerText = ""; 
+            modal.classList.add("active");
+        }
+
+        function closeModal() {
+            modal.classList.remove("active");
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) closeModal();
+        }
+
+        async function submitPayment() {
+            const amount = document.getElementById("pay-amount").value.trim();
+            const content = document.getElementById("pay-content").value.trim();
+            const btn = document.getElementById("pay-btn");
+            const msgBox = document.getElementById("pay-msg");
+
+            if (!amount || !content) {
+                msgBox.style.color = "#ff4d4d";
+                msgBox.innerText = "Vui lòng nhập số tiền!";
+                return;
+            }
+
+            btn.innerText = "Đang xử lý...";
+            btn.disabled = true;
+            msgBox.innerText = "";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: "create_payment",
+                        email: userEmail,
+                        userId: userId,
+                        amount: amount,
+                        content: content
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    msgBox.style.color = "#00e676";
+                    msgBox.innerText = `Thành công! Mã: ${result.transactionCode}`;
+                    document.getElementById("pay-amount").value = "";
+                    setTimeout(() => closeModal(), 2000);
+                } else {
+                    msgBox.style.color = "#ff4d4d";
+                    msgBox.innerText = result.message;
+                }
+            } catch (error) {
+                msgBox.style.color = "#ff4d4d";
+                msgBox.innerText = "Lỗi kết nối máy chủ!";
+            } finally {
+                btn.innerText = "Xác Nhận Tạo Đơn";
+                btn.disabled = false;
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
