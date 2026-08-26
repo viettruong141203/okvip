@@ -3,90 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Quản Lý Nạp Tiền</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Lịch sử giao dịch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body style="align-items: flex-start; padding-top: 20px; padding-bottom: 20px;">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    <div class="dashboard-layout">
+        body {
+            /* Background sáng với ánh hồng/tím nhẹ theo ảnh */
+            background: linear-gradient(180deg, #ffffff 0%, #f4f2fa 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Khung giao diện chuẩn Mobile */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px 20px 80px 20px;
+            position: relative;
+        }
+
+        /* Khu vực Tìm kiếm và Nút Thêm */
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .search-box i {
+            color: #999;
+            font-size: 16px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            margin-left: 12px;
+            width: 100%;
+            font-size: 15px;
+            background: transparent;
+            color: #333;
+        }
+
+        .search-box input::placeholder { color: #bbb; }
+
+        .btn-add {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c454d6, #6b5ae4);
+            color: white;
+            border: none;
+            font-size: 20px;
+            box-shadow: 0 8px 15px rgba(196, 84, 214, 0.3);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .btn-add:active { transform: scale(0.95); }
+
+        /* Tabs Bộ lọc */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+        }
+        .filter-tabs::-webkit-scrollbar { display: none; }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background: #ffffff;
+            color: #777;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            white-space: nowrap;
+            transition: 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #111424;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(17, 20, 36, 0.2);
+        }
+
+        /* Danh sách Card Giao dịch */
+        .tx-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tx-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: transform 0.2s;
+        }
+        .tx-card:active { transform: scale(0.98); }
+
+        .tx-left { display: flex; flex-direction: column; gap: 8px; }
+        .tx-id {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .copy-icon {
+            color: #a0a0a0;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 4px;
+            background: #f4f4f4;
+            border-radius: 6px;
+        }
+        .copy-icon:active { background: #e0e0e0; }
         
-        <!-- TRÁI: LỊCH SỬ GIAO DỊCH -->
-        <div class="main-content">
-            <h2 style="text-align: left; margin-bottom: 5px;"><i class="fas fa-history" style="color: #4facfe;"></i> Lịch sử Nạp Tiền</h2>
-            <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Quản lý các giao dịch nạp tiền của bạn.</p>
-            
-            <div id="history-container" class="history-grid">
-                <p id="loading-text" style="color: #00f2fe;"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</p>
+        .tx-time {
+            font-size: 12px;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .tx-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .tx-amount {
+            font-weight: 800;
+            font-size: 16px;
+            color: #1a1a1a;
+        }
+        .tx-status {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Màu Trạng Thái */
+        .status-pending { color: #f39c12; } /* Đang xử lí - Cam */
+        .status-success { color: #27ae60; } /* Hoàn tất - Xanh */
+        .status-failed { color: #e74c3c; }  /* Thất bại - Đỏ */
+
+        /* Modal Nạp Tiền (Sửa lại cho hợp tone sáng) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-content {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 30px 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: translateY(20px);
+            transition: 0.3s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; font-size: 24px; color: #888; cursor: pointer;
+        }
+        
+        .modal-content h2 { text-align: center; color: #1a1a1a; margin-bottom: 8px; }
+        .modal-content p { text-align: center; color: #888; font-size: 13px; margin-bottom: 20px; }
+        
+        .input-group { margin-bottom: 20px; }
+        .input-group label { font-size: 13px; color: #666; font-weight: 600; margin-bottom: 8px; display: block; }
+        .input-group input {
+            width: 100%; padding: 15px; border-radius: 12px;
+            border: 1px solid #ddd; background: #f9f9f9;
+            font-size: 16px; font-weight: bold; color: #333; outline: none;
+        }
+        .input-group input:focus { border-color: #6b5ae4; background: #fff; }
+        
+        .btn-submit {
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, #c454d6, #6b5ae4);
+            color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+
+        /* Nút Đăng xuất ở dưới cùng */
+        .logout-container {
+            text-align: center; margin-top: 30px;
+        }
+        .btn-logout {
+            background: transparent; border: none; color: #e74c3c; font-weight: 600; font-size: 14px; cursor: pointer;
+        }
+
+        /* Thông báo (Toast) khi copy */
+        #toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #333; color: #fff; padding: 10px 20px; border-radius: 20px;
+            font-size: 13px; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 2000;
+        }
+        #toast.show { opacity: 1; visibility: visible; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Khu vực Tìm kiếm & Thêm Giao dịch -->
+        <div class="header-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Tìm mã giao dịch..." oninput="filterData()">
             </div>
+            <button class="btn-add" onclick="openModal()">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
 
-        <!-- PHẢI: SIDEBAR -->
-        <div class="sidebar-right">
-            <div style="text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <i class="fas fa-user-circle" style="font-size: 50px; color: #4facfe; margin-bottom: 10px;"></i>
-                <div style="font-size: 13px; color: #aaa;">Tài khoản của bạn</div>
-                <b id="display-email" style="font-size: 15px; word-break: break-all; color: #fff;"></b>
-            </div>
-            
-            <button class="nav-btn" onclick="loadHistory()">
-                <i class="fas fa-sync-alt"></i> Làm mới lịch sử
-            </button>
-
-            <button class="nav-btn" onclick="openModal()" style="background: linear-gradient(90deg, #4facfe, #00f2fe); justify-content: center; font-weight: bold; margin-top: 10px; color: #fff; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); border: none;">
-                <i class="fas fa-plus-circle" style="font-size: 18px;"></i> TẠO ĐƠN NẠP TIỀN
-            </button>
-            
-            <button class="nav-btn logout" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Đăng xuất
-            </button>
+        <!-- Bộ lọc Trạng thái -->
+        <div class="filter-tabs">
+            <button class="filter-btn active" onclick="setFilter('Tất cả', this)">Tất cả</button>
+            <button class="filter-btn" onclick="setFilter('Đang xử lí', this)">Đang xử lí</button>
+            <button class="filter-btn" onclick="setFilter('Hoàn tất', this)">Hoàn tất</button>
+            <button class="filter-btn" onclick="setFilter('Thất bại', this)">Thất bại</button>
         </div>
 
+        <!-- Danh sách Thẻ Giao dịch -->
+        <div class="tx-list" id="history-container">
+            <p style="text-align: center; color: #999; margin-top: 20px;"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</p>
+        </div>
+
+        <div class="logout-container">
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất hệ thống</button>
+        </div>
     </div>
 
-    <!-- POPUP TẠO ĐƠN NẠP -->
+    <!-- Modal Form Nạp Tiền -->
     <div class="modal-overlay" id="payment-modal">
-        <div class="glass-container modal-content">
+        <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 style="color: #00f2fe; margin-bottom: 10px;">Tạo Đơn Nạp</h2>
-            <p style="text-align: center; color: #aaa; font-size: 13px; margin-bottom: 20px;">Hạn mức: 2.000đ - 2.000.000.000đ</p>
+            <h2>Tạo Đơn Nạp</h2>
+            <p>Hạn mức: 2.000đ - 2.000.000.000đ</p>
             
             <div class="input-group">
-                <label style="font-size: 13px; color: #ccc; margin-bottom: 5px; display: block;">Số tiền cần nạp (VNĐ)</label>
-                <input type="number" id="pay-amount" min="2000" max="2000000000" placeholder="VD: 50000" required style="font-size: 18px; font-weight: bold;">
+                <label>Số tiền cần nạp (VNĐ)</label>
+                <input type="number" id="pay-amount" min="2000" max="2000000000" placeholder="VD: 50000">
             </div>
             
             <div class="input-group">
-                <label style="font-size: 13px; color: #ccc; margin-bottom: 5px; display: block;">Nội dung chuyển khoản (Tự động sinh)</label>
-                <input type="text" id="pay-content" readonly style="background: rgba(0, 0, 0, 0.5); color: #00f2fe; font-weight: bold; text-align: center; font-size: 18px; letter-spacing: 2px;">
+                <label>Nội dung chuyển khoản</label>
+                <input type="text" id="pay-content" readonly style="color: #6b5ae4; text-align: center; letter-spacing: 1px;">
             </div>
             
-            <button id="pay-btn" onclick="submitPayment()" style="margin-top: 10px;">Xác Nhận Tạo Đơn</button>
-            <p id="pay-msg" class="msg"></p>
+            <button id="pay-btn" class="btn-submit" onclick="submitPayment()">Xác Nhận Tạo Đơn</button>
+            <p id="pay-msg" style="text-align: center; margin-top: 15px; font-weight: bold; font-size: 14px;"></p>
         </div>
     </div>
+
+    <!-- Thông báo Copy -->
+    <div id="toast">Đã sao chép mã giao dịch!</div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
         const userEmail = localStorage.getItem("userEmail");
         const userId = localStorage.getItem("userId");
-        let usedCodes = []; // Lưu mã nội dung để chống trùng lặp
+        
+        let allTransactions = []; // Biến lưu toàn bộ giao dịch để lọc cục bộ
+        let currentFilter = 'Tất cả';
+        let usedCodes = [];
 
+        // Kiểm tra đăng nhập
         if (!userEmail || !userId) {
             window.location.href = "index.html"; 
         } else {
-            document.getElementById("display-email").innerText = userEmail;
             loadHistory(); 
         }
 
-        function formatVND(amount) {
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        // Định dạng tiền: vd 2.000
+        function formatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
         }
 
+        // Tải dữ liệu từ Google Sheets
         async function loadHistory() {
-            const container = document.getElementById("history-container");
-            container.innerHTML = '<p id="loading-text" style="color: #00f2fe;"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</p>';
-            
             try {
                 const response = await fetch(API_URL, {
                     method: "POST",
@@ -95,52 +330,119 @@
                 });
                 
                 const result = await response.json();
-                container.innerHTML = ""; 
                 usedCodes = [];
 
-                if (result.status === "success" && result.history.length > 0) {
-                    result.history.forEach(tx => {
+                if (result.status === "success") {
+                    allTransactions = result.history;
+                    allTransactions.forEach(tx => {
                         if(tx.content.startsWith("MB")) usedCodes.push(tx.content);
-
-                        let cardClass = "pending";
-                        let statusText = tx.status || "Chờ xử lý";
-                        let statusColorClass = "status-pending";
-                        
-                        if (statusText.toLowerCase().includes("thành công") || statusText.toLowerCase().includes("đã thanh toán")) {
-                            cardClass = "success";
-                            statusColorClass = "status-success";
-                        }
-
-                        const card = `
-                            <div class="history-card ${cardClass}">
-                                <div class="hc-top">
-                                    <span>Mã: ${tx.maGiaoDich}</span>
-                                    <span>${tx.time}</span>
-                                </div>
-                                <div class="hc-amount">${formatVND(tx.amount)}</div>
-                                <div class="hc-content"><i class="fas fa-comment-dots"></i> ${tx.content}</div>
-                                <div class="hc-status ${statusColorClass}"><i class="fas fa-info-circle"></i> ${statusText}</div>
-                            </div>
-                        `;
-                        container.innerHTML += card;
                     });
+                    renderTransactions(); // Gọi hàm vẽ UI
                 } else {
-                    container.innerHTML = '<p style="color: #aaa;">Bạn chưa có giao dịch nào.</p>';
+                    document.getElementById("history-container").innerHTML = '<p style="text-align:center; color:#999;">Không có dữ liệu.</p>';
                 }
             } catch (error) {
-                container.innerHTML = '<p style="color: #ff4d4d;">Lỗi tải dữ liệu. Vui lòng thử lại sau.</p>';
+                document.getElementById("history-container").innerHTML = '<p style="text-align:center; color:#e74c3c;">Lỗi tải dữ liệu.</p>';
             }
         }
 
+        // Đặt bộ lọc khi bấm các nút (Tất cả, Đang xử lí,...)
+        function setFilter(status, btnElement) {
+            // Đổi class active
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            currentFilter = status;
+            renderTransactions();
+        }
+
+        // Lọc dữ liệu khi gõ vào ô tìm kiếm
+        function filterData() {
+            renderTransactions();
+        }
+
+        // Hàm render vẽ danh sách thẻ HTML
+        function renderTransactions() {
+            const container = document.getElementById("history-container");
+            const searchKeyword = document.getElementById("search-input").value.toLowerCase();
+            container.innerHTML = "";
+
+            // Lọc theo Từ khóa tìm kiếm VÀ Trạng thái
+            const filteredTx = allTransactions.filter(tx => {
+                // Đưa trạng thái thực tế về các chuẩn "Đang xử lí", "Hoàn tất", "Thất bại"
+                let txStatus = tx.status ? tx.status.toLowerCase() : "chờ xử lý";
+                let mapStatus = "Đang xử lí";
+                
+                if (txStatus.includes("thành công") || txStatus.includes("hoàn tất") || txStatus.includes("đã thanh toán")) {
+                    mapStatus = "Hoàn tất";
+                } else if (txStatus.includes("thất bại") || txStatus.includes("hủy")) {
+                    mapStatus = "Thất bại";
+                }
+
+                const matchStatus = (currentFilter === 'Tất cả') || (mapStatus === currentFilter);
+                const matchSearch = tx.maGiaoDich.toLowerCase().includes(searchKeyword) || tx.content.toLowerCase().includes(searchKeyword);
+                
+                // Gắn mapStatus vào object để tiện render
+                tx.displayStatus = mapStatus;
+
+                return matchStatus && matchSearch;
+            });
+
+            if (filteredTx.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Không tìm thấy giao dịch nào.</p>';
+                return;
+            }
+
+            filteredTx.forEach(tx => {
+                // Xác định CSS cho trạng thái
+                let statusColorClass = "status-pending";
+                if (tx.displayStatus === "Hoàn tất") statusColorClass = "status-success";
+                if (tx.displayStatus === "Thất bại") statusColorClass = "status-failed";
+
+                // Format mã giao dịch (Thêm dấu # nếu chưa có)
+                let displayId = tx.maGiaoDich.startsWith("#") ? tx.maGiaoDich : "#" + tx.maGiaoDich;
+                // Nếu ID dạng TXN..., thay bằng số để giống mẫu ảnh (tùy chỉnh hiển thị)
+                let justNumbersId = displayId.replace('TXN', '');
+
+                const cardHTML = `
+                    <div class="tx-card">
+                        <div class="tx-left">
+                            <div class="tx-id">
+                                ${justNumbersId} 
+                                <i class="far fa-copy copy-icon" onclick="copyText('${justNumbersId}')"></i>
+                            </div>
+                            <div class="tx-time">${tx.time}</div>
+                        </div>
+                        <div class="tx-right">
+                            <div class="tx-amount">${formatNumber(tx.amount)}</div>
+                            <div class="tx-status ${statusColorClass}">${tx.displayStatus}</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Chức năng Sao chép mã
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById("toast");
+                toast.classList.add("show");
+                setTimeout(() => toast.classList.remove("show"), 2000);
+            });
+        }
+
+        // Thuật toán sinh mã MB + 6 số
         function generateUniqueCode() {
             let mbCode;
             do {
-                let code = Math.floor(100000 + Math.random() * 900000); // Tạo 6 số ngẫu nhiên
+                let code = Math.floor(100000 + Math.random() * 900000);
                 mbCode = "MB" + code;
             } while (usedCodes.includes(mbCode)); 
             return mbCode;
         }
 
+        // Logic điều khiển Modal
         const modal = document.getElementById("payment-modal");
         
         function openModal() {
@@ -153,17 +455,22 @@
         function closeModal() { modal.classList.remove("active"); }
         window.onclick = function(event) { if (event.target === modal) closeModal(); }
 
+        // Gửi lệnh Tạo đơn nạp tiền
         async function submitPayment() {
             const amountInput = document.getElementById("pay-amount").value.trim();
             const content = document.getElementById("pay-content").value.trim();
             const btn = document.getElementById("pay-btn");
             const msgBox = document.getElementById("pay-msg");
 
-            if (!amountInput) return (msgBox.style.color = "#ff4d4d", msgBox.innerText = "Vui lòng nhập số tiền!");
+            if (!amountInput) {
+                msgBox.style.color = "#e74c3c";
+                return msgBox.innerText = "Vui lòng nhập số tiền!";
+            }
 
             const amount = parseInt(amountInput);
             if (amount < 2000 || amount > 2000000000) {
-                return (msgBox.style.color = "#ff4d4d", msgBox.innerText = "Số tiền phải từ 2,000 VNĐ đến 2,000,000,000 VNĐ!");
+                msgBox.style.color = "#e74c3c";
+                return msgBox.innerText = "Số tiền phải từ 2.000đ đến 2.000.000.000đ!";
             }
 
             btn.innerText = "Đang xử lý...";
@@ -171,6 +478,9 @@
             msgBox.innerText = "";
 
             try {
+                // Sử dụng ID ngẫu nhiên toàn số (giống trong ảnh) thay vì TXN
+                let rawId = Math.floor(100000000000 + Math.random() * 900000000000).toString(); 
+
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -182,15 +492,18 @@
                 const result = await response.json();
                 
                 if (result.status === "success") {
-                    msgBox.style.color = "#00e676";
-                    msgBox.innerText = `Thành công! Mã đơn: ${result.transactionCode}`;
-                    setTimeout(() => { closeModal(); loadHistory(); }, 1500);
+                    msgBox.style.color = "#27ae60";
+                    msgBox.innerText = `Thành công!`;
+                    setTimeout(() => { 
+                        closeModal(); 
+                        loadHistory(); // Tải lại danh sách mới
+                    }, 1500);
                 } else {
-                    msgBox.style.color = "#ff4d4d";
+                    msgBox.style.color = "#e74c3c";
                     msgBox.innerText = result.message;
                 }
             } catch (error) {
-                msgBox.style.color = "#ff4d4d";
+                msgBox.style.color = "#e74c3c";
                 msgBox.innerText = "Lỗi kết nối máy chủ!";
             } finally {
                 btn.innerText = "Xác Nhận Tạo Đơn";
@@ -198,6 +511,7 @@
             }
         }
 
+        // Đăng xuất
         function logout() {
             localStorage.clear();
             window.location.href = "index.html";
