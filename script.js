@@ -26,13 +26,9 @@ async function sendAuthData(payload, btnElement, msgElement) {
         msgElement.innerText = result.message;
         
         if (result.status === "success" && payload.action === "login") {
-            // Lưu thông tin để chuyển sang Dashboard
             localStorage.setItem("userEmail", result.email);
             localStorage.setItem("userId", result.id);
-            
-            setTimeout(() => {
-                window.location.href = "dashboard.html"; // Chuyển sang Dashboard
-            }, 1000);
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
         }
 
         if (result.status === "success" && payload.action === "register") {
@@ -56,7 +52,6 @@ function register() {
     const email = document.getElementById("reg-email").value.trim();
     const pass = document.getElementById("reg-password").value.trim();
     const msgBox = document.getElementById("reg-msg");
-    
     if (!email || !pass) return (msgBox.style.color = "#ff4d4d", msgBox.innerText = "Điền đủ thông tin!");
     sendAuthData({ action: "register", email, password: pass }, document.getElementById("reg-btn"), msgBox);
 }
@@ -65,7 +60,6 @@ function login() {
     const email = document.getElementById("login-email").value.trim();
     const pass = document.getElementById("login-password").value.trim();
     const msgBox = document.getElementById("login-msg");
-    
     if (!email || !pass) return (msgBox.style.color = "#ff4d4d", msgBox.innerText = "Điền đủ thông tin!");
     sendAuthData({ action: "login", email, password: pass }, document.getElementById("login-btn"), msgBox);
 }
