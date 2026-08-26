@@ -26,12 +26,12 @@ async function sendAuthData(payload, btnElement, msgElement) {
         msgElement.innerText = result.message;
         
         if (result.status === "success" && payload.action === "login") {
-            // Lưu thông tin người dùng vào LocalStorage
+            // Lưu thông tin để chuyển sang Dashboard
             localStorage.setItem("userEmail", result.email);
             localStorage.setItem("userId", result.id);
             
             setTimeout(() => {
-                window.location.href = "payment.html"; // Chuyển hướng
+                window.location.href = "dashboard.html"; // Chuyển sang Dashboard
             }, 1000);
         }
 
