@@ -326,7 +326,7 @@
         </div>
     </div>
 
-    <!-- 4. Form Đặt Cược XSMB -->
+    <!-- 4. Form Đặt Cược XSMB ĐƯỢC CẬP NHẬT TỶ LỆ MỚI-->
     <div id="view-loto" class="page-view form-wrapper">
         <div class="form-header">
             <button class="btn-back" onclick="navigate('home')"><i class="fas fa-chevron-left"></i></button>
@@ -336,8 +336,21 @@
         <div class="input-box">
             <label>Hình thức chơi</label>
             <select id="loto-type" onchange="calcLoto()">
-                <option value="Đề" data-rate="99">Đánh Đề (1 ăn 99)</option>
-                <option value="Lô" data-rate="3.6">Đánh Lô (1 điểm = 27k ăn 99k)</option>
+                <option value="Lô 2 số" data-rate="99">Lô 2 số (1 ăn 99)</option>
+                <option value="Lô 2 số 1k" data-rate="3.7">Lô 2 số 1k (1 ăn 3.7)</option>
+                <option value="Lô 3 số" data-rate="980">Lô 3 số (1 ăn 980)</option>
+                <option value="Lô 4 số" data-rate="8880">Lô 4 số (1 ăn 8880)</option>
+                <option value="Xiên 2" data-rate="16">Xiên 2 (1 ăn 16)</option>
+                <option value="Xiên 3" data-rate="65">Xiên 3 (1 ăn 65)</option>
+                <option value="Xiên 4" data-rate="222">Xiên 4 (1 ăn 222)</option>
+                <option value="Đề đặc biệt" data-rate="99">Đề đặc biệt (1 ăn 99)</option>
+                <option value="Đề giải nhất" data-rate="99">Đề giải nhất (1 ăn 99)</option>
+                <option value="Đề giải 7" data-rate="99">Đề giải 7 (1 ăn 99)</option>
+                <option value="Đầu" data-rate="9.5">Đầu (1 ăn 9.5)</option>
+                <option value="Đuôi" data-rate="9.5">Đuôi (1 ăn 9.5)</option>
+                <option value="3 Càng Đặc Biệt" data-rate="970">3 Càng Đặc Biệt (1 ăn 970)</option>
+                <option value="3 Càng Giải Nhất" data-rate="970">3 Càng Giải Nhất (1 ăn 970)</option>
+                <option value="4 Càng Đặc Biệt" data-rate="8870">4 Càng Đặc Biệt (1 ăn 8870)</option>
             </select>
         </div>
 
@@ -417,10 +430,6 @@
         // Clear forms
         document.querySelectorAll('.sys-msg').forEach(msg => msg.innerText = '');
         window.scrollTo(0,0);
-    }
-
-    function confirmLogout() {
-        if(confirm("Xác nhận đăng xuất?")) { localStorage.clear(); window.location.replace("index.html"); }
     }
 
     function showToast(msg) {
@@ -581,7 +590,7 @@
         finally { document.getElementById('btn-bank').innerText='LIÊN KẾT NGÂN HÀNG'; document.getElementById('btn-bank').disabled = false; }
     }
 
-    // 4. XSMB LÔ ĐỀ
+    // 4. XSMB LÔ ĐỀ (TÍNH TOÁN DỰA THEO TỶ LỆ MỚI)
     function calcLoto() {
         let amountStr = document.getElementById('loto-amount').value.replace(/\D/g, '');
         let amount = parseInt(amountStr) || 0;
@@ -593,7 +602,7 @@
         if(count === 0) count = 1;
 
         let totalPay = amount * count;
-        let expectedWin = amount * rate; // Thắng trên 1 con
+        let expectedWin = amount * rate; 
 
         document.getElementById('loto-total').innerText = new Intl.NumberFormat('vi-VN').format(totalPay) + ' ₫';
         document.getElementById('loto-win').innerText = new Intl.NumberFormat('vi-VN').format(expectedWin) + ' ₫';
