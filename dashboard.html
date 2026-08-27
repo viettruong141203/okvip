@@ -6,14 +6,12 @@
   <title>Dashboard | Quản Lý Thanh Toán</title>
   
   <script>
-    // Kiểm tra đăng nhập
     if (!localStorage.getItem("userEmail") || !localStorage.getItem("userId")) {
         window.location.replace("index.html");
     }
   </script>
 
   <style>
-    /* ================= CƠ SỞ (BASE) ================= */
     :root {
       --bg-body: #f1f5f9; 
       --bg-surface: #ffffff; 
@@ -25,266 +23,175 @@
       --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
       --brand-shadow: rgba(79, 70, 229, 0.25);
       
-      --status-pending-text: #b45309;
-      --status-pending-bg: #fef3c7;
-      --status-success-text: #047857;
-      --status-success-bg: #d1fae5;
-      --status-failed-text: #be123c;
-      --status-failed-bg: #ffe4e6;
+      --status-pending-text: #b45309; --status-pending-bg: #fef3c7;
+      --status-success-text: #047857; --status-success-bg: #d1fae5;
+      --status-failed-text: #be123c; --status-failed-bg: #ffe4e6;
       
       --sidebar-width: 250px;
       --header-height: 72px;
-      --border-radius-sm: 8px;
-      --border-radius-md: 12px;
-      --border-radius-lg: 20px;
     }
     
-    *, *::before, *::after { 
-        box-sizing: border-box; 
-        margin: 0; 
-        padding: 0; 
-        -webkit-tap-highlight-color: transparent; 
-        outline: none; 
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; outline: none; }
     
     body { 
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-        background-color: var(--bg-body); 
-        color: var(--text-main); 
-        -webkit-font-smoothing: antialiased; 
-        -moz-osx-font-smoothing: grayscale;
-        display: flex; 
-        min-height: 100vh; 
-        overflow-x: hidden; 
+        font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg-body); 
+        color: var(--text-main); -webkit-font-smoothing: antialiased; display: flex; 
+        min-height: 100vh; overflow-x: hidden; 
     }
 
     input, button { font-family: inherit; }
 
-    /* ================= THANH BÊN (SIDEBAR) ================= */
+    /* ================= SIDEBAR ================= */
     .sidebar { 
         position: fixed; top: 0; bottom: 0; left: 0; width: var(--sidebar-width); 
         background: var(--bg-surface); border-right: 1px solid var(--border-color); 
         display: flex; flex-direction: column; padding: 24px 16px; z-index: 1000; 
     }
-    .brand { 
-        font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 32px; 
-        display: flex; align-items: center; gap: 12px; padding: 0 8px; 
-    }
-    .brand-icon { 
-        width: 32px; height: 32px; border-radius: var(--border-radius-sm); 
-        background: var(--brand-gradient); display: flex; justify-content: center; 
-        align-items: center; color: white; 
-    }
+    .brand { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; padding: 0 8px; }
+    .brand-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--brand-gradient); display: flex; justify-content: center; align-items: center; color: white; }
     
     .nav-menu { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .nav-item { 
-        display: flex; align-items: center; gap: 12px; padding: 12px 14px; 
-        border-radius: var(--border-radius-md); color: var(--text-muted); font-weight: 600; 
-        font-size: 14px; cursor: pointer; transition: all 0.2s ease; border: none; 
-        background: transparent; width: 100%; text-align: left; 
-    }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: var(--text-muted); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; border: none; background: transparent; width: 100%; text-align: left; }
     .nav-item:hover { background: var(--bg-body); color: var(--brand-primary); }
     .nav-item.active { background: var(--brand-primary); color: white; box-shadow: 0 4px 12px var(--brand-shadow); }
-    .nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+    .nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
     
-    .logout-btn { 
-        margin-top: auto; display: flex; align-items: center; gap: 12px; padding: 12px 14px; 
-        border-radius: var(--border-radius-md); color: var(--status-failed-text); font-weight: 600; 
-        font-size: 14px; cursor: pointer; transition: all 0.2s ease; border: none; 
-        background: var(--status-failed-bg); width: 100%; text-align: left; 
-    }
+    .logout-btn { margin-top: auto; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: var(--status-failed-text); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; border: none; background: var(--status-failed-bg); width: 100%; text-align: left; }
     .logout-btn:active { transform: scale(0.96); }
 
-    /* ================= KHU VỰC CHÍNH (MAIN WRAPPER) ================= */
-    .main-wrapper { 
-        margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; 
-        min-width: 0; min-height: 100vh;
-    }
+    /* ================= MAIN WRAPPER ================= */
+    .main-wrapper { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 100vh; }
 
-    /* TOPBAR */
-    .topbar { 
-        position: sticky; top: 0; z-index: 99; height: var(--header-height); padding: 0 24px; 
-        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
-        display: flex; justify-content: space-between; align-items: center; 
-        border-bottom: 1px solid var(--border-color); 
-    }
+    .topbar { position: sticky; top: 0; z-index: 99; height: var(--header-height); padding: 0 24px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
     .topbar-greeting { font-size: 16px; font-weight: 700; color: var(--text-main); }
-    
     .user-profile { display: flex; align-items: center; gap: 16px; }
     .balance-box { display: flex; flex-direction: column; align-items: flex-end; }
     .balance-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
     .balance-value { font-size: 18px; font-weight: 800; color: var(--brand-primary); }
-    .avatar { 
-        width: 40px; height: 40px; border-radius: var(--border-radius-md); background: white; 
-        display: flex; justify-content: center; align-items: center; color: var(--brand-primary); 
-        border: 1px solid var(--border-color); 
-    }
+    .avatar { width: 40px; height: 40px; border-radius: 12px; background: white; display: flex; justify-content: center; align-items: center; color: var(--brand-primary); border: 1px solid var(--border-color); }
     .mobile-logout { display: none; }
 
-    /* KHU VỰC NỘI DUNG (VIEWS) */
     .content-area { padding: 24px; flex: 1; display: flex; flex-direction: column; }
     .page-view { display: none; flex-direction: column; flex: 1; animation: fadeIn 0.3s ease; }
     .page-view.active { display: flex; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ================= TRANG TỔNG QUAN ================= */
+    /* ================= TRANG TỔNG QUAN (HOME) ================= */
     .filter-wrapper { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .filter-wrapper::-webkit-scrollbar { display: none; }
-    .filter-btn { 
-        padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border-color); 
-        background: var(--bg-surface); color: var(--text-muted); font-size: 13px; font-weight: 600; 
-        cursor: pointer; transition: all 0.2s ease; white-space: nowrap; 
-    }
+    .filter-btn { padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
     .filter-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
 
-    .deck-grid { 
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-        gap: 16px; align-content: start; 
-    }
-    .tx-card { 
-        background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); 
-        padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; 
-    }
+    .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; align-content: start; }
+    .tx-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
     .tx-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); border-color: #cbd5e1; }
-    .tx-card:active { transform: scale(0.98); }
     
-    .tx-left { display: flex; flex-direction: column; gap: 6px; }
+    .tx-left { display: flex; flex-direction: column; gap: 8px; }
     .tx-id-wrap { display: flex; align-items: center; gap: 8px; }
-    .tx-id { font-family: monospace; font-size: 15px; font-weight: 800; color: var(--text-main); }
+    .tx-id { font-family: monospace; font-size: 16px; font-weight: 800; color: var(--text-main); }
     .tx-time { font-size: 12px; color: var(--text-muted); font-weight: 500; }
     
-    .tx-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-    .tx-amount { font-weight: 800; font-size: 16px; color: var(--text-main); }
+    .tx-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .tx-amount { font-weight: 800; font-size: 17px; color: var(--text-main); }
     
     .badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
     .badge.pending { color: var(--status-pending-text); background: var(--status-pending-bg); }
     .badge.success { color: var(--status-success-text); background: var(--status-success-bg); }
     .badge.failed { color: var(--status-failed-text); background: var(--status-failed-bg); }
-    
-    .copy-btn { 
-        background: var(--bg-body); border-radius: 6px; width: 26px; height: 26px; 
-        display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: 0.2s; 
-    }
-    .copy-btn:hover { background: var(--border-color); color: var(--text-main); }
-    .copy-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
 
-    /* ================= CÁC FORM CHUNG (NẠP TIỀN / ĐỔI MẬT KHẨU / CHI TIẾT) ================= */
-    .form-container { 
-        max-width: 480px; margin: 0 auto; width: 100%; background: var(--bg-surface); 
-        border-radius: var(--border-radius-lg); padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-        border: 1px solid var(--border-color); 
-    }
-    .form-header { display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
-    .form-title { text-align: center; font-size: 18px; font-weight: 800; margin: 0; color: var(--text-main); }
+    /* ================= CÁC FORM CHUNG (CĂN GIỮA) ================= */
+    .form-wrapper { display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; flex: 1; }
+    .form-container { width: 100%; max-width: 460px; background: var(--bg-surface); border-radius: 24px; padding: 32px 28px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); border: 1px solid var(--border-color); }
+    .form-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; position: relative;}
+    .btn-back { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-main); transition: 0.2s; z-index: 2;}
+    .btn-back:hover { background: #e2e8f0; }
+    .btn-back svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;}
+    .form-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap;}
 
     /* FORM NẠP TIỀN */
-    .amount-input-box { 
-        display: flex; align-items: center; background: var(--bg-body); border: 2px solid var(--bg-body); 
-        border-radius: var(--border-radius-md); padding: 8px 16px; margin-bottom: 20px; transition: all 0.2s ease; 
-    }
-    .amount-input-box:focus-within { border-color: var(--brand-primary); background: var(--bg-surface); }
-    .amount-input-box span { font-size: 16px; font-weight: 700; color: var(--text-muted); margin-right: 8px; }
-    .amount-input-box input { 
-        flex: 1; border: none; background: transparent; font-size: 28px; font-weight: 800; 
-        color: var(--text-main); outline: none; width: 100%; 
-        -webkit-appearance: none; 
-    }
+    .amount-input-box { display: flex; align-items: center; background: #f8fafc; border: 2px solid var(--border-color); border-radius: 16px; padding: 12px 20px; margin-bottom: 24px; transition: 0.3s; }
+    .amount-input-box:focus-within { background: #ffffff; border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+    .amount-input-box span { font-size: 16px; font-weight: 800; color: var(--text-muted); margin-right: 12px; }
+    .amount-input-box input { flex: 1; border: none; background: transparent; font-size: 32px; font-weight: 900; color: var(--brand-primary); outline: none; width: 100%; -webkit-appearance: none; }
     
-    .quick-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
-    .quick-btn { 
-        padding: 10px 0; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); 
-        background: var(--bg-surface); font-weight: 600; color: var(--text-muted); font-size: 13px; 
-        cursor: pointer; transition: all 0.2s ease; 
-    }
+    .quick-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .quick-btn { padding: 12px 0; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 700; color: var(--text-muted); font-size: 13px; cursor: pointer; transition: 0.2s; }
     .quick-btn:hover { border-color: var(--brand-primary); color: var(--brand-primary); background: #f5f3ff; }
-    .quick-btn:active { transform: scale(0.96); }
+    .quick-btn:active { transform: scale(0.95); }
 
-    /* THAY ĐỔI MẬT KHẨU */
-    .input-group { margin-bottom: 16px; }
-    .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-    .input-group input { 
-        width: 100%; padding: 14px 16px; border-radius: var(--border-radius-md); 
-        border: 1px solid var(--border-color); background: var(--bg-surface); 
-        font-size: 14px; font-weight: 500; outline: none; transition: all 0.2s ease; 
-        -webkit-appearance: none;
-    }
-    .input-group input:focus { border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    /* FORM ĐỔI MẬT KHẨU */
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+    .input-group input { width: 100%; padding: 16px; border-radius: 12px; border: 1.5px solid var(--border-color); background: #f8fafc; font-size: 15px; font-weight: 600; color: var(--text-main); transition: 0.3s; -webkit-appearance: none; }
+    .input-group input:focus { background: #ffffff; border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
 
-    /* CHI TIẾT HÓA ĐƠN */
-    .rc-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; }
-    .rc-icon svg { width: 28px; height: 28px; stroke: white; stroke-width: 2.5; fill: none; stroke-linecap: round; }
-    .rc-status { font-size: 18px; font-weight: 800; margin-bottom: 8px; text-align: center; }
-    .rc-amount { font-size: 32px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
-    .rc-divider { width: 100%; height: 1px; background: dashed 2px var(--border-color); margin: 24px 0; }
+    /* NÚT SAO CHÉP MỚI (COPY BTN) */
+    .copy-btn { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; color: var(--brand-primary); font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .copy-btn:hover { background: #e0e7ff; border-color: #c7d2fe; transform: translateY(-1px); }
+    .copy-btn:active { transform: translateY(0); }
+    .copy-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;}
+
+    /* ================= CHI TIẾT HÓA ĐƠN (RECEIPT CARD) ================= */
+    .receipt-wrapper { max-width: 440px; margin: 0 auto; width: 100%; background: #ffffff; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.06); border: 1px solid var(--border-color); overflow: hidden; }
     
-    .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; }
-    .detail-label { color: var(--text-muted); font-weight: 500; }
-    .detail-value { font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    /* Phần Top Biên lai */
+    .receipt-header { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); padding: 40px 24px 32px; text-align: center; border-bottom: 2px dashed #cbd5e1; position: relative; }
+    .rc-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
+    .rc-icon svg { width: 32px; height: 32px; stroke: white; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .rc-status { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); }
+    .rc-amount { font-size: 36px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; }
+    
+    /* Phần Bottom Biên lai */
+    .receipt-body { padding: 32px 24px; background: #ffffff; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .detail-row:last-child { margin-bottom: 0; }
+    .detail-label { color: var(--text-muted); font-size: 14px; font-weight: 600; }
+    .detail-value { font-weight: 800; color: var(--text-main); font-size: 15px; display: flex; align-items: center; gap: 8px; }
 
-    /* NÚT CHÍNH (PRIMARY BUTTON) */
-    .btn-main { 
-        width: 100%; padding: 16px; background: var(--brand-gradient); color: #ffffff; 
-        border: none; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 700; 
-        cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px var(--brand-shadow); 
-    }
+    /* NÚT CHÍNH CỦA FORM */
+    .btn-main { width: 100%; padding: 18px; background: var(--brand-gradient); color: #ffffff; border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 24px var(--brand-shadow); letter-spacing: 0.5px; }
     .btn-main:active { transform: scale(0.98); }
     .btn-main:disabled { opacity: 0.6; cursor: not-allowed; }
-    .sys-msg { text-align: center; margin-top: 16px; font-size: 13px; font-weight: 600; min-height: 18px; }
+    .sys-msg { text-align: center; margin-top: 20px; font-size: 14px; font-weight: 700; min-height: 20px; }
 
-    /* TOAST THÔNG BÁO */
-    .toast { 
-        position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); 
-        background: var(--text-main); color: white; padding: 12px 24px; border-radius: 30px; 
-        font-weight: 600; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
-        opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 2000; 
-    }
+    /* TOAST */
+    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1e293b; color: white; padding: 14px 28px; border-radius: 30px; font-weight: 600; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ================= RESPONSIVE (MOBILE & TABLET) ================= */
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 1024px) {
         :root { --sidebar-width: 220px; }
-        .topbar { padding: 0 16px; }
     }
-
     @media (max-width: 768px) {
-        .sidebar { 
-            width: 100%; height: 65px; top: auto; bottom: 0; flex-direction: row; 
-            padding: 8px 12px; border-right: none; border-top: 1px solid var(--border-color); 
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.02); padding-bottom: calc(8px + env(safe-area-inset-bottom));
-        }
+        .sidebar { width: 100%; height: 70px; top: auto; bottom: 0; flex-direction: row; padding: 8px 12px; border-right: none; border-top: 1px solid var(--border-color); padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
         .brand, .logout-btn, .nav-item span { display: none; } 
         .nav-menu { flex-direction: row; width: 100%; justify-content: space-around; gap: 0; }
-        .nav-item { flex-direction: column; padding: 6px; border-radius: 8px; width: auto; flex: 1; justify-content: center; align-items: center; }
+        .nav-item { flex-direction: column; padding: 8px; border-radius: 10px; width: auto; flex: 1; justify-content: center; align-items: center; }
         .nav-item.active { background: transparent; color: var(--brand-primary); box-shadow: none; }
         .nav-item.active svg { stroke: var(--brand-primary); stroke-width: 2.5; }
         
-        .main-wrapper { margin-left: 0; padding-bottom: calc(65px + env(safe-area-inset-bottom)); } 
-        
-        .topbar { height: auto; padding: 16px; }
+        .main-wrapper { margin-left: 0; padding-bottom: calc(70px + env(safe-area-inset-bottom)); } 
+        .topbar { padding: 0 16px; }
         .topbar-greeting { display: none; } 
         .user-profile { width: 100%; justify-content: space-between; }
         
-        .mobile-logout { 
-            display: flex; align-items: center; justify-content: center; 
-            background: var(--status-failed-bg); color: var(--status-failed-text); 
-            border: none; border-radius: var(--border-radius-sm); width: 40px; height: 40px; cursor: pointer; 
-        }
+        .mobile-logout { display: flex; align-items: center; justify-content: center; background: var(--status-failed-bg); color: var(--status-failed-text); border: none; border-radius: 10px; width: 40px; height: 40px; cursor: pointer; }
         
         .content-area { padding: 16px; }
         .deck-grid { grid-template-columns: 1fr; gap: 12px; }
-        .form-container { padding: 20px 16px; border-radius: 16px; }
+        .form-container, .receipt-wrapper { border-radius: 20px; }
+        .form-container { padding: 24px 20px; }
         .quick-amounts { grid-template-columns: repeat(2, 1fr); }
-        .amount-input-box input { font-size: 24px; }
     }
   </style>
 </head>
 <body>
   
-  <!-- SIDEBAR (MENU TRÁI / ĐÁY TRÊN MOBILE) -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
       <div class="brand">
           <div class="brand-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div>
-          Dashboard
+          Hệ Thống
       </div>
       <nav class="nav-menu">
           <button class="nav-item active" id="nav-home" onclick="navigate('home')">
@@ -300,17 +207,16 @@
               <span>Đổi mật khẩu</span>
           </button>
       </nav>
-      <!-- Nút đăng xuất PC -->
       <button class="logout-btn" onclick="confirmLogout()">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           Đăng xuất
       </button>
   </aside>
 
-  <!-- KHU VỰC CHÍNH -->
+  <!-- MAIN WRAPPER -->
   <main class="main-wrapper">
       
-      <!-- TOPBAR (HEADER) -->
+      <!-- TOPBAR -->
       <header class="topbar">
           <div class="topbar-greeting">Xin chào, <span id="displayEmail" style="color: var(--brand-primary);"></span></div>
           <div class="user-profile">
@@ -320,7 +226,6 @@
               </div>
               <div style="display: flex; gap: 12px; align-items: center;">
                   <div class="avatar"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                  <!-- Nút đăng xuất Mobile -->
                   <button class="mobile-logout" onclick="confirmLogout()">
                       <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                   </button>
@@ -328,7 +233,7 @@
           </div>
       </header>
 
-      <!-- VÙNG NỘI DUNG TỪNG TRANG -->
+      <!-- CONTENT AREA -->
       <section class="content-area">
           
           <!-- TRANG TỔNG QUAN -->
@@ -340,88 +245,95 @@
                   <button class="filter-btn" onclick="setFilter('failed', this)">Thất bại</button>
               </div>
               <div class="deck-grid" id="deckView">
-                  <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px; font-size: 14px; font-weight: 500;">
-                      Đang đồng bộ dữ liệu...
+                  <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px; font-size: 14px; font-weight: 600;">
+                      Đang đồng bộ dữ liệu hệ thống...
                   </div>
               </div>
           </div>
 
-        <!-- TRANG NẠP TIỀN -->
+          <!-- TRANG NẠP TIỀN -->
           <div id="view-add" class="page-view">
-              <div class="form-container">
-                  <div class="form-header">
-                      <h3 class="form-title">Nạp Tiền</h3>
-                  </div>
-                  
-                  <div class="amount-input-box">
-                      <span>VND</span>
-                      <input type="text" id="amount" inputmode="numeric" placeholder="0" oninput="formatInput(this)">
-                  </div>
+              <div class="form-wrapper">
+                  <div class="form-container">
+                      <div class="form-header">
+                          <h3 class="form-title" style="position: static; text-align: left; padding: 0;">Tạo Đơn Nạp</h3>
+                      </div>
+                      
+                      <div class="amount-input-box">
+                          <span>VND</span>
+                          <input type="text" id="amount" inputmode="numeric" placeholder="0" oninput="formatInput(this)">
+                      </div>
 
-                  <div class="quick-amounts">
-                      <button class="quick-btn" onclick="setAmount(50000)">50.000đ</button>
-                      <button class="quick-btn" onclick="setAmount(100000)">100.000đ</button>
-                      <button class="quick-btn" onclick="setAmount(200000)">200.000đ</button>
-                      <button class="quick-btn" onclick="setAmount(500000)">500.000đ</button>
-                      <button class="quick-btn" onclick="setAmount(1000000)">1 Triệu</button>
-                      <button class="quick-btn" onclick="setAmount(5000000)">5 Triệu</button>
+                      <div class="quick-amounts">
+                          <button class="quick-btn" onclick="setAmount(50000)">50.000đ</button>
+                          <button class="quick-btn" onclick="setAmount(100000)">100.000đ</button>
+                          <button class="quick-btn" onclick="setAmount(200000)">200.000đ</button>
+                          <button class="quick-btn" onclick="setAmount(500000)">500.000đ</button>
+                          <button class="quick-btn" onclick="setAmount(1000000)">1 Triệu</button>
+                          <button class="quick-btn" onclick="setAmount(5000000)">5 Triệu</button>
+                      </div>
+                      
+                      <button class="btn-main" id="submitBtn" onclick="submitForm()">Xác Nhận Nạp Tiền</button>
+                      <div class="sys-msg" id="message"></div>
                   </div>
-                  
-                  <button class="btn-main" id="submitBtn" onclick="submitForm()">Xác Nhận Nạp Tiền</button>
-                  <div class="sys-msg" id="message"></div>
               </div>
           </div>
 
           <!-- TRANG ĐỔI MẬT KHẨU -->
           <div id="view-pwd" class="page-view">
-              <div class="form-container">
-                  <div class="form-header">
-                      <h3 class="form-title">Đổi Mật Khẩu</h3>
-                  </div>
+              <div class="form-wrapper">
+                  <div class="form-container">
+                      <div class="form-header">
+                          <h3 class="form-title" style="position: static; text-align: left; padding: 0;">Đổi Mật Khẩu</h3>
+                      </div>
 
-                  <div class="input-group">
-                      <label>Mật khẩu cũ</label>
-                      <input type="password" id="old-pwd" placeholder="Nhập mật khẩu hiện tại">
+                      <div class="input-group">
+                          <label>Mật khẩu hiện tại</label>
+                          <input type="password" id="old-pwd" placeholder="Nhập mật khẩu đang sử dụng">
+                      </div>
+                      <div class="input-group">
+                          <label>Mật khẩu mới</label>
+                          <input type="password" id="new-pwd" placeholder="Nhập ít nhất 6 ký tự">
+                      </div>
+                      <div class="input-group" style="margin-bottom: 28px;">
+                          <label>Xác nhận mật khẩu mới</label>
+                          <input type="password" id="confirm-pwd" placeholder="Nhập lại mật khẩu mới">
+                      </div>
+                      
+                      <button class="btn-main" id="pwdBtn" onclick="changePassword()">Cập Nhật Thay Đổi</button>
+                      <div class="sys-msg" id="pwd-msg"></div>
                   </div>
-                  <div class="input-group">
-                      <label>Mật khẩu mới</label>
-                      <input type="password" id="new-pwd" placeholder="Nhập mật khẩu mới">
-                  </div>
-                  <div class="input-group" style="margin-bottom: 24px;">
-                      <label>Xác nhận mật khẩu mới</label>
-                      <input type="password" id="confirm-pwd" placeholder="Nhập lại mật khẩu mới">
-                  </div>
-                  
-                  <button class="btn-main" id="pwdBtn" onclick="changePassword()">Cập Nhật Mật Khẩu</button>
-                  <div class="sys-msg" id="pwd-msg"></div>
               </div>
           </div>
 
-          <!-- CHI TIẾT HÓA ĐƠN -->
+          <!-- TRANG CHI TIẾT HÓA ĐƠN (RECEIPT) -->
           <div id="view-detail" class="page-view">
-              <div class="form-container">
-                  <div class="form-header">
-                      <h3 class="form-title">Chi Tiết Hóa Đơn</h3>
-                  </div>
+              <div class="form-wrapper">
+                  <div class="receipt-wrapper">
+                      <div class="receipt-header">
+                          <button class="btn-back" onclick="navigate('home')" style="position: absolute; top: 24px; left: 24px;"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                          
+                          <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending-text);"></div>
+                          <div class="rc-status" id="rc-title-status">Đang xử lí</div>
+                          <div class="rc-amount" id="rc-amount-row">0 ₫</div>
+                      </div>
 
-                  <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending-text);"></div>
-                  <div class="rc-status" id="rc-title-status">Đang xử lí</div>
-                  <div class="rc-amount" id="rc-amount-row">0 ₫</div>
-                  
-                  <div class="rc-divider"></div>
-
-                  <div class="detail-row">
-                      <span class="detail-label">Mã giao dịch</span>
-                      <span class="detail-value">
-                          <span id="rc-id" style="font-family: monospace;"></span> 
-                          <button class="copy-btn" onclick="copyText(document.getElementById('rc-id').innerText)">
-                              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                          </button>
-                      </span>
-                  </div>
-                  <div class="detail-row">
-                      <span class="detail-label">Thời gian tạo</span>
-                      <span class="detail-value" id="rc-time"></span>
+                      <div class="receipt-body">
+                          <div class="detail-row">
+                              <span class="detail-label">Mã giao dịch</span>
+                              <span class="detail-value">
+                                  <span id="rc-id" style="font-family: monospace;"></span> 
+                                  <button class="copy-btn" onclick="copyText(document.getElementById('rc-id').innerText)">
+                                      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 
+                                      Copy
+                                  </button>
+                              </span>
+                          </div>
+                          <div class="detail-row">
+                              <span class="detail-label">Thời gian tạo</span>
+                              <span class="detail-value" id="rc-time" style="color: var(--text-muted);"></span>
+                          </div>
+                      </div>
                   </div>
               </div>
           </div>
@@ -429,10 +341,9 @@
       </section>
   </main>
 
-  <!-- TOAST MESSAGE -->
-  <div class="toast" id="toastMsg">Đã sao chép!</div>
+  <div class="toast" id="toastMsg">Đã sao chép vào bộ nhớ tạm!</div>
 
-  <!-- SCRIPTS -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
     const userEmail = localStorage.getItem("userEmail");
@@ -456,12 +367,10 @@
         document.getElementById('view-' + viewId).classList.add('active');
         
         if(viewId !== 'detail') currentDetailId = null;
-        if(viewId === 'add') document.getElementById('amount').value = '';
+        if(viewId === 'add') { document.getElementById('amount').value = ''; document.getElementById('message').innerText = ''; }
         if(viewId === 'pwd') {
-            document.getElementById('old-pwd').value = '';
-            document.getElementById('new-pwd').value = '';
-            document.getElementById('confirm-pwd').value = '';
-            document.getElementById('pwd-msg').innerText = '';
+            document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
+            document.getElementById('confirm-pwd').value = ''; document.getElementById('pwd-msg').innerText = '';
         }
     }
 
@@ -529,7 +438,7 @@
         container.innerHTML = "";
 
         if (filtered.length === 0) {
-            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px; font-size: 14px;">Không tìm thấy giao dịch nào.</div>';
+            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px; font-size: 14px; font-weight: 500;">Không có giao dịch nào.</div>';
             return;
         }
 
@@ -541,7 +450,9 @@
                 <div class="tx-left">
                     <div class="tx-id-wrap">
                         <span class="tx-id">#${displayId}</span>
-                        <button class="copy-btn" onclick="event.stopPropagation(); copyText('${displayId}')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyText('${displayId}')">
+                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
                     </div>
                     <span class="tx-time">${tx.timeFormated}</span>
                 </div>
@@ -560,13 +471,16 @@
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
         document.getElementById("rc-id").innerText = "#" + tx.maGiaoDich.replace('TXN', '');
         document.getElementById("rc-time").innerText = tx.timeFormated; 
-        document.getElementById("rc-amount-row").innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tx.amount);
+        document.getElementById("rc-amount-row").innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tx.amount) + ' đ';
+        
         const titleEl = document.getElementById("rc-title-status");
         const iconWrap = document.getElementById("rc-icon-wrapper");
         titleEl.innerText = tx.statusText;
+        
         if(tx.mappedStatus === 'success') { titleEl.style.color = "var(--status-success-text)"; iconWrap.style.background = "var(--status-success-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-success-text)"><polyline points="20 6 9 17 4 12"></polyline></svg>'; } 
         else if (tx.mappedStatus === 'failed') { titleEl.style.color = "var(--status-failed-text)"; iconWrap.style.background = "var(--status-failed-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-failed-text)"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'; } 
         else { titleEl.style.color = "var(--status-pending-text)"; iconWrap.style.background = "var(--status-pending-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-pending-text)"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'; }
+        
         document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
         document.getElementById('view-detail').classList.add('active');
     }
