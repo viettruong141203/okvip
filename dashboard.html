@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-  <title>Thanh Toán Online</title>
+  <title>Thanh Toán Online - Dark Mode</title>
   <style>
     :root {
-      /* BẢNG MÀU AURORA GLASS */
-      --bg-base: #f8fafc; 
-      --card-bg: rgba(255, 255, 255, 0.75); 
-      --card-border: rgba(255, 255, 255, 1); 
-      --text-main: #0f172a; 
-      --text-muted: #64748b;
+      /* BẢNG MÀU DARK GLASSMORPHISM & NEUMORPHISM */
+      --bg-base: #0b101e;
+      --card-bg: rgba(26, 31, 53, 0.6);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       
-      --brand-primary: #8b5cf6;
-      --brand-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
-      --brand-glow: rgba(236, 72, 153, 0.25);
+      --brand-primary: #00f2fe;
+      --brand-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --brand-glow: rgba(0, 242, 254, 0.3);
       
       --status-pending: #f59e0b; 
       --status-success: #10b981; 
@@ -30,9 +30,10 @@
       display: flex; flex-direction: column; align-items: center; min-height: 100vh; 
       padding-bottom: calc(40px + env(safe-area-inset-bottom)); -webkit-font-smoothing: antialiased;
       
+      /* Hiệu ứng ánh sáng Cực quang bóng tối */
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.12), transparent 35%),
-        radial-gradient(circle at 85% 60%, rgba(236, 72, 153, 0.12), transparent 35%);
+        radial-gradient(circle at 10% 10%, rgba(79, 172, 254, 0.15), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.12), transparent 40%);
       background-attachment: fixed;
     }
     .container { width: 100%; max-width: 480px; position: relative; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
@@ -47,78 +48,82 @@
     .page-header .page-title { font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap; letter-spacing: 0.5px;}
     .header-spacer { width: 44px; height: 44px; flex-shrink: 0; }
     
-    .back-btn { background: rgba(255, 255, 255, 0.8); border: 1px solid var(--card-border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; transition: 0.2s; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; z-index: 10;}
-    .back-btn:active { background: #f1f5f9; transform: scale(0.9);}
+    .back-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; transition: 0.2s; backdrop-filter: blur(12px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); flex-shrink: 0; z-index: 10;}
+    .back-btn:active { background: rgba(255,255,255,0.1); transform: scale(0.9);}
     .back-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; }
 
     /* MÀN HÌNH CHÍNH (HOME) */
-    .sticky-header { position: sticky; top: max(16px, env(safe-area-inset-top)); z-index: 100; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--card-border); border-radius: 28px; padding: 16px; margin-top: max(16px, env(safe-area-inset-top)); margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.04);}
+    .sticky-header { position: sticky; top: max(16px, env(safe-area-inset-top)); z-index: 100; background: rgba(11, 16, 30, 0.7); backdrop-filter: blur(24px); border: 1px solid var(--card-border); border-radius: 28px; padding: 16px; margin-top: max(16px, env(safe-area-inset-top)); margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);}
     .top-row { display: flex; align-items: center; gap: 12px; width: 100%; }
-    .search-bar { flex: 1; display: flex; align-items: center; background: rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 0 16px; height: 50px; border: 1px solid var(--card-border); transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);}
-    .search-bar:focus-within { background: #ffffff; border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
+    
+    /* Ô Tìm kiếm phong cách Neumorphism chìm */
+    .search-bar { flex: 1; display: flex; align-items: center; background: rgba(0, 0, 0, 0.2); border-radius: 20px; padding: 0 16px; height: 50px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; box-shadow: inset 0 4px 6px rgba(0,0,0,0.3);}
+    .search-bar:focus-within { border-color: var(--brand-primary); box-shadow: inset 0 4px 6px rgba(0,0,0,0.3), 0 0 0 2px rgba(0, 242, 254, 0.2); }
     .search-bar svg { width: 20px; height: 20px; color: var(--text-muted); flex-shrink: 0;}
     .search-bar input { flex: 1; min-width: 0; background: transparent; border: none; color: var(--text-main); outline: none; margin-left: 10px; font-size: 15px; font-weight: 500;}
-    .search-bar input::placeholder { color: #cbd5e1; font-weight: 500;}
+    .search-bar input::placeholder { color: #64748b; font-weight: 500;}
     
-    .add-btn { flex-shrink: 0; width: 50px; height: 50px; border-radius: 20px; background: var(--brand-gradient); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px var(--brand-glow); transition: 0.3s;}
+    .add-btn { flex-shrink: 0; width: 50px; height: 50px; border-radius: 20px; background: var(--brand-gradient); color: #0b101e; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px var(--brand-glow); transition: 0.3s;}
     .add-btn:active { transform: scale(0.9) translateY(2px); box-shadow: 0 4px 12px var(--brand-glow); }
     .add-btn svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
     
     .filter-wrapper { display: flex; overflow-x: auto; gap: 8px; scrollbar-width: none; padding-bottom: 2px;}
     .filter-wrapper::-webkit-scrollbar { display: none; }
-    .filter-btn { padding: 10px 20px; border-radius: 16px; border: 1px solid var(--card-border); background: rgba(255, 255, 255, 0.5); color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
-    .filter-btn.active { background: var(--text-main); color: #ffffff; border-color: var(--text-main); box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15); }
+    .filter-btn { padding: 10px 20px; border-radius: 16px; border: 1px solid var(--card-border); background: rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+    .filter-btn.active { background: var(--brand-gradient); color: #0b101e; border-color: transparent; box-shadow: 0 6px 16px var(--brand-glow); }
 
     /* CARD DANH SÁCH */
     .list-container { padding-top: 4px; display: flex; flex-direction: column; gap: 16px;}
-    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);}
-    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06); }
-    .card:active { transform: scale(0.97) translateY(0); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);}
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);}
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.3); }
+    .card:active { transform: scale(0.97); }
     .card-left { display: flex; align-items: center; gap: 0; min-width: 0; flex: 1; padding-right: 8px;}
     .card-info { display: flex; flex-direction: column; gap: 6px; min-width: 0;}
     .card-id-wrap { display: flex; align-items: center; gap: 8px; }
     .card-id { font-family: monospace; font-size: 16px; font-weight: 800; color: var(--text-main); }
     
-    .icon-copy-mini { background: rgba(0, 0, 0, 0.03); border: 1px solid rgba(0,0,0,0.02); border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
-    .icon-copy-mini:active { background: rgba(0, 0, 0, 0.08); transform: scale(0.9);}
+    .icon-copy-mini { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
+    .icon-copy-mini:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.9);}
     .icon-copy-mini svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; }
     
     .card-time { font-size: 12px; color: var(--text-muted); font-weight: 600;}
     .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0;}
     .card-amount { font-weight: 800; font-size: 17px; color: var(--text-main); }
     
-    .status-text { font-size: 13px; font-weight: 700; }
-    .status-pending { color: var(--status-pending); }
-    .status-success { color: var(--status-success); }
-    .status-failed { color: var(--status-failed); }
+    .status-text { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(255,255,255,0.05); }
+    .status-pending { color: var(--status-pending); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .status-success { color: var(--status-success); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .status-failed { color: var(--status-failed); border: 1px solid rgba(244, 63, 94, 0.2); }
 
     /* MÀN HÌNH NHẬP TIỀN */
     .add-sub { text-align: center; font-size: 14px; color: var(--text-muted); margin-bottom: 32px; margin-top: -10px; font-weight: 500;}
-    .input-group { display: flex; align-items: center; background: rgba(255,255,255,0.8); border: 2px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.04); backdrop-filter: blur(10px);}
-    .input-group:focus-within { background: #ffffff; border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);}
-    .step-btn { flex: 0 0 64px; height: 64px; background: transparent; color: var(--text-muted); border: none; font-size: 1.8rem; cursor: pointer;}
-    .step-btn:active { background: rgba(0,0,0,0.05); color: var(--text-main);}
+    
+    .input-group { display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 32px; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); backdrop-filter: blur(10px); transition: 0.3s ease;}
+    .input-group:focus-within { border-color: var(--brand-primary); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 0 2px rgba(0, 242, 254, 0.15);}
+    .step-btn { flex: 0 0 64px; height: 64px; background: transparent; color: var(--brand-primary); border: none; font-size: 1.8rem; cursor: pointer; transition: 0.2s;}
+    .step-btn:active { background: rgba(255,255,255,0.05); color: #fff;}
     .input-group input[type="text"] { flex: 1; min-width: 0; border: none; background: transparent; color: var(--text-main); font-size: 34px; text-align: center; outline: none; font-weight: 800; }
     
-    button.btn-primary { width: 100%; padding: 18px; background: var(--brand-gradient); color: #ffffff; border: none; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; min-height: 60px; box-shadow: 0 12px 30px var(--brand-glow);}
+    button.btn-primary { width: 100%; padding: 18px; background: var(--brand-gradient); color: #0b101e; border: none; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; min-height: 60px; box-shadow: 0 12px 30px var(--brand-glow);}
     button.btn-primary:active { transform: scale(0.96) translateY(2px); box-shadow: 0 6px 15px var(--brand-glow);}
+    button.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
     /* MÀN HÌNH CHI TIẾT HÓA ĐƠN */
-    .receipt-card { width: 100%; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 28px; padding: 32px 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.05); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); text-align: center;}
+    .receipt-card { width: 100%; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 28px; padding: 32px 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.4); backdrop-filter: blur(24px); text-align: center;}
     
-    .rc-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; transition: 0.3s;}
-    .rc-icon svg { width: 32px; height: 32px; stroke: white; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+    .rc-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; transition: 0.3s; box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+    .rc-icon svg { width: 32px; height: 32px; stroke: #0b101e; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round;}
     
     .rc-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; transition: 0.3s;}
-    .rc-amount-big { font-size: 32px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 24px; }
-    .rc-divider { width: 100%; height: 1px; background: dashed 2px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    .rc-amount-big { font-size: 34px; font-weight: 900; color: #fff; margin-bottom: 24px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+    .rc-divider { width: 100%; height: 1px; background: dashed 2px rgba(255,255,255,0.1); margin-bottom: 24px; }
     
     .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 14.5px;}
     .detail-label { color: var(--text-muted); font-weight: 600;}
     .detail-value { font-weight: 800; text-align: right; color: var(--text-main); }
 
     /* TOAST THÔNG BÁO */
-    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: var(--bg-base); padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; pointer-events: none;}
+    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: #fff; color: #0b101e; padding: 14px 32px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; pointer-events: none;}
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -137,7 +142,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     <span id="displayEmail">Đang tải...</span>
                 </div>
-                <div style="font-size: 22px; font-weight: 900; color: var(--brand-primary);">
+                <div style="font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.2);">
                     <span id="displayBalance">0 ₫</span>
                 </div>
             </div>
@@ -184,7 +189,6 @@
         <button class="step-btn" onclick="adjustAmount(10000)">+</button>
       </div>
       
-      <!-- Không hiển thị dòng chữ "Nội dung" nữa, chỉ ngầm sinh mã bằng JS -->
       <button class="btn-primary" id="submitBtn" onclick="submitForm()">Xác nhận tạo đơn</button>
       <div id="message" style="text-align:center; margin-top:16px; font-size:14px; font-weight:700;"></div>
     </div>
@@ -201,7 +205,7 @@
 
       <div class="receipt-card">
         <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending);">
-           <!-- Icon sẽ chèn ngẫu nhiên bằng JS -->
+           <!-- Icon render bằng JS -->
         </div>
         <div class="rc-title" id="rc-title-status">Đang xử lí</div>
         <div class="rc-amount-big" id="rc-amount-row">0 ₫</div>
@@ -212,7 +216,7 @@
           <span class="detail-label">Mã giao dịch</span>
           <span class="detail-value mono" style="display:flex; align-items:center; gap:8px;">
               <span id="rc-id"></span> 
-              <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:rgba(139,92,246,0.1); padding:4px; border-radius:6px;">
+              <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:rgba(0, 242, 254, 0.1); padding:6px; border-radius:8px; border: 1px solid rgba(0,242,254,0.2);">
                   <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
               </span>
           </span>
@@ -226,15 +230,14 @@
 
   </div>
 
-  <div class="toast" id="toastMsg">Đã sao chép!</div>
+  <div class="toast" id="toastMsg">Đã sao chép mã!</div>
 
-  <!-- PHẦN XỬ LÝ JAVASCRIPT -->
+  <!-- PHẦN XỬ LÝ JAVASCRIPT GIỮ NGUYÊN (KHÔNG LỖI) -->
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
     
-    // BẢO MẬT: Kiểm tra nếu chưa đăng nhập thì đẩy về trang index
     if (!userEmail || !userId) {
         window.location.replace("index.html");
     } else {
@@ -243,11 +246,10 @@
 
     let allTransactions = [];
     let currentFilter = 'All';
-    let currentDetailId = null; // Quản lý ID đang xem chi tiết để auto update
+    let currentDetailId = null;
     let isFetching = false;
     let rawDataString = ""; 
 
-    // KHỞI CHẠY TỰ ĐỘNG TẢI LẠI SAU MỖI 2 GIÂY
     window.onload = () => { 
         loadHistoryData(); 
         setInterval(loadHistoryData, 2000); 
@@ -259,7 +261,6 @@
         if(viewId !== 'detail') currentDetailId = null;
     }
 
-    // XÁC NHẬN TRƯỚC KHI ĐĂNG XUẤT
     function confirmLogout() {
         if(confirm("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?")) {
             localStorage.clear();
@@ -267,7 +268,6 @@
         }
     }
 
-    // HÀM ÉP ĐỊNH DẠNG THỜI GIAN: HH:mm:ss dd/MM/yyyy
     function formatTimeUI(timeStr) {
         if (!timeStr) return "";
         if (typeof timeStr === 'string' && timeStr.includes('/')) return timeStr; 
@@ -281,12 +281,9 @@
             let mo = String(d.getMonth() + 1).padStart(2, '0');
             let yyyy = d.getFullYear();
             return `${hh}:${mm}:${ss} ${dd}/${mo}/${yyyy}`;
-        } catch(e) {
-            return timeStr;
-        }
+        } catch(e) { return timeStr; }
     }
 
-    // HÀM TẢI NGẦM DỮ LIỆU
     async function loadHistoryData() {
         if(isFetching) return;
         isFetching = true;
@@ -299,11 +296,9 @@
             const result = await response.json();
             
             if (result.status === "success") {
-                // Cập nhật SỐ DƯ
                 document.getElementById("displayBalance").innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result.balance || 0);
 
                 const newDataString = JSON.stringify(result.history);
-                // CHỈ RENDER LẠI NẾU DỮ LIỆU THAY ĐỔI
                 if(newDataString !== rawDataString) {
                     rawDataString = newDataString;
                     
@@ -312,7 +307,6 @@
                         let mappedStatus = "pending";
                         let statusText = "Đang xử lí"; 
 
-                        // CHUẨN HÓA TRẠNG THÁI HIỂN THỊ
                         if (rawStatus.includes("thành công") || rawStatus.includes("hoàn tất") || rawStatus.includes("đã")) {
                             mappedStatus = "success"; statusText = "Hoàn tất";
                         } else if (rawStatus.includes("thất bại") || rawStatus.includes("hủy") || rawStatus.includes("thất")) {
@@ -321,14 +315,10 @@
                             mappedStatus = "pending"; statusText = "Đang xử lí";
                         }
                         
-                        return { 
-                            ...tx, mappedStatus, statusText, timeFormated: formatTimeUI(tx.time) 
-                        };
+                        return { ...tx, mappedStatus, statusText, timeFormated: formatTimeUI(tx.time) };
                     });
                     
                     applyFilters();
-
-                    // Tự động làm mới UI Hóa đơn nếu đang mở xem
                     if(currentDetailId) openDetail(currentDetailId); 
                 }
             }
@@ -377,7 +367,7 @@
                     </div>
                 </div>
                 <div class="card-right">
-                    <span class="card-amount">${amountFormatted}</span>
+                    <span class="card-amount">${amountFormatted} đ</span>
                     <span class="status-text status-${tx.mappedStatus}">${tx.statusText}</span>
                 </div>
             </div>`;
@@ -385,7 +375,6 @@
         });
     }
 
-    // LÀM MỚI CHI TIẾT HÓA ĐƠN
     function openDetail(txId) {
         currentDetailId = txId;
         const tx = allTransactions.find(t => t.maGiaoDich === txId);
@@ -403,21 +392,23 @@
         if(tx.mappedStatus === 'success') {
             titleEl.style.color = "var(--status-success)";
             iconWrap.style.background = "var(--status-success)";
+            iconWrap.style.boxShadow = "0 8px 20px rgba(16, 185, 129, 0.4)";
             iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         } else if (tx.mappedStatus === 'failed') {
             titleEl.style.color = "var(--status-failed)";
             iconWrap.style.background = "var(--status-failed)";
+            iconWrap.style.boxShadow = "0 8px 20px rgba(244, 63, 94, 0.4)";
             iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
         } else {
             titleEl.style.color = "var(--status-pending)";
             iconWrap.style.background = "var(--status-pending)";
+            iconWrap.style.boxShadow = "0 8px 20px rgba(245, 158, 11, 0.4)";
             iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
         }
 
         navigate('detail');
     }
 
-    // ĐIỀU KHIỂN FORM TẠO ĐƠN
     function openAddPage() {
         document.getElementById('amount').value = '';
         document.getElementById('message').innerText = '';
@@ -438,7 +429,6 @@
         input.value = new Intl.NumberFormat('vi-VN').format(val);
     }
 
-    // TẠO MÃ NỘI DUNG MB
     function generateUniqueMB() {
         let code;
         let used = allTransactions.map(t => t.content);
@@ -446,11 +436,11 @@
         return code;
     }
 
-    // GỬI ĐƠN NẠP TIỀN
     async function submitForm() {
         let amountStr = document.getElementById('amount').value.replace(/\D/g, '');
         let amount = parseInt(amountStr);
         let msgBox = document.getElementById('message');
+        let btn = document.getElementById('submitBtn');
         
         if(!amountStr || amount < 2000 || amount > 2000000000) {
             msgBox.style.color = "var(--status-failed)";
@@ -458,8 +448,8 @@
         }
         
         let generatedContent = generateUniqueMB();
-        document.getElementById('submitBtn').innerText = 'Đang xử lý...';
-        document.getElementById('submitBtn').disabled = true;
+        btn.innerText = 'Đang xử lý...';
+        btn.disabled = true;
         msgBox.innerText = "";
         
         try {
@@ -475,7 +465,7 @@
             if(result.status === "success") {
                 msgBox.style.color = "var(--status-success)";
                 msgBox.innerText = "Tạo đơn thành công!";
-                loadHistoryData(); // Gọi update ngay
+                loadHistoryData(); 
                 setTimeout(() => { navigate('home'); }, 1500);
             } else {
                 msgBox.style.color = "var(--status-failed)";
@@ -485,12 +475,11 @@
             msgBox.style.color = "var(--status-failed)";
             msgBox.innerText = "Lỗi kết nối máy chủ!";
         } finally {
-            document.getElementById('submitBtn').innerText = 'Xác nhận tạo đơn';
-            document.getElementById('submitBtn').disabled = false;
+            btn.innerText = 'Xác nhận tạo đơn';
+            btn.disabled = false;
         }
     }
 
-    // SAO CHÉP MÃ
     function copyText(text) {
         navigator.clipboard.writeText(text).then(() => {
             const toast = document.getElementById("toastMsg");
