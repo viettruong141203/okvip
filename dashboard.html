@@ -174,14 +174,8 @@
         border-radius: var(--border-radius-lg); padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
         border: 1px solid var(--border-color); 
     }
-    .form-header { display: flex; align-items: center; margin-bottom: 24px; }
-    .btn-back { 
-        background: var(--bg-body); border: none; border-radius: var(--border-radius-sm); 
-        width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; 
-        cursor: pointer; color: var(--text-main); transition: 0.2s; 
-    }
-    .btn-back:hover { background: var(--border-color); }
-    .form-title { flex: 1; text-align: center; font-size: 18px; font-weight: 800; margin: 0; padding-right: 36px; }
+    .form-header { display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
+    .form-title { text-align: center; font-size: 18px; font-weight: 800; margin: 0; color: var(--text-main); }
 
     /* FORM NẠP TIỀN */
     .amount-input-box { 
@@ -193,7 +187,7 @@
     .amount-input-box input { 
         flex: 1; border: none; background: transparent; font-size: 28px; font-weight: 800; 
         color: var(--text-main); outline: none; width: 100%; 
-        -webkit-appearance: none; /* Fix iOS styling */
+        -webkit-appearance: none; 
     }
     
     .quick-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
@@ -352,15 +346,12 @@
               </div>
           </div>
 
-          <!-- TRANG NẠP TIỀN -->
+        <!-- TRANG NẠP TIỀN -->
           <div id="view-add" class="page-view">
               <div class="form-container">
                   <div class="form-header">
-                      <button class="btn-back" onclick="navigate('home')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                       <h3 class="form-title">Nạp Tiền</h3>
                   </div>
-                  
-                  <div style="text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Hạn mức: 2.000đ - 2.000.000.000đ</div>
                   
                   <div class="amount-input-box">
                       <span>VND</span>
@@ -385,7 +376,6 @@
           <div id="view-pwd" class="page-view">
               <div class="form-container">
                   <div class="form-header">
-                      <button class="btn-back" onclick="navigate('home')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                       <h3 class="form-title">Đổi Mật Khẩu</h3>
                   </div>
 
@@ -407,11 +397,10 @@
               </div>
           </div>
 
-          <!-- TRANG CHI TIẾT HÓA ĐƠN -->
+          <!-- CHI TIẾT HÓA ĐƠN -->
           <div id="view-detail" class="page-view">
               <div class="form-container">
                   <div class="form-header">
-                      <button class="btn-back" onclick="navigate('home')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                       <h3 class="form-title">Chi Tiết Hóa Đơn</h3>
                   </div>
 
@@ -575,9 +564,9 @@
         const titleEl = document.getElementById("rc-title-status");
         const iconWrap = document.getElementById("rc-icon-wrapper");
         titleEl.innerText = tx.statusText;
-        if(tx.mappedStatus === 'success') { titleEl.style.color = "var(--status-success-text)"; iconWrap.style.background = "var(--status-success-text)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>'; } 
-        else if (tx.mappedStatus === 'failed') { titleEl.style.color = "var(--status-failed-text)"; iconWrap.style.background = "var(--status-failed-text)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'; } 
-        else { titleEl.style.color = "var(--status-pending-text)"; iconWrap.style.background = "var(--status-pending-text)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'; }
+        if(tx.mappedStatus === 'success') { titleEl.style.color = "var(--status-success-text)"; iconWrap.style.background = "var(--status-success-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-success-text)"><polyline points="20 6 9 17 4 12"></polyline></svg>'; } 
+        else if (tx.mappedStatus === 'failed') { titleEl.style.color = "var(--status-failed-text)"; iconWrap.style.background = "var(--status-failed-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-failed-text)"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'; } 
+        else { titleEl.style.color = "var(--status-pending-text)"; iconWrap.style.background = "var(--status-pending-bg)"; iconWrap.innerHTML = '<svg viewBox="0 0 24 24" stroke="var(--status-pending-text)"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'; }
         document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
         document.getElementById('view-detail').classList.add('active');
     }
