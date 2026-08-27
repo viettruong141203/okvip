@@ -31,20 +31,20 @@
       --sidebar-width: 260px;
     }
     
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0;}
     
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--bg-base); color: var(--text-main); margin: 0; padding: 0;
-      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+      background-color: var(--bg-base); color: var(--text-main);
+      -webkit-font-smoothing: antialiased; 
+      display: flex; min-height: 100vh; overflow-x: hidden;
     }
 
-    /* ================= THANH ĐIỀU HƯỚNG BÊN TRÁI (SIDEBAR) ================= */
+    /* ================= SIDEBAR (TRÁI) ================= */
     .sidebar {
-        position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh;
+        position: fixed; top: 0; bottom: 0; left: 0; width: var(--sidebar-width);
         background: var(--card-bg); border-right: 1px solid var(--card-border);
         display: flex; flex-direction: column; padding: 24px 16px; z-index: 1000;
-        box-shadow: 4px 0 24px rgba(0,0,0,0.02);
     }
     .brand {
         font-size: 20px; font-weight: 900; color: var(--text-main); margin-bottom: 40px;
@@ -59,7 +59,7 @@
     .nav-item {
         display: flex; align-items: center; gap: 14px; padding: 14px 16px;
         border-radius: 14px; color: var(--text-muted); font-weight: 600; font-size: 15px;
-        cursor: pointer; transition: 0.2s; border: none; background: transparent; outline: none; width: 100%; text-align: left;
+        cursor: pointer; transition: 0.2s; border: none; background: transparent; width: 100%; text-align: left;
     }
     .nav-item:hover { background: var(--bg-base); color: var(--brand-primary); }
     .nav-item.active { background: var(--brand-primary); color: white; box-shadow: 0 8px 20px var(--brand-glow); }
@@ -72,67 +72,75 @@
     }
     .logout-btn:active { transform: scale(0.96); }
 
-    /* ================= KHU VỰC CHÍNH (MAIN WRAPPER) ================= */
-    .main-wrapper {
+    /* ================= KHU VỰC CHÍNH (PHẢI) ================= */
+    .main-content {
         margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column;
-        width: calc(100% - var(--sidebar-width)); min-height: 100vh; position: relative;
+        min-width: 0; /* Quan trọng: Chống vỡ khung layout */
     }
 
-    /* THANH TOPBAR */
+    /* TOPBAR */
     .topbar {
-        position: sticky; top: 0; z-index: 100; padding: 16px 32px;
-        background: rgba(244, 247, 254, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        position: sticky; top: 0; z-index: 99; padding: 16px 32px;
+        background: rgba(244, 247, 254, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         display: flex; justify-content: space-between; align-items: center;
-        border-bottom: 1px solid rgba(0,0,0,0.02);
+        border-bottom: 1px solid var(--card-border);
     }
     .top-search {
-        display: flex; align-items: center; background: white; border-radius: 20px;
-        padding: 0 20px; height: 48px; border: 1px solid var(--card-border); width: 300px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        display: flex; align-items: center; background: white; border-radius: 16px;
+        padding: 0 16px; height: 48px; border: 1px solid var(--card-border); width: 320px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
-    .top-search input { border: none; outline: none; background: transparent; margin-left: 12px; font-size: 14px; font-weight: 500; width: 100%;}
+    .top-search input { border: none; background: transparent; margin-left: 12px; font-size: 14px; font-weight: 500; width: 100%;}
     
     .user-profile { display: flex; align-items: center; gap: 20px; }
     .balance-box { display: flex; flex-direction: column; align-items: flex-end;}
     .balance-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
     .balance-value { font-size: 20px; font-weight: 900; color: var(--brand-primary); }
-    .avatar { width: 44px; height: 44px; border-radius: 12px; background: white; display: flex; justify-content: center; align-items: center; color: var(--brand-primary); border: 2px solid var(--card-border); box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+    .avatar { width: 44px; height: 44px; border-radius: 12px; background: white; display: flex; justify-content: center; align-items: center; color: var(--brand-primary); border: 2px solid var(--card-border); }
+    
+    .mobile-logout { display: none; }
 
-    /* KHU VỰC HIỂN THỊ NỘI DUNG (VIEWS) */
-    .content-area { padding: 32px; flex: 1; }
-    .page-view { display: none; flex-direction: column; animation: fadeIn 0.3s ease; }
+    /* KHU VỰC NỘI DUNG TỪNG TRANG */
+    .views-container { padding: 32px; flex: 1; display: flex; flex-direction: column; }
+    .page-view { display: none; flex-direction: column; flex: 1; animation: fadeIn 0.3s ease; }
     .page-view.active { display: flex; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* LỌC & DANH SÁCH (TRANG CHỦ) */
+    /* TRANG CHỦ (LỌC & DANH SÁCH) */
     .filter-wrapper { display: flex; gap: 10px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;}
     .filter-wrapper::-webkit-scrollbar { display: none; }
-    .filter-btn { padding: 10px 20px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.02);}
+    .filter-btn { padding: 10px 24px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.02);}
     .filter-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
 
-    .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; align-content: start; }
     .card { background: white; border: 1px solid var(--card-border); border-radius: 20px; padding: 24px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);}
     .card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06); border-color: var(--brand-primary); }
+    .card:active { transform: scale(0.97); }
     .card-id-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 8px;}
     .card-id { font-family: monospace; font-size: 17px; font-weight: 900; color: var(--text-main); }
     .card-time { font-size: 13px; color: var(--text-muted); font-weight: 600;}
     .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px;}
     .card-amount { font-weight: 900; font-size: 18px; color: var(--text-main); }
     .status-text { font-size: 13px; font-weight: 800; padding: 6px 12px; border-radius: 8px; }
+    
     .status-pending { color: var(--status-pending); background: rgba(245, 158, 11, 0.1); }
     .status-success { color: var(--status-success); background: rgba(16, 185, 129, 0.1); }
     .status-failed { color: var(--status-failed); background: rgba(244, 63, 94, 0.1); }
+    
     .icon-copy-mini { background: var(--bg-base); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: 0.2s;}
     .icon-copy-mini:hover { background: var(--brand-primary); color: white;}
+    .icon-copy-mini svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; }
 
-    /* FORM NẠP TIỀN & CHI TIẾT (CĂN GIỮA) */
+    /* TRANG NẠP TIỀN & CHI TIẾT (FORM BOX) */
     .centered-box { max-width: 500px; margin: 0 auto; width: 100%; background: white; border-radius: 24px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--card-border);}
-    .box-title { font-size: 20px; font-weight: 900; text-align: center; margin-bottom: 8px; }
-    .box-sub { text-align: center; font-size: 14px; color: var(--text-muted); font-weight: 600; margin-bottom: 32px; }
+    .box-header { display: flex; align-items: center; margin-bottom: 24px; }
+    .back-btn { background: var(--bg-base); border: none; border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-main); transition: 0.2s;}
+    .back-btn:hover { background: var(--card-border); }
+    .box-title { flex: 1; text-align: center; font-size: 20px; font-weight: 900; margin: 0; }
     
-    .input-group { display: flex; align-items: center; background: var(--bg-base); border: 2px solid var(--card-border); border-radius: 20px; overflow: hidden; margin-bottom: 24px; transition: 0.3s;}
+    .input-group { display: flex; align-items: center; background: var(--bg-base); border: 2px solid var(--card-border); border-radius: 16px; overflow: hidden; margin-bottom: 24px; transition: 0.3s;}
     .input-group:focus-within { border-color: var(--brand-primary); background: white;}
     .step-btn { flex: 0 0 60px; height: 60px; background: transparent; border: none; font-size: 24px; font-weight: bold; color: var(--text-muted); cursor: pointer;}
-    .input-group input { flex: 1; border: none; background: transparent; text-align: center; font-size: 30px; font-weight: 900; outline: none; color: var(--text-main);}
+    .input-group input { flex: 1; border: none; background: transparent; text-align: center; font-size: 30px; font-weight: 900; color: var(--text-main);}
     
     button.btn-primary { width: 100%; padding: 18px; background: var(--brand-gradient); color: #ffffff; border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px var(--brand-glow);}
     button.btn-primary:active { transform: scale(0.97); }
@@ -149,24 +157,34 @@
     .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: white; padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ================= RESPONSIVE ĐIỆN THOẠI (BOTTOM NAV) ================= */
+    /* ================= RESPONSIVE ĐIỆN THOẠI ================= */
     @media (max-width: 768px) {
         .sidebar {
-            top: auto; bottom: 0; width: 100%; height: 75px; flex-direction: row; justify-content: space-around;
-            padding: 10px; border-right: none; border-top: 1px solid var(--card-border); z-index: 1000;
+            width: 100%; height: 75px; top: auto; bottom: 0; flex-direction: row; 
+            padding: 10px 16px; border-right: none; border-top: 1px solid var(--card-border);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
         }
-        .brand, .logout-btn, .nav-item span { display: none; } /* Ẩn chữ và logo trên điện thoại */
-        .nav-menu { flex-direction: row; justify-content: space-around; width: 100%; gap: 0;}
+        .brand, .logout-btn, .nav-item span { display: none; } 
+        .nav-menu { flex-direction: row; width: 100%; justify-content: space-around; gap: 0;}
         .nav-item { flex-direction: column; gap: 4px; padding: 8px; border-radius: 12px; width: auto; flex: 1; justify-content: center; align-items: center;}
         .nav-item.active { background: transparent; color: var(--brand-primary); box-shadow: none; }
         .nav-item.active svg { stroke: var(--brand-primary); }
         
-        .main-wrapper { margin-left: 0; width: 100%; padding-bottom: 80px; }
+        .main-content { margin-left: 0; padding-bottom: 75px; } /* Nhường chỗ cho Bottom Nav */
+        
         .topbar { padding: 16px; flex-direction: column-reverse; gap: 16px; }
         .top-search { width: 100%; }
         .user-profile { width: 100%; justify-content: space-between; }
-        .content-area { padding: 16px; }
+        
+        .mobile-logout { 
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(244, 63, 94, 0.1); color: var(--status-failed); 
+            border: none; border-radius: 12px; width: 44px; height: 44px; cursor: pointer;
+        }
+        
+        .views-container { padding: 16px; }
         .deck-grid { grid-template-columns: 1fr; }
+        .centered-box { padding: 24px; border-radius: 20px;}
     }
   </style>
 </head>
@@ -176,7 +194,7 @@
   <aside class="sidebar">
       <div class="brand">
           <div class="brand-icon"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div>
-          Hệ Thống
+          Dashboard
       </div>
       <nav class="nav-menu">
           <button class="nav-item active" id="nav-home" onclick="navigate('home')">
@@ -188,14 +206,15 @@
               <span>Nạp tiền</span>
           </button>
       </nav>
+      <!-- Nút đăng xuất (Chỉ hiện trên PC) -->
       <button class="logout-btn" onclick="confirmLogout()">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          Đăng xuất
+          Đăng xuất hệ thống
       </button>
   </aside>
 
   <!-- KHU VỰC CHÍNH -->
-  <main class="main-wrapper">
+  <main class="main-content">
       
       <!-- THANH CÔNG CỤ TRÊN CÙNG -->
       <header class="topbar">
@@ -208,14 +227,20 @@
                   <span class="balance-label">Tổng số dư</span>
                   <span class="balance-value" id="displayBalance">0 ₫</span>
               </div>
-              <div class="avatar" title="Tài khoản của bạn">
-                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                  <div class="avatar" title="Tài khoản của bạn">
+                      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  </div>
+                  <!-- Nút đăng xuất (Chỉ hiện trên Mobile) -->
+                  <button class="mobile-logout" onclick="confirmLogout()" title="Đăng xuất">
+                      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                  </button>
               </div>
           </div>
       </header>
 
-      <!-- KHU VỰC NỘI DUNG -->
-      <section class="content-area">
+      <!-- KHU VỰC NỘI DUNG TỪNG TRANG -->
+      <section class="views-container">
           
           <!-- TRANG TỔNG QUAN (HOME) -->
           <div id="view-home" class="page-view active">
@@ -226,6 +251,7 @@
                   <button class="filter-btn" onclick="setFilter('failed', this)">Thất bại</button>
               </div>
 
+              <!-- DANH SÁCH LƯỚI THẺ -->
               <div class="deck-grid" id="deckView">
                   <div style="grid-column: 1/-1; text-align: center; color: var(--brand-primary); padding: 40px; font-weight: 700;">
                       Đang đồng bộ dữ liệu hệ thống...
@@ -236,7 +262,11 @@
           <!-- TRANG NẠP TIỀN -->
           <div id="view-add" class="page-view">
               <div class="centered-box">
-                  <div class="box-title">Tạo Đơn Nạp Tiền</div>
+                  <div class="box-header">
+                      <button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                      <h3 class="box-title">Nạp Tiền</h3>
+                      <div style="width: 44px;"></div>
+                  </div>
                   <div class="box-sub">Hạn mức: 2.000đ - 2.000.000.000đ</div>
                   
                   <div class="input-group">
@@ -252,7 +282,13 @@
 
           <!-- TRANG CHI TIẾT HÓA ĐƠN -->
           <div id="view-detail" class="page-view">
-              <div class="centered-box" style="padding-top: 40px;">
+              <div class="centered-box">
+                  <div class="box-header">
+                      <button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                      <h3 class="box-title">Chi Tiết Hóa Đơn</h3>
+                      <div style="width: 44px;"></div>
+                  </div>
+
                   <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending);"></div>
                   <div style="font-size: 20px; font-weight: 800; margin-bottom: 8px; text-align: center;" id="rc-title-status">Đang xử lí</div>
                   <div style="font-size: 38px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;" id="rc-amount-row">0 ₫</div>
@@ -263,7 +299,7 @@
                       <span class="detail-label">Mã giao dịch</span>
                       <span class="detail-value">
                           <span id="rc-id" style="font-family: monospace;"></span> 
-                          <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:var(--bg-base); padding:6px; border-radius:8px; display: flex;">
+                          <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:var(--bg-base); padding:6px; border-radius:8px;">
                               <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                           </span>
                       </span>
@@ -298,7 +334,7 @@
         setInterval(loadHistoryData, 2000); 
     };
 
-    // QUẢN LÝ ĐIỀU HƯỚNG TÁP
+    // QUẢN LÝ ĐIỀU HƯỚNG TAB
     function navigate(viewId) {
         // Đổi màu menu sidebar
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
@@ -370,7 +406,7 @@
                     if(currentDetailId) openDetail(currentDetailId); 
                 }
             }
-        } catch (error) { console.log("Lỗi tải ngầm", error); }
+        } catch (error) {}
         isFetching = false;
     }
 
@@ -383,6 +419,11 @@
     }
 
     function applyFilters() {
+        // Tự động chuyển về Home nếu đang ở form Thêm/Chi tiết mà bấm tìm kiếm
+        if(!document.getElementById('view-home').classList.contains('active') && document.getElementById('searchInput').value.trim() !== '') {
+            navigate('home');
+        }
+
         const currentSearch = document.getElementById('searchInput').value.toLowerCase();
         const filtered = allTransactions.filter(tx => {
             let matchFilter = (currentFilter === 'All') || (tx.mappedStatus === currentFilter);
@@ -414,7 +455,7 @@
                     <span class="card-time">${tx.timeFormated}</span>
                 </div>
                 <div class="card-right">
-                    <span class="card-amount">${amountFormatted}</span>
+                    <span class="card-amount">${amountFormatted} đ</span>
                     <span class="status-text status-${tx.mappedStatus}">${tx.statusText}</span>
                 </div>
             </div>`;
@@ -427,7 +468,6 @@
         const tx = allTransactions.find(t => t.maGiaoDich === txId);
         if(!tx) return;
         
-        // Remove active state from sidebar when in detail view
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
 
         document.getElementById("rc-id").innerText = "#" + tx.maGiaoDich.replace('TXN', '');
