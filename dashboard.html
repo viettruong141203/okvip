@@ -14,249 +14,277 @@
 
   <style>
     :root {
-      /* BẢNG MÀU AURORA GLASS */
-      --bg-base: #f8fafc; 
-      --card-bg: rgba(255, 255, 255, 0.75); 
-      --card-border: rgba(255, 255, 255, 1); 
-      --text-main: #0f172a; 
+      --bg-base: #f4f7fe; 
+      --card-bg: #ffffff; 
+      --card-border: rgba(226, 232, 240, 0.8); 
+      --text-main: #1e293b; 
       --text-muted: #64748b;
       
-      --brand-primary: #8b5cf6;
-      --brand-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
-      --brand-glow: rgba(236, 72, 153, 0.25);
+      --brand-primary: #6366f1;
+      --brand-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --brand-glow: rgba(99, 102, 241, 0.25);
       
       --status-pending: #f59e0b; 
       --status-success: #10b981; 
       --status-failed: #f43f5e; 
+      
+      --sidebar-width: 260px;
     }
     
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--bg-base); color: var(--text-main); margin: 0; padding: 0;
-      display: flex; flex-direction: column; align-items: center; min-height: 100vh; 
-      padding-bottom: 40px; -webkit-font-smoothing: antialiased;
-      
-      /* Nền Cực quang (Aurora) */
-      background-image: 
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.12), transparent 35%),
-        radial-gradient(circle at 85% 60%, rgba(236, 72, 153, 0.12), transparent 35%);
-      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
     }
 
-    /* MỞ RỘNG CONTAINER CHO DASHBOARD */
-    .container { width: 100%; max-width: 1200px; position: relative; padding: 24px; }
+    /* ================= THANH ĐIỀU HƯỚNG BÊN TRÁI (SIDEBAR) ================= */
+    .sidebar {
+        position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh;
+        background: var(--card-bg); border-right: 1px solid var(--card-border);
+        display: flex; flex-direction: column; padding: 24px 16px; z-index: 1000;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.02);
+    }
+    .brand {
+        font-size: 20px; font-weight: 900; color: var(--text-main); margin-bottom: 40px;
+        display: flex; align-items: center; gap: 12px; padding: 0 12px;
+    }
+    .brand-icon {
+        width: 36px; height: 36px; border-radius: 10px; background: var(--brand-gradient);
+        display: flex; justify-content: center; align-items: center; color: white;
+    }
+    
+    .nav-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .nav-item {
+        display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+        border-radius: 14px; color: var(--text-muted); font-weight: 600; font-size: 15px;
+        cursor: pointer; transition: 0.2s; border: none; background: transparent; outline: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: var(--bg-base); color: var(--brand-primary); }
+    .nav-item.active { background: var(--brand-primary); color: white; box-shadow: 0 8px 20px var(--brand-glow); }
+    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; }
+    
+    .logout-btn {
+        margin-top: auto; display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+        border-radius: 14px; color: var(--status-failed); font-weight: 700; font-size: 15px;
+        cursor: pointer; transition: 0.2s; border: none; background: rgba(244, 63, 94, 0.1); width: 100%; text-align: left;
+    }
+    .logout-btn:active { transform: scale(0.96); }
 
-    /* KIẾN TRÚC MÀN HÌNH SPA */
-    .page-view { display: none; flex-direction: column; width: 100%; animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    /* ================= KHU VỰC CHÍNH (MAIN WRAPPER) ================= */
+    .main-wrapper {
+        margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column;
+        width: calc(100% - var(--sidebar-width)); min-height: 100vh; position: relative;
+    }
+
+    /* THANH TOPBAR */
+    .topbar {
+        position: sticky; top: 0; z-index: 100; padding: 16px 32px;
+        background: rgba(244, 247, 254, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.02);
+    }
+    .top-search {
+        display: flex; align-items: center; background: white; border-radius: 20px;
+        padding: 0 20px; height: 48px; border: 1px solid var(--card-border); width: 300px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .top-search input { border: none; outline: none; background: transparent; margin-left: 12px; font-size: 14px; font-weight: 500; width: 100%;}
+    
+    .user-profile { display: flex; align-items: center; gap: 20px; }
+    .balance-box { display: flex; flex-direction: column; align-items: flex-end;}
+    .balance-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+    .balance-value { font-size: 20px; font-weight: 900; color: var(--brand-primary); }
+    .avatar { width: 44px; height: 44px; border-radius: 12px; background: white; display: flex; justify-content: center; align-items: center; color: var(--brand-primary); border: 2px solid var(--card-border); box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+
+    /* KHU VỰC HIỂN THỊ NỘI DUNG (VIEWS) */
+    .content-area { padding: 32px; flex: 1; }
+    .page-view { display: none; flex-direction: column; animation: fadeIn 0.3s ease; }
     .page-view.active { display: flex; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* BỐ CỤC DASHBOARD (CHIA CỘT) */
-    .dashboard-layout { display: flex; gap: 30px; width: 100%; align-items: flex-start; }
-    .sidebar { width: 320px; flex-shrink: 0; position: sticky; top: 24px; display: flex; flex-direction: column; gap: 20px; }
-    .main-board { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
-
-    /* THẺ GLASSMORPHISM CHUNG */
-    .glass-card {
-        background: var(--card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); 
-        border: 1px solid var(--card-border); border-radius: 28px; padding: 24px; 
-        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-    }
-
-    /* THÔNG TIN SỐ DƯ (SIDEBAR) */
-    .user-email { display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 24px; word-break: break-all;}
-    .balance-title { font-size: 14px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
-    .balance-amount { font-size: 32px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    .btn-logout { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: var(--status-failed); font-weight: 800; padding: 16px; border-radius: 20px; font-size: 15px; cursor: pointer; transition: 0.2s; width: 100%;}
-    .btn-logout:active { transform: scale(0.96); }
-
-    /* TÌM KIẾM & BỘ LỌC (MAIN BOARD) */
-    .top-row { display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 16px;}
-    .search-bar { flex: 1; display: flex; align-items: center; background: rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 0 16px; height: 52px; border: 1px solid var(--card-border); transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);}
-    .search-bar:focus-within { background: #ffffff; border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
-    .search-bar svg { width: 20px; height: 20px; color: var(--text-muted); flex-shrink: 0;}
-    .search-bar input { flex: 1; border: none; background: transparent; color: var(--text-main); outline: none; margin-left: 10px; font-size: 15px; font-weight: 500;}
-    
-    .filter-wrapper { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; }
+    /* LỌC & DANH SÁCH (TRANG CHỦ) */
+    .filter-wrapper { display: flex; gap: 10px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;}
     .filter-wrapper::-webkit-scrollbar { display: none; }
-    .filter-btn { padding: 10px 24px; border-radius: 20px; border: 1px solid var(--card-border); background: rgba(255, 255, 255, 0.6); color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.3s; }
-    .filter-btn.active { background: var(--text-main); color: #ffffff; border-color: var(--text-main); box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15); }
+    .filter-btn { padding: 10px 20px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.02);}
+    .filter-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
 
-    /* DANH SÁCH GIAO DỊCH DẠNG LƯỚI (DECK/GRID) */
-    .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);}
-    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06); border-color: var(--brand-primary); }
-    .card:active { transform: scale(0.97); }
-    .card-id-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 6px;}
-    .card-id { font-family: monospace; font-size: 16px; font-weight: 900; color: var(--text-main); }
-    .card-time { font-size: 12.5px; color: var(--text-muted); font-weight: 600;}
-    .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px;}
+    .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .card { background: white; border: 1px solid var(--card-border); border-radius: 20px; padding: 24px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);}
+    .card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06); border-color: var(--brand-primary); }
+    .card-id-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 8px;}
+    .card-id { font-family: monospace; font-size: 17px; font-weight: 900; color: var(--text-main); }
+    .card-time { font-size: 13px; color: var(--text-muted); font-weight: 600;}
+    .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px;}
     .card-amount { font-weight: 900; font-size: 18px; color: var(--text-main); }
-    
-    .status-text { font-size: 13.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px; }
+    .status-text { font-size: 13px; font-weight: 800; padding: 6px 12px; border-radius: 8px; }
     .status-pending { color: var(--status-pending); background: rgba(245, 158, 11, 0.1); }
     .status-success { color: var(--status-success); background: rgba(16, 185, 129, 0.1); }
     .status-failed { color: var(--status-failed); background: rgba(244, 63, 94, 0.1); }
-
-    .icon-copy-mini { background: rgba(0,0,0,0.04); border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: 0.2s;}
+    .icon-copy-mini { background: var(--bg-base); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: 0.2s;}
     .icon-copy-mini:hover { background: var(--brand-primary); color: white;}
-    .icon-copy-mini svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; }
 
-    /* NÚT CHÍNH */
-    button.btn-primary { width: 100%; padding: 18px; background: var(--brand-gradient); color: #ffffff; border: none; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 12px 30px var(--brand-glow);}
-    button.btn-primary:active { transform: scale(0.96); }
-
-    /* TRANG CON (NẠP TIỀN / CHI TIẾT) CĂN GIỮA */
-    .centered-view { max-width: 500px; margin: 0 auto; width: 100%; }
+    /* FORM NẠP TIỀN & CHI TIẾT (CĂN GIỮA) */
+    .centered-box { max-width: 500px; margin: 0 auto; width: 100%; background: white; border-radius: 24px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--card-border);}
+    .box-title { font-size: 20px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+    .box-sub { text-align: center; font-size: 14px; color: var(--text-muted); font-weight: 600; margin-bottom: 32px; }
     
-    .page-header { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 24px; position: relative; }
-    .page-title { font-size: 1.3rem; font-weight: 900; position: absolute; left: 50%; transform: translateX(-50%); }
-    .back-btn { background: rgba(255, 255, 255, 0.8); border: 1px solid var(--card-border); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); z-index: 10;}
+    .input-group { display: flex; align-items: center; background: var(--bg-base); border: 2px solid var(--card-border); border-radius: 20px; overflow: hidden; margin-bottom: 24px; transition: 0.3s;}
+    .input-group:focus-within { border-color: var(--brand-primary); background: white;}
+    .step-btn { flex: 0 0 60px; height: 60px; background: transparent; border: none; font-size: 24px; font-weight: bold; color: var(--text-muted); cursor: pointer;}
+    .input-group input { flex: 1; border: none; background: transparent; text-align: center; font-size: 30px; font-weight: 900; outline: none; color: var(--text-main);}
     
-    /* INPUT NẠP TIỀN */
-    .input-group { display: flex; align-items: center; background: rgba(255,255,255,0.8); border: 2px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.04); }
-    .input-group:focus-within { border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);}
-    .step-btn { flex: 0 0 64px; height: 64px; background: transparent; border: none; font-size: 24px; font-weight: bold; color: var(--text-muted); cursor: pointer;}
-    .input-group input { flex: 1; border: none; background: transparent; text-align: center; font-size: 32px; font-weight: 900; outline: none; }
+    button.btn-primary { width: 100%; padding: 18px; background: var(--brand-gradient); color: #ffffff; border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px var(--brand-glow);}
+    button.btn-primary:active { transform: scale(0.97); }
 
-    /* HÓA ĐƠN */
+    /* CHI TIẾT HÓA ĐƠN */
     .rc-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; }
     .rc-icon svg { width: 32px; height: 32px; stroke: white; stroke-width: 3; fill: none; stroke-linecap: round; }
     .rc-divider { width: 100%; height: 1px; background: dashed 2px rgba(0,0,0,0.08); margin: 24px 0; }
     .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 15px;}
-    
-    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: var(--bg-base); padding: 14px 32px; border-radius: 30px; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000; }
+    .detail-label { color: var(--text-muted); font-weight: 600;}
+    .detail-value { font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+
+    /* TOAST THÔNG BÁO */
+    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: white; padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* RESPONSIVE CHO ĐIỆN THOẠI */
-    @media (max-width: 860px) {
-        .dashboard-layout { flex-direction: column; gap: 20px; }
-        .sidebar { width: 100%; position: static; }
+    /* ================= RESPONSIVE ĐIỆN THOẠI (BOTTOM NAV) ================= */
+    @media (max-width: 768px) {
+        .sidebar {
+            top: auto; bottom: 0; width: 100%; height: 75px; flex-direction: row; justify-content: space-around;
+            padding: 10px; border-right: none; border-top: 1px solid var(--card-border); z-index: 1000;
+        }
+        .brand, .logout-btn, .nav-item span { display: none; } /* Ẩn chữ và logo trên điện thoại */
+        .nav-menu { flex-direction: row; justify-content: space-around; width: 100%; gap: 0;}
+        .nav-item { flex-direction: column; gap: 4px; padding: 8px; border-radius: 12px; width: auto; flex: 1; justify-content: center; align-items: center;}
+        .nav-item.active { background: transparent; color: var(--brand-primary); box-shadow: none; }
+        .nav-item.active svg { stroke: var(--brand-primary); }
+        
+        .main-wrapper { margin-left: 0; width: 100%; padding-bottom: 80px; }
+        .topbar { padding: 16px; flex-direction: column-reverse; gap: 16px; }
+        .top-search { width: 100%; }
+        .user-profile { width: 100%; justify-content: space-between; }
+        .content-area { padding: 16px; }
         .deck-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   
-  <div class="container">
-    
-    <!-- ================= MÀN HÌNH CHÍNH (DASHBOARD) ================= -->
-    <div id="view-home" class="page-view active">
-      <div class="dashboard-layout">
-        
-        <!-- SIDEBAR (TRÁI/TRÊN) -->
-        <div class="sidebar">
-            <div class="glass-card">
-                <div class="user-email">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span id="displayEmail">Đang tải...</span>
-                </div>
-                <div class="balance-title">Tổng số dư</div>
-                <div class="balance-amount" id="displayBalance">0 ₫</div>
-            </div>
-            
-            <button class="btn-primary" onclick="openAddPage()">
-                <div style="display:flex; justify-content:center; align-items:center; gap:8px;">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5V19M5 12H19"></path></svg>
-                    Tạo Giao Dịch Nạp
-                </div>
-            </button>
-            <button class="btn-logout" onclick="confirmLogout()">Đăng xuất hệ thống</button>
-        </div>
-
-        <!-- MAIN BOARD (PHẢI/DƯỚI) -->
-        <div class="main-board">
-            <div class="glass-card" style="padding: 16px 24px;">
-                <div class="top-row">
-                    <div class="search-bar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="searchInput" placeholder="Tìm kiếm mã giao dịch..." oninput="applyFilters()">
-                    </div>
-                </div>
-                <div class="filter-wrapper">
-                    <button class="filter-btn active" onclick="setFilter('All', this)">Tất cả</button>
-                    <button class="filter-btn" onclick="setFilter('pending', this)">Đang xử lí</button>
-                    <button class="filter-btn" onclick="setFilter('success', this)">Hoàn tất</button>
-                    <button class="filter-btn" onclick="setFilter('failed', this)">Thất bại</button>
-                </div>
-            </div>
-
-            <!-- GRID GIAO DỊCH -->
-            <div class="deck-grid" id="deckView">
-                <div style="grid-column: 1 / -1; text-align: center; color: var(--brand-primary); padding: 40px; font-weight: 700;">
-                    Đang đồng bộ dữ liệu hệ thống...
-                </div>
-            </div>
-        </div>
-        
+  <!-- THANH ĐIỀU HƯỚNG BÊN TRÁI -->
+  <aside class="sidebar">
+      <div class="brand">
+          <div class="brand-icon"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div>
+          Hệ Thống
       </div>
-    </div>
+      <nav class="nav-menu">
+          <button class="nav-item active" id="nav-home" onclick="navigate('home')">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Tổng quan</span>
+          </button>
+          <button class="nav-item" id="nav-add" onclick="openAddPage()">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              <span>Nạp tiền</span>
+          </button>
+      </nav>
+      <button class="logout-btn" onclick="confirmLogout()">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Đăng xuất
+      </button>
+  </aside>
 
-    <!-- ================= MÀN HÌNH TẠO ĐƠN ================= -->
-    <div id="view-add" class="page-view centered-view">
-      <div class="page-header">
-        <button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" stroke="currentColor"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-        <h3 class="page-title">Nạp Tiền</h3>
-        <div class="header-spacer"></div>
-      </div>
-
-      <div style="text-align: center; font-size: 14.5px; color: var(--text-muted); margin-bottom: 24px; font-weight: 600;">Hạn mức giao dịch: 2.000đ - 2.000.000.000đ</div>
+  <!-- KHU VỰC CHÍNH -->
+  <main class="main-wrapper">
       
-      <div class="input-group">
-        <button class="step-btn" onclick="adjustAmount(-10000)">-</button>
-        <input type="text" id="amount" inputmode="numeric" placeholder="0" oninput="formatInput(this)">
-        <button class="step-btn" onclick="adjustAmount(10000)">+</button>
-      </div>
-      
-      <button class="btn-primary" id="submitBtn" onclick="submitForm()">Xác Nhận Nạp Tiền</button>
-      <div id="message" style="text-align:center; margin-top:20px; font-size:15px; font-weight:800;"></div>
-    </div>
+      <!-- THANH CÔNG CỤ TRÊN CÙNG -->
+      <header class="topbar">
+          <div class="top-search">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--text-muted)" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchInput" placeholder="Tìm kiếm mã giao dịch..." oninput="applyFilters()">
+          </div>
+          <div class="user-profile">
+              <div class="balance-box">
+                  <span class="balance-label">Tổng số dư</span>
+                  <span class="balance-value" id="displayBalance">0 ₫</span>
+              </div>
+              <div class="avatar" title="Tài khoản của bạn">
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </div>
+          </div>
+      </header>
 
-    <!-- ================= MÀN HÌNH CHI TIẾT ================= -->
-    <div id="view-detail" class="page-view centered-view">
-      <div class="page-header">
-        <button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" stroke="currentColor"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-        <h3 class="page-title">Chi Tiết Hóa Đơn</h3>
-        <div class="header-spacer"></div>
-      </div>
+      <!-- KHU VỰC NỘI DUNG -->
+      <section class="content-area">
+          
+          <!-- TRANG TỔNG QUAN (HOME) -->
+          <div id="view-home" class="page-view active">
+              <div class="filter-wrapper">
+                  <button class="filter-btn active" onclick="setFilter('All', this)">Tất cả</button>
+                  <button class="filter-btn" onclick="setFilter('pending', this)">Đang xử lí</button>
+                  <button class="filter-btn" onclick="setFilter('success', this)">Hoàn tất</button>
+                  <button class="filter-btn" onclick="setFilter('failed', this)">Thất bại</button>
+              </div>
 
-      <div class="glass-card" style="text-align: center;">
-        <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending);"></div>
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;" id="rc-title-status">Đang xử lí</div>
-        <div style="font-size: 36px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="rc-amount-row">0 ₫</div>
-        
-        <div class="rc-divider"></div>
+              <div class="deck-grid" id="deckView">
+                  <div style="grid-column: 1/-1; text-align: center; color: var(--brand-primary); padding: 40px; font-weight: 700;">
+                      Đang đồng bộ dữ liệu hệ thống...
+                  </div>
+              </div>
+          </div>
 
-        <div class="detail-row">
-          <span class="detail-label">Mã giao dịch</span>
-          <span style="display:flex; align-items:center; gap:8px; font-family: monospace; font-weight: 900; font-size: 16px;">
-              <span id="rc-id"></span> 
-              <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:rgba(139,92,246,0.1); padding:6px; border-radius:8px;">
-                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              </span>
-          </span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Thời gian tạo</span>
-          <span style="font-weight: 800;" id="rc-time"></span>
-        </div>
-      </div>
-    </div>
+          <!-- TRANG NẠP TIỀN -->
+          <div id="view-add" class="page-view">
+              <div class="centered-box">
+                  <div class="box-title">Tạo Đơn Nạp Tiền</div>
+                  <div class="box-sub">Hạn mức: 2.000đ - 2.000.000.000đ</div>
+                  
+                  <div class="input-group">
+                      <button class="step-btn" onclick="adjustAmount(-10000)">-</button>
+                      <input type="text" id="amount" inputmode="numeric" placeholder="0" oninput="formatInput(this)">
+                      <button class="step-btn" onclick="adjustAmount(10000)">+</button>
+                  </div>
+                  
+                  <button class="btn-primary" id="submitBtn" onclick="submitForm()">Xác Nhận Nạp Tiền</button>
+                  <div id="message" style="text-align:center; margin-top:20px; font-size:15px; font-weight:800;"></div>
+              </div>
+          </div>
 
-  </div>
+          <!-- TRANG CHI TIẾT HÓA ĐƠN -->
+          <div id="view-detail" class="page-view">
+              <div class="centered-box" style="padding-top: 40px;">
+                  <div class="rc-icon" id="rc-icon-wrapper" style="background: var(--status-pending);"></div>
+                  <div style="font-size: 20px; font-weight: 800; margin-bottom: 8px; text-align: center;" id="rc-title-status">Đang xử lí</div>
+                  <div style="font-size: 38px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;" id="rc-amount-row">0 ₫</div>
+                  
+                  <div class="rc-divider"></div>
 
-  <div class="toast" id="toastMsg">Đã sao chép!</div>
+                  <div class="detail-row">
+                      <span class="detail-label">Mã giao dịch</span>
+                      <span class="detail-value">
+                          <span id="rc-id" style="font-family: monospace;"></span> 
+                          <span onclick="copyText(document.getElementById('rc-id').innerText)" style="color:var(--brand-primary); cursor:pointer; background:var(--bg-base); padding:6px; border-radius:8px; display: flex;">
+                              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                          </span>
+                      </span>
+                  </div>
+                  <div class="detail-row">
+                      <span class="detail-label">Thời gian tạo</span>
+                      <span class="detail-value" id="rc-time"></span>
+                  </div>
+              </div>
+          </div>
+
+      </section>
+  </main>
+
+  <div class="toast" id="toastMsg">Đã sao chép mã!</div>
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
-    
-    document.getElementById("displayEmail").innerText = userEmail;
 
     let allTransactions = [];
     let currentFilter = 'All';
@@ -270,9 +298,17 @@
         setInterval(loadHistoryData, 2000); 
     };
 
+    // QUẢN LÝ ĐIỀU HƯỚNG TÁP
     function navigate(viewId) {
+        // Đổi màu menu sidebar
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        if(viewId === 'home') document.getElementById('nav-home').classList.add('active');
+        if(viewId === 'add') document.getElementById('nav-add').classList.add('active');
+        
+        // Hiện view tương ứng
         document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
         document.getElementById('view-' + viewId).classList.add('active');
+        
         if(viewId !== 'detail') currentDetailId = null;
     }
 
@@ -283,6 +319,7 @@
         }
     }
 
+    // ÉP ĐỊNH DẠNG THỜI GIAN
     function formatTimeUI(timeStr) {
         if (!timeStr) return "";
         if (typeof timeStr === 'string' && timeStr.includes('/')) return timeStr; 
@@ -298,6 +335,7 @@
         } catch(e) { return timeStr; }
     }
 
+    // TẢI DỮ LIỆU TỰ ĐỘNG
     async function loadHistoryData() {
         if(isFetching) return;
         isFetching = true;
@@ -336,6 +374,7 @@
         isFetching = false;
     }
 
+    // BỘ LỌC TÌM KIẾM
     function setFilter(filterType, btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -375,18 +414,22 @@
                     <span class="card-time">${tx.timeFormated}</span>
                 </div>
                 <div class="card-right">
-                    <span class="card-amount">${amountFormatted} đ</span>
+                    <span class="card-amount">${amountFormatted}</span>
                     <span class="status-text status-${tx.mappedStatus}">${tx.statusText}</span>
                 </div>
             </div>`;
         });
     }
 
+    // XEM CHI TIẾT
     function openDetail(txId) {
         currentDetailId = txId;
         const tx = allTransactions.find(t => t.maGiaoDich === txId);
         if(!tx) return;
         
+        // Remove active state from sidebar when in detail view
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+
         document.getElementById("rc-id").innerText = "#" + tx.maGiaoDich.replace('TXN', '');
         document.getElementById("rc-time").innerText = tx.timeFormated; 
         document.getElementById("rc-amount-row").innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tx.amount);
@@ -408,9 +451,12 @@
             iconWrap.style.background = "var(--status-pending)";
             iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
         }
-        navigate('detail');
+        
+        document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-detail').classList.add('active');
     }
 
+    // FORM NẠP TIỀN
     function openAddPage() {
         document.getElementById('amount').value = '';
         document.getElementById('message').innerText = '';
