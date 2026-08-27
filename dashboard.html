@@ -56,7 +56,6 @@
         background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08), transparent 50%);
     }
 
-    /* Ẩn hiện các trang */
     .page-view { display: none; flex-direction: column; flex: 1; padding-bottom: 80px; animation: fadeIn 0.3s ease; }
     .page-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
@@ -129,7 +128,13 @@
     .pf-btn i { font-size: 24px; color: var(--brand-primary); }
     .pf-btn:active { transform: scale(0.95); border-color: var(--brand-primary); }
 
+    /* Lịch sử trong Profile */
     .history-section { padding: 0 20px; }
+    .history-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; scrollbar-width: none;}
+    .history-tabs::-webkit-scrollbar { display: none; }
+    .h-tab { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.2s;}
+    .h-tab.active { background: var(--brand-primary); color: #000; border-color: var(--brand-primary); box-shadow: 0 4px 10px rgba(245,158,11,0.3);}
+
     .history-list { display: flex; flex-direction: column; gap: 12px; }
     .h-card { background: var(--bg-surface); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
     .h-left { display: flex; flex-direction: column; gap: 6px; }
@@ -137,6 +142,11 @@
     .h-time { font-size: 12px; color: var(--text-muted); font-weight: 600; }
     .h-right { text-align: right; display: flex; flex-direction: column; gap: 6px; }
     .h-amount { font-weight: 900; font-size: 16px; color: var(--text-main);}
+    
+    .badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.5px; }
+    .badge.pending { color: var(--status-pending-text); background: var(--status-pending-bg); border: 1px solid rgba(251, 191, 36, 0.2); }
+    .badge.success { color: var(--status-success-text); background: var(--status-success-bg); border: 1px solid rgba(52, 211, 153, 0.2);}
+    .badge.failed { color: var(--status-failed-text); background: var(--status-failed-bg); border: 1px solid rgba(248, 113, 113, 0.2);}
 
     /* ================= CÁC FORM CHUNG ================= */
     .form-wrapper { padding: 20px; }
@@ -148,10 +158,8 @@
     .input-box:focus-within { border-color: var(--brand-primary); box-shadow: 0 0 0 2px rgba(245,158,11,0.2); }
     .input-box label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;}
     .input-box input, .input-box select { width: 100%; border: none; background: transparent; font-size: 16px; font-weight: 800; color: #fff; outline: none;}
-    
     .input-box select { -webkit-appearance: none; background: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right center; }
     .input-box select option, .input-box select optgroup { background: var(--bg-surface); color: white; font-weight: bold;}
-    
     .input-box.amount-box input { font-size: 32px; color: var(--brand-primary); }
 
     .btn-submit { width: 100%; background: var(--brand-gradient); color: white; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 24px var(--brand-shadow); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;}
@@ -162,13 +170,12 @@
     .btn-money { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 12px 0; border-radius: 12px; font-size: 14px; font-weight: 700; color: var(--text-muted); cursor: pointer;}
     .btn-money:active { background: rgba(245,158,11,0.1); color: var(--brand-primary); border-color: var(--brand-primary);}
 
-    /* Danh sách ngân hàng */
-    .bank-item { background: var(--bg-surface); border: 1px solid var(--brand-primary); padding: 16px; border-radius: 16px; margin-bottom: 16px; position: relative; overflow: hidden;}
+    .bank-item { background: var(--bg-surface); border: 1px solid var(--brand-primary); padding: 16px; border-radius: 16px; margin-bottom: 16px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(245,158,11,0.1);}
     .bank-item::before { content:''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--brand-primary); }
     .bank-item-name { font-size: 16px; font-weight: 900; color: var(--brand-primary); margin-bottom: 4px; }
     .bank-item-acc { font-family: monospace; font-size: 16px; font-weight: bold; color: white;}
 
-    /* ================= LOTO HINT BOX ================= */
+    /* LOTO HINT BOX */
     .loto-hint-box { font-size: 13px; color: var(--text-muted); margin-top: -12px; margin-bottom: 20px; font-weight: 600; padding: 0 4px;}
     .loto-hint-box b { color: var(--brand-primary); }
 
@@ -250,17 +257,30 @@
         </div>
 
         <div class="history-section">
-            <div class="section-header"><div class="section-title">LỊCH SỬ RÚT TIỀN</div></div>
+            <div class="section-header"><div class="section-title">LỊCH SỬ GIAO DỊCH</div></div>
+            
+            <div class="history-tabs">
+                <button class="h-tab active" onclick="filterHistory('All', this)">Tất cả</button>
+                <button class="h-tab" onclick="filterHistory('Nạp tiền', this)">Nạp</button>
+                <button class="h-tab" onclick="filterHistory('Rút tiền', this)">Rút</button>
+                <button class="h-tab" onclick="filterHistory('Đặt cược', this)">Cược</button>
+            </div>
+
             <div class="history-list" id="historyList">
                 <div style="text-align: center; color: var(--text-muted); padding: 20px;">Đang tải dữ liệu...</div>
             </div>
+
+            <!-- Nút Đăng Xuất To Nổi Bật -->
+            <button class="btn-submit" style="background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); margin-top: 30px; box-shadow: none;" onclick="confirmLogout()">
+                <i class="fas fa-power-off"></i> ĐĂNG XUẤT
+            </button>
         </div>
     </div>
 
     <!-- ================= CÁC FORM CHỨC NĂNG ================= -->
     
-    
-        <div id="view-add" class="page-view form-wrapper">
+    <!-- 1. Form Nạp tiền -->
+    <div id="view-add" class="page-view form-wrapper">
         <div class="form-header">
             <button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button>
             <div class="form-title">Nạp Tiền</div>
@@ -281,6 +301,7 @@
         <div class="sys-msg" id="msg-add"></div>
     </div>
 
+    <!-- 2. Form Rút tiền -->
     <div id="view-withdraw" class="page-view form-wrapper">
         <div class="form-header">
             <button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button>
@@ -298,24 +319,27 @@
         <div class="sys-msg" id="msg-wd"></div>
     </div>
 
+    <!-- 3. Form Thêm Ngân Hàng (Khóa duy nhất 1 tài khoản) -->
     <div id="view-bank" class="page-view form-wrapper">
         <div class="form-header">
             <button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button>
-            <div class="form-title">Quản Lý Ngân Hàng</div>
+            <div class="form-title">Ngân Hàng</div>
         </div>
+        
         <div id="bank-list-container"></div>
-        <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px; margin-top: 10px;">
-            <div class="section-title" style="margin-bottom: 16px;">Thêm Ngân Hàng Mới</div>
+        
+        <div id="bank-form-section" style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px; margin-top: 10px;">
+            <div class="section-title" style="margin-bottom: 16px;">Cập Nhật Tài Khoản Nhận Tiền</div>
             <div class="input-box"><label>Tên Ngân hàng</label><input type="text" id="bk-name" placeholder="VD: Vietcombank, MB Bank"></div>
             <div class="input-box"><label>Số tài khoản</label><input type="text" id="bk-acc" placeholder="Nhập số tài khoản"></div>
             <div class="input-box"><label>Tên Chủ Tài Khoản</label><input type="text" id="bk-owner" placeholder="NGUYEN VAN A" style="text-transform: uppercase;"></div>
             <div class="input-box"><label>Chi nhánh</label><input type="text" id="bk-branch" placeholder="Hà Nội"></div>
-            <button class="btn-submit" id="btn-bank" onclick="submitBank()">Liên Kết Ngân Hàng</button>
+            <button class="btn-submit" id="btn-bank" onclick="submitBank()">CẬP NHẬT NGÂN HÀNG</button>
             <div class="sys-msg" id="msg-bank"></div>
         </div>
     </div>
 
-    <!-- ================= FORM ĐẶT CƯỢC XSMB VỚI TỶ LỆ CHUẨN ================= -->
+    <!-- 4. Form Đặt Cược XSMB -->
     <div id="view-loto" class="page-view form-wrapper">
         <div class="form-header">
             <button class="btn-back" onclick="navigate('home')"><i class="fas fa-chevron-left"></i></button>
@@ -324,11 +348,6 @@
 
         <div class="input-box">
             <label>Hình thức chơi</label>
-            <!-- 
-                data-rate: Tiền thắng / 1 điểm
-                data-cost: Số giải (Số vốn phải nhân lên). Ví dụ Lô 2 số = 27 giải.
-                data-xien: Yêu cầu chính xác bao nhiêu số
-            -->
             <select id="loto-type" onchange="calcLoto()">
                 <optgroup label="Nhóm Lô">
                     <option value="Lô 2 số" data-rate="99" data-cost="27">Lô 2 số (27 giải) - 1 ăn 99</option>
@@ -358,12 +377,10 @@
             </select>
         </div>
 
-        <div class="loto-hint-box" id="loto-hint">
-            <!-- Nội dung tự động hiện luật cược -->
-        </div>
+        <div class="loto-hint-box" id="loto-hint"></div>
 
         <div class="input-box">
-            <label>Nhập các số cược (Cách nhau bởi dấu phẩy)</label>
+            <label>Nhập các số cược (Cách nhau dấu phẩy)</label>
             <input type="text" id="loto-nums" placeholder="VD: 68, 86, 99" style="letter-spacing: 2px;" oninput="calcLoto()">
         </div>
 
@@ -386,7 +403,9 @@
         <button class="btn-submit" id="btn-loto" onclick="submitLoto()">XÁC NHẬN CƯỢC</button>
         <div class="sys-msg" id="msg-loto"></div>
     </div>
-  <!-- ================= BOTTOM NAVIGATION ================= -->
+
+
+    <!-- ================= BOTTOM NAVIGATION ================= -->
     <nav class="bottom-nav">
         <button class="nav-item active" id="nav-home" onclick="navigate('home')">
             <i class="fas fa-home"></i><span>Trang chủ</span>
@@ -402,7 +421,6 @@
         </button>
     </nav>
 
-    <!-- TOAST -->
     <div class="toast" id="toastMsg">Thành công!</div>
 
   </div> <!-- End App -->
@@ -417,14 +435,15 @@
 
     let userBalance = 0;
     let userBanks = [];
-    let userWithdraws = [];
+    let userHistoryArray = [];
     let isFetching = false;
     let rawDataString = ""; 
+    let currentHistoryFilter = 'All';
 
     window.onload = () => { 
         loadAppData(); 
         setInterval(loadAppData, 3000); 
-        calcLoto(); // Init loto hint
+        calcLoto(); 
     };
 
     function navigate(viewId) {
@@ -438,6 +457,10 @@
         document.querySelectorAll('.sys-msg').forEach(msg => msg.innerText = '');
         window.scrollTo(0,0);
         if(viewId === 'loto') calcLoto();
+    }
+
+    function confirmLogout() {
+        if(confirm("Bạn có chắc chắn muốn đăng xuất?")) { localStorage.clear(); window.location.replace("index.html"); }
     }
 
     function showToast(msg) {
@@ -461,13 +484,13 @@
                     rawDataString = newDataString;
                     userBalance = result.balance || 0;
                     userBanks = result.banks || [];
-                    userWithdraws = result.withdraws || [];
+                    userHistoryArray = result.history || [];
                     
                     const balFormatted = new Intl.NumberFormat('vi-VN').format(userBalance);
                     document.getElementById("topBalance").innerText = balFormatted + ' ₫';
                     document.getElementById("displayBalanceBig").innerText = balFormatted;
                     
-                    renderWithdrawHistory();
+                    renderHistory();
                     renderBankList();
                     populateBankDropdown();
                 }
@@ -476,29 +499,49 @@
         isFetching = false;
     }
 
-    function renderWithdrawHistory() {
+    function filterHistory(type, btnElement) {
+        document.querySelectorAll('.h-tab').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        currentHistoryFilter = type;
+        renderHistory();
+    }
+
+    function renderHistory() {
         const container = document.getElementById("historyList");
         container.innerHTML = "";
-        if (userWithdraws.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Chưa có lịch sử rút tiền.</div>';
+        
+        let filtered = userHistoryArray;
+        if(currentHistoryFilter !== 'All') {
+            filtered = userHistoryArray.filter(h => h.type === currentHistoryFilter);
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Không có giao dịch nào.</div>';
             return;
         }
-        userWithdraws.forEach(wd => {
-            const amountFormatted = new Intl.NumberFormat('vi-VN').format(wd.amount);
-            let rawStatus = wd.status ? wd.status.toLowerCase() : "";
-            let stClass = "pending", stText = wd.status || "Đang xử lý";
-            if(rawStatus.includes("thành công") || rawStatus.includes("hoàn tất")) { stClass = "success"; stText = "Thành công"; }
-            else if(rawStatus.includes("từ chối") || rawStatus.includes("hủy") || rawStatus.includes("thất bại")) { stClass = "failed"; stText = "Thất bại"; }
 
-            // Nếu ID thiếu "OUT", gắn thêm vào cho đẹp
-            let displayId = wd.id;
-            if(!displayId.includes("OUT")) displayId = "OUT" + displayId.replace("TXN","");
+        filtered.forEach(item => {
+            const amountFormatted = new Intl.NumberFormat('vi-VN').format(item.amount);
+            let rawStatus = item.status ? item.status.toLowerCase() : "";
+            let stClass = "pending", stText = item.status || "Chờ xử lý";
+
+            if(rawStatus.includes("thành công") || rawStatus.includes("hoàn tất") || rawStatus.includes("thắng") || rawStatus.includes("trúng")) { stClass = "success"; }
+            else if(rawStatus.includes("từ chối") || rawStatus.includes("hủy") || rawStatus.includes("thất bại") || rawStatus.includes("trượt")) { stClass = "failed"; }
+
+            let displayId = item.id;
+            if(!displayId.includes("TXN") && !displayId.includes("IN") && !displayId.includes("OUT") && !displayId.includes("BET")) displayId = "#" + displayId;
+
+            let icon = "fa-exchange-alt", color = "var(--text-muted)";
+            if(item.type === "Nạp tiền") { icon = "fa-arrow-down"; color = "#34d399"; }
+            if(item.type === "Rút tiền") { icon = "fa-arrow-up"; color = "#f87171"; }
+            if(item.type === "Đặt cược") { icon = "fa-dice"; color = "#f59e0b"; }
 
             container.innerHTML += `
             <div class="h-card">
-                <div class="h-left">
-                    <span class="h-id">#${displayId}</span>
-                    <span class="h-time">Lệnh Rút Tiền</span>
+                <div class="h-left" style="gap:4px;">
+                    <span class="h-id" style="color: ${color};"><i class="fas ${icon}"></i> ${item.type}</span>
+                    <span class="h-time" style="font-size: 11px; opacity: 0.7;">${displayId} | ${item.time}</span>
+                    <span class="h-time" style="font-weight:bold; color: #fff; margin-top:2px;">${item.detail}</span>
                 </div>
                 <div class="h-right">
                     <span class="h-amount">${amountFormatted} ₫</span>
@@ -508,19 +551,28 @@
         });
     }
 
+    function toggleBankForm() {
+        document.getElementById("bank-form-section").style.display = "block";
+    }
+
     function renderBankList() {
         const container = document.getElementById("bank-list-container");
-        container.innerHTML = "";
-        if(userBanks.length === 0) return;
-        
-        container.innerHTML = '<div class="section-title" style="margin-bottom: 12px;">Ngân hàng đã liên kết</div>';
-        userBanks.forEach(bk => {
-            container.innerHTML += `
+        const formSection = document.getElementById("bank-form-section");
+
+        if(userBanks.length > 0) {
+            let bk = userBanks[0];
+            container.innerHTML = `
             <div class="bank-item">
                 <div class="bank-item-name">${bk.bankName}</div>
                 <div class="bank-item-acc">${bk.accountNumber} - ${bk.accountName}</div>
+                <div style="margin-top:12px; font-size: 12px; color: #fbbf24;">* Mỗi tài khoản chỉ được liên kết 1 ngân hàng duy nhất.</div>
+                <button onclick="toggleBankForm()" style="margin-top: 12px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; width: 100%;">THAY ĐỔI NGÂN HÀNG</button>
             </div>`;
-        });
+            formSection.style.display = "none";
+        } else {
+            container.innerHTML = '<div style="color:var(--text-muted); font-size: 14px; margin-bottom:16px;">Bạn chưa có ngân hàng nào.</div>';
+            formSection.style.display = "block";
+        }
     }
 
     function populateBankDropdown() {
@@ -540,9 +592,8 @@
         if(val === '') { input.value = ''; return; }
         input.value = new Intl.NumberFormat('vi-VN').format(val);
     }
-    function setAmount(inputId, val) { document.getElementById(inputId).value = new Intl.NumberFormat('vi-VN').format(val); }
+    function setAmount(inputId, val) { document.getElementById(inputId).value = new Intl.NumberFormat('vi-VN').format(val); calcLoto(); }
 
-    // 1. NẠP TIỀN
     async function submitDeposit() {
         let amountStr = document.getElementById('amount-add').value.replace(/\D/g, '');
         let amount = parseInt(amountStr);
@@ -560,7 +611,6 @@
         finally { document.getElementById('btn-add').innerText='TẠO LỆNH NẠP'; document.getElementById('btn-add').disabled = false; }
     }
 
-    // 2. RÚT TIỀN
     async function submitWithdraw() {
         let amountStr = document.getElementById('amount-wd').value.replace(/\D/g, '');
         let amount = parseInt(amountStr);
@@ -582,7 +632,6 @@
         finally { document.getElementById('btn-wd').innerText='TẠO LỆNH RÚT'; document.getElementById('btn-wd').disabled = false; }
     }
 
-    // 3. THÊM NGÂN HÀNG
     async function submitBank() {
         let name = document.getElementById('bk-name').value.trim();
         let acc = document.getElementById('bk-acc').value.trim();
@@ -596,13 +645,12 @@
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "add_bank", email: userEmail, userId: userId, bankName: name, bin: "", accountNumber: acc, accountName: owner, branch: branch }) });
             const result = await res.json();
-            if(result.status === "success") { showToast("Thêm Ngân hàng thành công!"); setTimeout(()=>navigate('profile'),1000); loadAppData(); } 
+            if(result.status === "success") { showToast("Cập nhật Ngân hàng thành công!"); setTimeout(()=>navigate('profile'),1000); loadAppData(); } 
             else { msgBox.style.color="red"; msgBox.innerText=result.message; }
         } catch(e) { msgBox.style.color="red"; msgBox.innerText="Lỗi kết nối!"; }
-        finally { document.getElementById('btn-bank').innerText='LIÊN KẾT NGÂN HÀNG'; document.getElementById('btn-bank').disabled = false; }
+        finally { document.getElementById('btn-bank').innerText='CẬP NHẬT NGÂN HÀNG'; document.getElementById('btn-bank').disabled = false; }
     }
 
-    // ================= THUẬT TOÁN ĐẶT CƯỢC XSMB SIÊU CHUẨN =================
     function calcLoto() {
         let amountStr = document.getElementById('loto-amount').value.replace(/\D/g, '');
         let amount = parseInt(amountStr) || 0;
@@ -612,28 +660,23 @@
         let opt = sel.options[sel.selectedIndex];
         let rate = parseFloat(opt.getAttribute("data-rate"));
         let cost = parseInt(opt.getAttribute("data-cost"));
-        let xien = opt.getAttribute("data-xien"); // Sẽ là "2", "3", "4" nếu là Lô Xiên
+        let xien = opt.getAttribute("data-xien"); 
         
-        // Đếm số lượng con số người chơi nhập (cách nhau bởi dấu phẩy)
         let numsArr = numsStr.split(',').map(s => s.trim()).filter(s => s !== "");
         let count = numsArr.length;
-        if (count === 0) count = 1; // Mặc định tính là 1 con để demo hiển thị
+        if (count === 0) count = 1; 
 
         let totalPay = 0;
         let expectedWin = 0;
 
-        // XỬ LÝ LOGIC TÍNH TIỀN
         if (xien) {
-            // Nhóm Lô Xiên: Chơi cả 1 dàn số chung 1 vé. Tiền cược KHÔNG nhân lên theo số lượng giải hay con số.
             totalPay = amount; 
             expectedWin = amount * rate; 
         } else {
-            // Nhóm Lô / Đề bình thường: Tổng thanh toán = (Tiền cược) x (Hệ số giải) x (Số lượng con)
             totalPay = amount * cost * count;
-            expectedWin = amount * rate; // Số tiền thắng nếu trúng 1 con (1 nháy)
+            expectedWin = amount * rate; 
         }
 
-        // CẬP NHẬT GỢI Ý LUẬT CHƠI LÊN MÀN HÌNH
         let hintEl = document.getElementById('loto-hint');
         if (xien) {
             hintEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> Xiên ${xien}: Yêu cầu nhập đúng <b>${xien} số</b>. Tổng thanh toán = Tiền cược (Không nhân vốn).`;
@@ -643,10 +686,7 @@
             hintEl.innerHTML = `<i class="fas fa-info-circle"></i> Tổng tiền thanh toán = (Tiền cược) x (Số lượng con).`;
         }
 
-        // CẬP NHẬT HIỂN THỊ TIỀN
         document.getElementById('loto-total').innerText = new Intl.NumberFormat('vi-VN').format(totalPay) + ' ₫';
-        
-        // Nếu đánh nhiều con, hiển thị tiền thắng của 1 con để người chơi không bị nhầm lẫn
         if(count > 1 && !xien) {
             document.getElementById('loto-win').innerText = new Intl.NumberFormat('vi-VN').format(expectedWin) + ' ₫ / mỗi con trúng';
         } else {
@@ -670,51 +710,25 @@
         let numsArr = nums.split(',').map(s => s.trim()).filter(s => s !== "");
         let count = numsArr.length;
 
-        // KIỂM TRA LỖI NHẬP LIỆU
         if(!nums || count === 0) return (msgBox.style.color="red", msgBox.innerText="Vui lòng nhập các số cần cược!");
-        
-        // Check Lô Xiên (Phải nhập đúng số lượng)
-        if (xien && count !== parseInt(xien)) {
-            return (msgBox.style.color="red", msgBox.innerText=`Lô Xiên ${xien} bắt buộc phải nhập chính xác ${xien} số!`);
-        }
-
+        if (xien && count !== parseInt(xien)) return (msgBox.style.color="red", msgBox.innerText=`Lô Xiên ${xien} bắt buộc phải nhập chính xác ${xien} số!`);
         if(amount < 1000) return (msgBox.style.color="red", msgBox.innerText="Cược tối thiểu 1.000đ!");
         
-        // TÍNH TOÁN LẠI TỔNG TIỀN VÀ RATE ĐỂ GỬI LÊN MÁY CHỦ
         let totalPay = xien ? amount : (amount * cost * count);
-        
         if(totalPay > userBalance) return (msgBox.style.color="red", msgBox.innerText=`Số dư không đủ! (Cần ${new Intl.NumberFormat('vi-VN').format(totalPay)}đ)`);
 
-        // ĐỂ BACKEND KHÔNG BỊ SAI KHI NHÂN TỶ LỆ, TA CHỈNH LẠI RATE GỬI LÊN:
-        // Backend đang tính: Tiền thắng = (amount) x (rate). 
-        // Do ta gửi amount = totalPay để trừ vốn cho đúng, nên rate gửi lên phải là: (Tiền thắng dự kiến / totalPay)
         let finalBackendRate = xien ? rate : (rate / cost); 
-
-        let fullContent = `${typeText} | Cược: ${amount}đ | Số: ${nums}`;
 
         document.getElementById('btn-loto').innerText = 'ĐANG CHỐT ĐƠN...'; document.getElementById('btn-loto').disabled = true;
         try {
             const res = await fetch(API_URL, { 
                 method: "POST", headers: {"Content-Type":"text/plain"}, 
-                body: JSON.stringify({ 
-                    action: "place_bet", 
-                    email: userEmail, userId: userId, 
-                    gameType: typeText, 
-                    rate: finalBackendRate, // Gửi tỷ lệ chuẩn hóa cho DB
-                    betNumbers: nums, 
-                    amount: totalPay 
-                }) 
+                body: JSON.stringify({ action: "place_bet", email: userEmail, userId: userId, gameType: typeText, rate: finalBackendRate, betNumbers: nums, amount: totalPay }) 
             });
             const result = await res.json();
             if(result.status === "success") { 
-                showToast("Cược thành công!"); 
-                document.getElementById('loto-nums').value=''; 
-                document.getElementById('loto-amount').value=''; 
-                calcLoto(); 
-                setTimeout(()=>navigate('home'),1500); 
-                loadAppData(); 
-            } 
-            else { msgBox.style.color="red"; msgBox.innerText=result.message; }
+                showToast("Cược thành công!"); document.getElementById('loto-nums').value=''; document.getElementById('loto-amount').value=''; calcLoto(); setTimeout(()=>navigate('profile'),1500); loadAppData(); 
+            } else { msgBox.style.color="red"; msgBox.innerText=result.message; }
         } catch(e) { msgBox.style.color="red"; msgBox.innerText="Lỗi kết nối!"; }
         finally { document.getElementById('btn-loto').innerText='XÁC NHẬN CƯỢC'; document.getElementById('btn-loto').disabled = false; }
     }
