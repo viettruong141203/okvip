@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>Dashboard | Xổ Số Online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- TOP HEADER -->
+    <header class="top-header" id="main-header">
+        <div style="font-size: 20px; font-weight: 900; font-style: italic; color: #fff; display: flex; align-items: center; gap: 6px;"><i class="fas fa-dice" style="color:var(--brand-primary);"></i> XS<span style="color:var(--brand-primary);">MB</span></div>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 20px; padding: 4px 6px 4px 12px; display: flex; align-items: center; gap: 8px;">
+            <span id="topBalance" style="font-size: 14px; font-weight: 800; color: var(--brand-primary);">0 ₫</span>
+            <button onclick="navigate('add')" style="background: var(--brand-gradient); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-plus"></i></button>
+        </div>
+    </header>
+
+    <!-- TRANG CHỦ -->
+    <div id="view-home" class="page-view active" style="padding: 16px;">
+        <div style="font-weight: 900; text-transform: uppercase; margin: 10px 0 12px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">HỆ THỐNG ĐẶT CƯỢC XSMB</div>
+        <div style="background: var(--bg-surface); border-radius: 16px; padding: 24px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+            <div style="position:absolute; top:0;left:0;width:100%;height:6px;background: var(--brand-gradient);"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <span style="font-weight: 900; font-size: 20px;">Xổ Số Miền Bắc</span>
+                <span style="color: var(--brand-primary); font-weight: bold; font-family: monospace; font-size: 16px; background: rgba(245, 158, 11, 0.1); padding: 4px 12px; border-radius: 20px;"><i class="fas fa-clock"></i> 18:30 MỖI NGÀY</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 24px; justify-content: center;">
+                <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">6</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">6</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div>
+            </div>
+            <button class="btn-submit" onclick="navigate('loto')">TIẾN HÀNH ĐẶT CƯỢC</button>
+        </div>
+        <div style="text-align: center; margin-top: 30px; font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fas fa-shield-alt" style="color: var(--brand-primary); font-size: 20px; margin-bottom: 8px; display: block;"></i>Thanh toán tự động, an toàn tuyệt đối.</div>
+    </div>
+
+    <!-- ĐẶT CƯỢC XSMB -->
+    <div id="view-loto" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('home')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">ĐẶT CƯỢC XSMB</div></div>
+        <div class="input-box"><label>Hình thức chơi</label>
+            <select id="loto-type" onchange="calcLoto()">
+                <optgroup label="Nhóm Lô"><option value="Lô 2 số" data-rate="99" data-cost="27">Lô 2 số (27 giải) - 1 ăn 99</option><option value="Lô 2 số 1k" data-rate="3.7" data-cost="27">Lô 2 số 1k (27 giải) - 1 ăn 3.7</option><option value="Lô 3 số" data-rate="980" data-cost="23">Lô 3 số (23 giải) - 1 ăn 980</option><option value="Lô 4 số" data-rate="8880" data-cost="20">Lô 4 số (20 giải) - 1 ăn 8880</option></optgroup>
+                <optgroup label="Nhóm Lô Xiên"><option value="Xiên 2" data-rate="16" data-cost="1" data-xien="2">Xiên 2 - 1 ăn 16</option><option value="Xiên 3" data-rate="65" data-cost="1" data-xien="3">Xiên 3 - 1 ăn 65</option><option value="Xiên 4" data-rate="222" data-cost="1" data-xien="4">Xiên 4 - 1 ăn 222</option></optgroup>
+                <optgroup label="Nhóm Đề"><option value="Đề đặc biệt" data-rate="99" data-cost="1">Đề Đặc Biệt - 1 ăn 99</option><option value="Đề giải nhất" data-rate="99" data-cost="1">Đề Giải Nhất - 1 ăn 99</option><option value="Đề giải 7" data-rate="99" data-cost="4">Đề Giải 7 (4 giải) - 1 ăn 99</option></optgroup>
+                <optgroup label="Nhóm Càng / Đầu Đuôi"><option value="3 Càng Đặc Biệt" data-rate="970" data-cost="1">3 Càng Đặc Biệt - 1 ăn 970</option><option value="4 Càng Đặc Biệt" data-rate="8870" data-cost="1">4 Càng Đặc Biệt - 1 ăn 8870</option><option value="Đầu" data-rate="9.5" data-cost="1">Đầu - 1 ăn 9.5</option><option value="Đuôi" data-rate="9.5" data-cost="1">Đuôi - 1 ăn 9.5</option></optgroup>
+            </select>
+        </div>
+        <div id="loto-hint" style="font-size: 13px; color: var(--text-muted); margin: -12px 0 20px 4px; font-weight: 600;"></div>
+        <div class="input-box"><label>Số cược (Cách nhau dấu phẩy)</label><input type="text" id="loto-nums" placeholder="VD: 68, 86, 99" oninput="calcLoto()"></div>
+        <div class="input-box"><label>Tiền cược (Mỗi số)</label><input type="text" id="loto-amount" inputmode="numeric" placeholder="0" oninput="formatInput(this); calcLoto();" style="font-size:32px; color:var(--brand-primary);"></div>
+        <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid var(--brand-primary); padding: 16px; border-radius: 16px; margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="color: var(--text-muted); font-size: 14px;">Tổng thanh toán:</span><span style="font-weight: 900; font-size: 16px;" id="loto-total">0 ₫</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-muted); font-size: 14px;">Thắng dự kiến:</span><span style="font-weight: 900; color: var(--brand-primary); font-size: 16px;" id="loto-win">0 ₫</span></div>
+        </div>
+        <button class="btn-submit" id="btn-loto" onclick="submitLoto()">XÁC NHẬN CƯỢC</button>
+        <div class="sys-msg" id="msg-loto"></div>
+    </div>
+
+    <!-- CỦA TÔI (PROFILE) -->
+    <div id="view-profile" class="page-view">
+        <div style="padding: 40px 20px 24px; text-align: center; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+            <div id="displayEmail" style="font-size: 18px; font-weight: 900; margin-bottom: 12px;"></div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">TỔNG SỐ DƯ (VND)</div>
+            <div id="displayBalanceBig" style="font-size: 40px; font-weight: 900; color: var(--brand-primary); text-shadow: 0 0 20px rgba(245, 158, 11, 0.4);">0</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 24px 20px;">
+            <div onclick="navigate('add')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-wallet" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Nạp Tiền</div>
+            <div onclick="navigate('withdraw')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-hand-holding-usd" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Rút Tiền</div>
+            <div onclick="navigate('bank')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-university" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Ngân Hàng</div>
+        </div>
+        <div style="padding: 0 20px;">
+            <div style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">QUẢN LÝ LỊCH SỬ</div>
+            <div onclick="navigate('history-deposit')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(52,211,153,0.1);color:#34d399;"><i class="fas fa-arrow-down"></i></div><div style="flex: 1;">Lịch sử Nạp Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
+            <div onclick="navigate('history-withdraw')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(248,113,113,0.1);color:#f87171;"><i class="fas fa-arrow-up"></i></div><div style="flex: 1;">Lịch sử Rút Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
+            <div onclick="navigate('history-bet')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(245,158,11,0.1);color:#f59e0b;"><i class="fas fa-dice"></i></div><div style="flex: 1;">Lịch sử Đặt Cược</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
+            <div onclick="navigate('pwd')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(255,255,255,0.1);color:#fff;"><i class="fas fa-lock"></i></div><div style="flex: 1;">Đổi mật khẩu</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
+            <button class="btn-submit" style="background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); margin-top: 24px; box-shadow: none;" onclick="confirmLogout()"><i class="fas fa-power-off"></i> ĐĂNG XUẤT TÀI KHOẢN</button>
+        </div>
+    </div>
+
+    <!-- NẠP TIỀN -->
+    <div id="view-add" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">NẠP TIỀN</div></div>
+        <div class="input-box"><label>Số tiền nạp (VND)</label><input type="text" id="amount-add" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:32px; color:var(--brand-primary);"></div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px;">
+            <button onclick="setAmount('amount-add', 50000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">50K</button>
+            <button onclick="setAmount('amount-add', 100000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">100K</button>
+            <button onclick="setAmount('amount-add', 200000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">200K</button>
+            <button onclick="setAmount('amount-add', 500000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">500K</button>
+            <button onclick="setAmount('amount-add', 1000000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">1 TRIỆU</button>
+            <button onclick="setAmount('amount-add', 5000000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">5 TRIỆU</button>
+        </div>
+        <button class="btn-submit" id="btn-add" onclick="submitDeposit()">TẠO LỆNH NẠP</button>
+        <div class="sys-msg" id="msg-add"></div>
+    </div>
+
+    <!-- RÚT TIỀN -->
+    <div id="view-withdraw" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">RÚT TIỀN</div></div>
+        <div class="input-box"><label>Ngân hàng nhận tiền</label><select id="wd-bank"><option value="">Vui lòng thêm ngân hàng trước</option></select></div>
+        <div class="input-box"><label>Số tiền rút (VND)</label><input type="text" id="amount-wd" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:32px; color:var(--brand-primary);"></div>
+        <button class="btn-submit" id="btn-wd" onclick="submitWithdraw()">TẠO LỆNH RÚT</button>
+        <div class="sys-msg" id="msg-wd"></div>
+    </div>
+
+    <!-- NGÂN HÀNG -->
+    <div id="view-bank" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">NGÂN HÀNG</div></div>
+        <div id="bank-list-container"></div>
+        <div id="bank-form-section" style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px; margin-top: 10px; display: none;">
+            <div style="font-weight: 900; text-transform: uppercase; margin-bottom: 16px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">CẬP NHẬT TÀI KHOẢN MỚI</div>
+            <div class="input-box"><label>Tên Ngân hàng</label><input type="text" id="bk-name" placeholder="VD: Vietcombank, MB Bank"></div>
+            <div class="input-box"><label>Số tài khoản</label><input type="text" id="bk-acc" placeholder="Nhập số tài khoản"></div>
+            <div class="input-box"><label>Tên Chủ Tài Khoản</label><input type="text" id="bk-owner" placeholder="NGUYEN VAN A" style="text-transform: uppercase;"></div>
+            <div class="input-box"><label>Chi nhánh</label><input type="text" id="bk-branch" placeholder="Hà Nội"></div>
+            <button class="btn-submit" id="btn-bank" onclick="submitBank()">CẬP NHẬT NGÂN HÀNG</button>
+            <div class="sys-msg" id="msg-bank"></div>
+        </div>
+    </div>
+
+    <!-- ĐỔI MẬT KHẨU -->
+    <div id="view-pwd" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">ĐỔI MẬT KHẨU</div></div>
+        <div class="input-box"><label>Mật khẩu hiện tại</label><input type="password" id="old-pwd" placeholder="Nhập mật khẩu đang sử dụng"></div>
+        <div class="input-box"><label>Mật khẩu mới</label><input type="password" id="new-pwd" placeholder="Nhập ít nhất 6 ký tự"></div>
+        <div class="input-box"><label>Xác nhận mật khẩu mới</label><input type="password" id="confirm-pwd" placeholder="Nhập lại mật khẩu mới"></div>
+        <button class="btn-submit" id="pwdBtn" onclick="changePassword()">CẬP NHẬT MẬT KHẨU</button>
+        <div class="sys-msg" id="pwd-msg"></div>
+    </div>
+
+    <!-- LỊCH SỬ NẠP TIỀN -->
+    <div id="view-history-deposit" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ NẠP TIỀN</div></div>
+        <div id="historyList-deposit"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
+    </div>
+
+    <!-- LỊCH SỬ RÚT TIỀN -->
+    <div id="view-history-withdraw" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ RÚT TIỀN</div></div>
+        <div id="historyList-withdraw"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
+    </div>
+
+    <!-- LỊCH SỬ ĐẶT CƯỢC -->
+    <div id="view-history-bet" class="page-view" style="padding: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ ĐẶT CƯỢC</div></div>
+        <div id="historyList-bet"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
+    </div>
+
+    <!-- CHI TIẾT GIAO DỊCH (VÉ VIP) -->
+    <div id="view-detail" class="page-view" style="padding: 20px; align-items: center;">
+        <div style="width: 100%; background: linear-gradient(180deg, #162032 0%, #0d131f 100%); border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05); margin-top: 10px; overflow: hidden; position:relative;">
+            <div style="padding: 48px 32px 32px; text-align: center; position: relative;">
+                <button onclick="navigate('profile')" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; color: white; cursor: pointer;"><i class="fas fa-times"></i></button>
+                <div id="rc-icon-wrapper" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;"></div>
+                <div id="rc-title-status" style="font-size: 18px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">...</div>
+                <div id="rc-amount-row" style="font-size: 42px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;">0 ₫</div>
+            </div>
+            <div style="position: relative; height: 40px; overflow: hidden;">
+                <div style="position: absolute; top: 50%; left: -20px; transform: translateY(-50%); width: 40px; height: 40px; background: #05080f; border-radius: 50%; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);"></div>
+                <div style="position: absolute; top: 50%; right: -20px; transform: translateY(-50%); width: 40px; height: 40px; background: #05080f; border-radius: 50%; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);"></div>
+                <div style="position: absolute; top: 50%; left: 30px; right: 30px; border-top: 2px dashed rgba(255,255,255,0.1); transform: translateY(-50%);"></div>
+            </div>
+            <div style="padding: 16px 32px 40px;">
+                <div style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Loại</span><span id="rc-type" style="font-weight: 800; font-size: 16px;">...</span></div>
+                <div style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Mã GD</span><span style="font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px;"><span id="rc-id" style="font-family: monospace;"></span><button onclick="copyText(document.getElementById('rc-id').innerText)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px; color: #fff; cursor: pointer;">Copy</button></span></div>
+                <div style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Chi tiết</span><span id="rc-detail" style="font-weight: 800; font-size: 16px; max-width: 60%; text-align: right;">...</span></div>
+                <div style="display: flex; justify-content: space-between; padding: 16px 0;"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Thời gian</span><span id="rc-time" style="font-weight: 800; font-size: 16px;">...</span></div>
+                <div style="height: 50px; width: 100%; opacity: 0.6; margin-top: 32px; background: repeating-linear-gradient(90deg, var(--brand-primary), var(--brand-primary) 2px, transparent 2px, transparent 6px, var(--brand-primary) 6px, var(--brand-primary) 10px, transparent 10px, transparent 12px);"></div>
+                <div style="text-align:center; font-size: 11px; color: var(--brand-primary); margin-top: 16px; font-weight: 800; letter-spacing: 3px;">BIÊN LAI HỆ THỐNG</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" id="main-nav">
+        <button class="nav-item active" id="nav-home" onclick="navigate('home')"><i class="fas fa-home"></i><span>Trang chủ</span></button>
+        <button class="nav-item" id="nav-loto" onclick="navigate('loto')"><i class="fas fa-bowling-ball"></i><span>Đặt cược</span></button>
+        <button class="nav-item" onclick="alert('CSKH Zalo: 0987.654.321')"><i class="fas fa-headset"></i><span>Hỗ trợ</span></button>
+        <button class="nav-item" id="nav-profile" onclick="navigate('profile')"><i class="fas fa-user-circle"></i><span>Của tôi</span></button>
+    </nav>
+
+    <div class="toast" id="toastMsg">Thành công!</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
