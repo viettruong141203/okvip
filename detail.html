@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết | Xổ Số Online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-image: radial-gradient(circle at 50% -20%, rgba(245, 158, 11, 0.15), transparent 70%);">
+  <div style="width: 100%; max-width: 480px; margin: 0 auto; padding: 20px;">
+      <div style="width: 100%; background: linear-gradient(180deg, #162032 0%, #0d131f 100%); border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05); margin: 20px auto; overflow: hidden; position:relative;">
+          <div style="padding: 48px 32px 32px; text-align: center; position: relative;">
+              <button onclick="window.history.back()" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;"><i class="fas fa-times"></i></button>
+              <div id="rc-icon-wrapper" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;"></div>
+              <div id="rc-title-status" style="font-size: 18px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main);">...</div>
+              <div id="rc-amount-row" style="font-size: 42px; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;">0 ₫</div>
+          </div>
+          <div style="position: relative; height: 40px; background: transparent; overflow: hidden;">
+              <div style="content: ''; position: absolute; top: 50%; left: -20px; transform: translateY(-50%); width: 40px; height: 40px; background: #05080f; border-radius: 50%; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);"></div>
+              <div style="content: ''; position: absolute; top: 50%; right: -20px; transform: translateY(-50%); width: 40px; height: 40px; background: #05080f; border-radius: 50%; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);"></div>
+              <div style="position: absolute; top: 50%; left: 30px; right: 30px; border-top: 2px dashed rgba(255,255,255,0.1); transform: translateY(-50%);"></div>
+          </div>
+          <div style="padding: 16px 32px 40px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Loại giao dịch</span><span id="rc-type" style="font-weight: 800; color: var(--text-main); font-size: 16px;">...</span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Mã giao dịch</span><span style="font-weight: 800; color: var(--text-main); font-size: 16px; display: flex; align-items: center; gap: 10px;"><span id="rc-id" style="font-family: monospace; letter-spacing: 1px;"></span><button onclick="copyText(document.getElementById('rc-id').innerText)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer;">Copy</button></span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Chi tiết</span><span id="rc-detail" style="font-weight: 800; color: var(--text-main); font-size: 16px; max-width: 60%; word-break: break-word; text-align: right;">...</span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;"><span style="color: var(--text-muted); font-size: 14px; font-weight: 600; text-transform: uppercase;">Thời gian</span><span id="rc-time" style="font-weight: 800; color: var(--text-main); font-size: 16px;">...</span></div>
+              <div style="height: 50px; width: 100%; opacity: 0.6; margin-top: 32px; background: repeating-linear-gradient(90deg, var(--brand-primary), var(--brand-primary) 2px, transparent 2px, transparent 6px, var(--brand-primary) 6px, var(--brand-primary) 10px, transparent 10px, transparent 12px); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));"></div>
+              <div style="text-align:center; font-size: 11px; color: var(--brand-primary); margin-top: 16px; font-weight: 800; letter-spacing: 3px;">BIÊN LAI HỆ THỐNG</div>
+          </div>
+      </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
