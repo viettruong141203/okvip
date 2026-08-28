@@ -2,62 +2,32 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng Nhập | Xổ Số Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <style>
-    body { background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 60%); align-items: center;}
-    .auth-container { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px 30px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
-    .form-section { display: none; animation: fadeUp 0.4s ease; }
-    .form-section.active { display: block; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    .logo-header { text-align: center; margin-bottom: 30px; }
-    .logo-header i { font-size: 44px; color: var(--brand-primary); margin-bottom: 12px; filter: drop-shadow(0 0 10px var(--brand-shadow));}
-    .logo-header h2 { font-size: 24px; font-weight: 900; letter-spacing: 1px; margin: 0;}
-    .switch-text { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); font-weight: 600;}
-    .switch-text span { color: var(--brand-primary); cursor: pointer; font-weight: 800; transition: 0.2s;}
-  </style>
-  <script>if(localStorage.getItem("userEmail")) window.location.replace("home.html");</script>
 </head>
-<body>
-  <div class="auth-container">
-      <div class="logo-header">
-          <i class="fas fa-dice"></i><h2>XỔ SỐ ONLINE</h2>
+<body style="align-items: center;">
+  <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px 30px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);">
+      <div style="text-align: center; margin-bottom: 30px;">
+          <i class="fas fa-dice" style="font-size: 44px; color: var(--brand-primary); margin-bottom: 12px; filter: drop-shadow(0 0 10px var(--brand-shadow));"></i>
+          <h2 style="font-size: 24px; font-weight: 900; letter-spacing: 1px; margin: 0;">XỔ SỐ ONLINE</h2>
       </div>
-      <div id="login-form" class="form-section active">
-          <div class="input-box"><input type="email" id="login-email" placeholder="E-mail đăng nhập"></div>
-          <div class="input-box"><input type="password" id="login-password" placeholder="Mật khẩu"></div>
-          <button id="login-btn" class="btn-submit" onclick="login()">Đăng Nhập</button>
-          <p class="switch-text">Chưa có tài khoản? <span onclick="switchForm()">Đăng ký</span></p>
+      <div id="login-form">
+          <div class="input-box" style="padding:10px 16px;"><input type="email" id="login-email" placeholder="E-mail đăng nhập"></div>
+          <div class="input-box" style="padding:10px 16px;"><input type="password" id="login-password" placeholder="Mật khẩu"></div>
+          <button id="login-btn" class="btn-submit" onclick="submitAuth('login','login-email','login-password','login-btn','login-msg')">Đăng Nhập</button>
+          <p style="text-align:center; margin-top:24px; font-size:14px; color:var(--text-muted); font-weight:600;">Chưa có tài khoản? <span style="color:var(--brand-primary); cursor:pointer;" onclick="document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block';">Đăng ký</span></p>
           <p id="login-msg" class="sys-msg"></p>
       </div>
-      <div id="register-form" class="form-section">
-          <div class="input-box"><input type="email" id="reg-email" placeholder="E-mail đăng ký"></div>
-          <div class="input-box"><input type="password" id="reg-password" placeholder="Tạo mật khẩu"></div>
-          <button id="reg-btn" class="btn-submit" onclick="register()">Xác Nhận Đăng Ký</button>
-          <p class="switch-text">Đã có tài khoản? <span onclick="switchForm()">Đăng nhập</span></p>
+      <div id="register-form" style="display:none;">
+          <div class="input-box" style="padding:10px 16px;"><input type="email" id="reg-email" placeholder="E-mail đăng ký"></div>
+          <div class="input-box" style="padding:10px 16px;"><input type="password" id="reg-password" placeholder="Tạo mật khẩu"></div>
+          <button id="reg-btn" class="btn-submit" onclick="submitAuth('register','reg-email','reg-password','reg-btn','reg-msg')">Xác Nhận Đăng Ký</button>
+          <p style="text-align:center; margin-top:24px; font-size:14px; color:var(--text-muted); font-weight:600;">Đã có tài khoản? <span style="color:var(--brand-primary); cursor:pointer;" onclick="document.getElementById('register-form').style.display='none';document.getElementById('login-form').style.display='block';">Đăng nhập</span></p>
           <p id="reg-msg" class="sys-msg"></p>
       </div>
   </div>
-  <script>
-      const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
-      function switchForm() { document.getElementById("login-form").classList.toggle("active"); document.getElementById("register-form").classList.toggle("active"); document.querySelectorAll(".sys-msg").forEach(m=>m.innerText=""); }
-      async function sendAuthData(payload, btnId, msgId) {
-          const btn = document.getElementById(btnId); const msg = document.getElementById(msgId);
-          btn.innerText = "ĐANG XỬ LÝ..."; btn.disabled = true; msg.innerText = "";
-          try {
-              const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
-              const result = await res.json();
-              if (result.status === "success") {
-                  msg.style.color = "#34d399"; msg.innerText = result.message;
-                  if (payload.action === "login") { localStorage.setItem("userEmail", result.email); localStorage.setItem("userId", result.id); setTimeout(() => window.location.replace("home.html"), 1000); } 
-                  else setTimeout(() => switchForm(), 1500);
-              } else { msg.style.color = "#f87171"; msg.innerText = result.message; btn.innerText = payload.action === "login" ? "ĐĂNG NHẬP" : "ĐĂNG KÝ"; btn.disabled = false; }
-          } catch (e) { msg.style.color = "#f87171"; msg.innerText = "Lỗi kết nối!"; btn.disabled = false; }
-      }
-      function register() { const email = document.getElementById("reg-email").value.trim(); const pass = document.getElementById("reg-password").value.trim(); if (!email || !pass) return document.getElementById("reg-msg").innerText = "Vui lòng nhập đủ thông tin!"; sendAuthData({ action: "register", email: email, password: pass }, "reg-btn", "reg-msg"); }
-      function login() { const email = document.getElementById("login-email").value.trim(); const pass = document.getElementById("login-password").value.trim(); if (!email || !pass) return document.getElementById("login-msg").innerText = "Vui lòng nhập đủ thông tin!"; sendAuthData({ action: "login", email: email, password: pass }, "login-btn", "login-msg"); }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
