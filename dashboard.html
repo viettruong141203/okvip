@@ -4,69 +4,167 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>Dashboard | Xổ Số Online</title>
+  
+  <!-- Tích hợp Icon & Font chữ Quốc tế Inter -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
   <script>if(!localStorage.getItem("userEmail") || !localStorage.getItem("userId")) window.location.replace("index.html");</script>
   
   <style>
-    /* CSS DÙNG CHUNG */
+    /* ================= BẢNG MÀU VIP LUXURY ================= */
     :root {
-      --bg-body: #090e17; --bg-surface: #101827; --border-color: rgba(255, 255, 255, 0.08); 
-      --text-main: #f8fafc; --text-muted: #94a3b8; --brand-primary: #f59e0b; 
-      --brand-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); --brand-shadow: rgba(245, 158, 11, 0.35);
-      --status-pending-bg: rgba(251, 191, 36, 0.15); --status-success-bg: rgba(52, 211, 153, 0.15); --status-failed-bg: rgba(248, 113, 113, 0.15);
+      --bg-body: #04070c; 
+      --bg-surface: rgba(17, 24, 39, 0.6); 
+      --border-color: rgba(255, 255, 255, 0.06); 
+      --text-main: #f8fafc; 
+      --text-muted: #8b9bb4; 
+      
+      /* Chuyển tông Vàng Kim (Gold) rực rỡ và sang hơn */
+      --brand-primary: #F5A623; 
+      --brand-gradient: linear-gradient(135deg, #FAD961 0%, #F76B1C 100%); 
+      --brand-shadow: rgba(247, 107, 28, 0.4);
+      
+      --status-pending-bg: rgba(245, 166, 35, 0.15); 
+      --status-success-bg: rgba(16, 185, 129, 0.15); 
+      --status-failed-bg: rgba(239, 68, 68, 0.15);
+      
       --app-max-width: 480px; 
     }
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-    body { font-family: system-ui, -apple-system, sans-serif; background-color: #000; color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
+    
+    body { 
+        font-family: 'Inter', system-ui, sans-serif; background-color: #000; 
+        color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; 
+    }
+    
     input, button, select { font-family: inherit; }
     
-    .app-container { width: 100%; max-width: var(--app-max-width); background: var(--bg-body); position: relative; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 80px; background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08), transparent 50%); box-shadow: 0 0 30px rgba(245,158,11,0.1);}
-    .page-view { display: none; flex-direction: column; flex: 1; animation: fadeUp 0.3s ease; } .page-view.active { display: block; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
-
-    .top-header { position: sticky; top: 0; background: rgba(9, 14, 23, 0.9); backdrop-filter: blur(10px); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
-    .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: var(--app-max-width); background: rgba(16, 24, 39, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 10px; border-top: 1px solid var(--border-color); z-index: 100; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; gap: 6px; border: none; background: transparent; text-transform: uppercase;}
-    .nav-item.active { color: var(--brand-primary); } .nav-item.active i { transform: translateY(-4px); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));}
+    /* Bối cảnh nền có đốm sáng Aura */
+    .app-container { 
+        width: 100%; max-width: var(--app-max-width); background: var(--bg-body); 
+        position: relative; min-height: 100vh; display: flex; flex-direction: column; 
+        overflow-x: hidden; padding-bottom: 100px; 
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(247, 107, 28, 0.08), transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.08), transparent 40%);
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    }
     
-    .input-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 20px;}
-    .input-box:focus-within { border-color: var(--brand-primary); box-shadow: 0 0 0 2px rgba(245,158,11,0.2); }
-    .input-box label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;}
-    .input-box input, .input-box select { width: 100%; border: none; background: transparent; font-size: 16px; font-weight: 800; color: #fff; -webkit-appearance: none;}
-    .input-box select { background: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right center; }
-    .input-box select option, .input-box select optgroup { background: var(--bg-surface); color: white;}
-    .btn-submit { width: 100%; background: var(--brand-gradient); color: white; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 24px var(--brand-shadow); cursor: pointer; text-transform: uppercase;}
-    .btn-submit:disabled { opacity: 0.6; }
-    .btn-back { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 12px; color: white; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s;}
-    .btn-back:active { transform: scale(0.9); }
-    .sys-msg { text-align: center; margin-top: 16px; font-size: 14px; font-weight: bold; min-height: 20px;}
-    .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--brand-primary); color: #000; padding: 12px 24px; border-radius: 20px; font-size: 14px; font-weight: 900; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000; box-shadow: 0 10px 20px var(--brand-shadow);}
-    .toast.show { opacity: 1; }
+    .page-view { display: none; flex-direction: column; flex: 1; animation: scaleFade 0.3s cubic-bezier(0.16, 1, 0.3, 1); } 
+    .page-view.active { display: block; }
+    @keyframes scaleFade { from { opacity: 0; transform: scale(0.97) translateY(10px);} to { opacity: 1; transform: scale(1) translateY(0);} }
 
-    /* GIAO DIỆN CHI TIẾT (PANEL KÍNH MỜ SANG TRỌNG) */
+    /* ================= HEADER SANG TRỌNG ================= */
+    .top-header { 
+        position: sticky; top: 0; background: rgba(4, 7, 12, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        z-index: 100; display: flex; justify-content: space-between; align-items: center; 
+        padding: 16px 20px; border-bottom: 1px solid var(--border-color); 
+    }
+    .balance-badge { 
+        background: rgba(245, 166, 35, 0.1); border: 1px solid rgba(245, 166, 35, 0.2); 
+        border-radius: 30px; padding: 4px 6px 4px 16px; display: flex; align-items: center; gap: 10px; 
+    }
+    .balance-text { font-size: 15px; font-weight: 800; color: var(--brand-primary); text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);}
+    .btn-plus { 
+        background: var(--brand-gradient); color: #000; border: none; border-radius: 50%; 
+        width: 28px; height: 28px; font-weight: 900; cursor: pointer; display: flex; 
+        justify-content: center; align-items: center; box-shadow: 0 4px 10px var(--brand-shadow); 
+    }
+
+    /* ================= BOTTOM NAV NỔI (FLOATING STYLE) ================= */
+    .bottom-nav { 
+        position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+        width: calc(100% - 32px); max-width: calc(var(--app-max-width) - 32px); 
+        background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        display: flex; justify-content: space-between; align-items: center; height: 72px; 
+        padding: 0 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 100; 
+    }
+    .nav-item { 
+        display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        flex: 1; color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; 
+        gap: 6px; border: none; background: transparent; text-transform: uppercase; transition: 0.3s;
+    }
+    .nav-item i { font-size: 22px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+    .nav-item.active { color: var(--brand-primary); } 
+    .nav-item.active i { transform: translateY(-6px) scale(1.1); filter: drop-shadow(0 0 10px rgba(245, 166, 35, 0.8));}
+
+    /* ================= FORM & INPUTS ================= */
+    .input-box { 
+        background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); 
+        border-radius: 16px; padding: 18px 20px; margin-bottom: 20px; transition: 0.3s;
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .input-box:focus-within { border-color: var(--brand-primary); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 0 0 2px rgba(245, 166, 35, 0.2); }
+    .input-box label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+    .input-box input, .input-box select { width: 100%; border: none; background: transparent; font-size: 17px; font-weight: 800; color: #fff; -webkit-appearance: none;}
+    .input-box select { background: url('data:image/svg+xml;utf8,<svg fill="%238b9bb4" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right center; }
+    .input-box select option, .input-box select optgroup { background: #111827; color: white;}
+    
+    .btn-submit { 
+        width: 100%; background: var(--brand-gradient); color: #000; border: none; 
+        padding: 20px; border-radius: 16px; font-size: 16px; font-weight: 900; 
+        box-shadow: 0 10px 30px var(--brand-shadow); cursor: pointer; text-transform: uppercase; 
+        letter-spacing: 1px; transition: 0.3s;
+    }
+    .btn-submit:active { transform: scale(0.96); box-shadow: 0 4px 10px var(--brand-shadow); }
+    .btn-submit:disabled { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
+    
+    .btn-back { 
+        background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); 
+        width: 44px; height: 44px; border-radius: 14px; color: white; cursor: pointer; 
+        display: flex; justify-content: center; align-items: center; transition: 0.2s;
+    }
+    .btn-back:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
+    
+    .sys-msg { text-align: center; margin-top: 16px; font-size: 14px; font-weight: bold; min-height: 20px;}
+    
+    /* TOAST */
+    .toast { 
+        position: fixed; top: 90px; left: 50%; transform: translateX(-50%); 
+        background: var(--brand-gradient); color: #000; padding: 14px 28px; 
+        border-radius: 30px; font-size: 14px; font-weight: 900; opacity: 0; 
+        pointer-events: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        z-index: 2000; box-shadow: 0 10px 30px var(--brand-shadow);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 10px); }
+
+    /* ================= CÁC THÀNH PHẦN KHÁC ================= */
+    .glass-card {
+        background: var(--bg-surface); border-radius: 20px; padding: 24px; 
+        border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .glass-card::before { content:''; position:absolute; top:0;left:0;width:100%;height:4px;background: var(--brand-gradient); }
+    
+    .ball { 
+        width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); 
+        color: white; display: flex; justify-content: center; align-items: center; 
+        font-weight: 900; font-size: 22px; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 8px 15px rgba(59, 130, 246, 0.5);
+    }
+
+    /* GIAO DIỆN CHI TIẾT (KÍNH MỜ) */
     .receipt-panel {
         width: 100%; max-width: 420px;
-        background: rgba(16, 24, 39, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
         padding: 40px 24px 32px; text-align: center; position: relative;
         overflow: hidden; margin: 20px auto;
-    }
-    .receipt-panel::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-        background: var(--brand-gradient); transition: background 0.3s, box-shadow 0.3s;
-        box-shadow: 0 0 20px var(--brand-primary);
     }
     .rc-icon-wrap { width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; position: relative; transition: 0.3s;}
     .rc-icon-wrap::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); border-top-color: transparent; animation: spin 4s linear infinite;}
     @keyframes spin { 100% { transform: rotate(360deg); } }
-    .rc-amount { font-size: 42px; font-weight: 900; color: #fff; letter-spacing: -1px; margin-bottom: 32px;}
+    .rc-amount { font-size: 44px; font-weight: 900; color: #fff; letter-spacing: -1px; margin-bottom: 32px;}
     .rc-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 0 -24px 24px; }
     .rc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; text-align: left;}
     .rc-row:last-child { margin-bottom: 0; }
     .rc-label { color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
     .rc-value { font-weight: 800; color: var(--text-main); font-size: 15px; max-width: 65%; word-break: break-word; text-align: right;}
-    .copy-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 4px 10px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 10px;}
+    .copy-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 10px; transition: 0.2s;}
+    .copy-btn:hover { background: var(--brand-primary); color: #000; border-color: var(--brand-primary);}
   </style>
 </head>
 <body>
@@ -74,85 +172,161 @@
     
     <!-- TOP HEADER -->
     <header class="top-header" id="main-header">
-        <div style="font-size: 20px; font-weight: 900; font-style: italic; color: #fff; display: flex; align-items: center; gap: 6px;"><i class="fas fa-dice" style="color:var(--brand-primary);"></i> XS<span style="color:var(--brand-primary);">MB</span></div>
-        <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 20px; padding: 4px 6px 4px 12px; display: flex; align-items: center; gap: 8px;">
-            <span id="topBalance" style="font-size: 14px; font-weight: 800; color: var(--brand-primary);">0 ₫</span>
-            <button onclick="navigate('add')" style="background: var(--brand-gradient); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-plus"></i></button>
+        <div style="font-size: 22px; font-weight: 900; font-style: italic; color: #fff; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-gem" style="color:var(--brand-primary); text-shadow: 0 0 10px rgba(245, 166, 35, 0.5);"></i> XS<span style="color:var(--brand-primary);">MB</span>
+        </div>
+        <div class="balance-badge">
+            <span id="topBalance" class="balance-text">0 ₫</span>
+            <button onclick="navigate('add')" class="btn-plus"><i class="fas fa-plus"></i></button>
         </div>
     </header>
 
-    <!-- TRANG CHỦ -->
-    <div id="view-home" class="page-view active" style="padding: 16px;">
-        <div style="font-weight: 900; text-transform: uppercase; margin: 10px 0 12px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">HỆ THỐNG ĐẶT CƯỢC XSMB</div>
-        <div style="background: var(--bg-surface); border-radius: 16px; padding: 24px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
-            <div style="position:absolute; top:0;left:0;width:100%;height:6px;background: var(--brand-gradient);"></div>
+    <!-- ================= TRANG CHỦ ================= -->
+    <div id="view-home" class="page-view active" style="padding: 20px;">
+        <div style="font-weight: 900; text-transform: uppercase; margin: 10px 0 16px; border-left: 4px solid var(--brand-primary); padding-left: 12px; font-size: 18px; letter-spacing: 0.5px;">HỆ THỐNG ĐẶT CƯỢC XSMB</div>
+        
+        <div class="glass-card" style="position: relative; overflow: hidden;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <span style="font-weight: 900; font-size: 20px;">Xổ Số Miền Bắc</span>
-                <span style="color: var(--brand-primary); font-weight: bold; font-family: monospace; font-size: 16px; background: rgba(245, 158, 11, 0.1); padding: 4px 12px; border-radius: 20px;"><i class="fas fa-clock"></i> 18:30 MỖI NGÀY</span>
+                <span style="font-weight: 900; font-size: 22px;">Xổ Số Miền Bắc</span>
+                <span style="color: var(--brand-primary); font-weight: 800; font-family: monospace; font-size: 16px; background: rgba(245, 166, 35, 0.1); padding: 6px 14px; border-radius: 30px; border: 1px solid rgba(245, 166, 35, 0.2);"><i class="fas fa-bolt"></i> 18:30 TỐI</span>
             </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 24px; justify-content: center;">
-                <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">6</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">6</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3b82f6 0%,#1d4ed8 100%);color:white;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;">8</div>
+            
+            <div style="display: flex; gap: 12px; margin-bottom: 30px; justify-content: center;">
+                <div class="ball">6</div><div class="ball">8</div><div class="ball">6</div><div class="ball">8</div><div class="ball">8</div>
             </div>
+            
             <button class="btn-submit" onclick="navigate('loto')">TIẾN HÀNH ĐẶT CƯỢC</button>
         </div>
-        <div style="text-align: center; margin-top: 30px; font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fas fa-shield-alt" style="color: var(--brand-primary); font-size: 20px; margin-bottom: 8px; display: block;"></i>Thanh toán tự động, an toàn tuyệt đối.</div>
+        
+        <div style="text-align: center; margin-top: 40px; font-size: 13px; color: var(--text-muted); font-weight: 600;">
+            <div style="width: 50px; height: 50px; background: rgba(245,166,35,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(--brand-primary); font-size: 24px;">
+                <i class="fas fa-shield-check"></i>
+            </div>
+            Thanh toán tự động, an toàn và bảo mật tuyệt đối.
+        </div>
     </div>
 
-    <!-- ĐẶT CƯỢC XSMB -->
+    <!-- ================= ĐẶT CƯỢC XSMB ================= -->
     <div id="view-loto" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('home')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">ĐẶT CƯỢC XSMB</div></div>
-        <div class="input-box"><label>Hình thức chơi</label>
+        <div style="display: flex; align-items: center; margin-bottom: 30px;">
+            <button class="btn-back" onclick="navigate('home')"><i class="fas fa-chevron-left"></i></button>
+            <div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px; letter-spacing: 1px;">ĐẶT CƯỢC XSMB</div>
+        </div>
+        
+        <div class="input-box">
+            <label>Hình thức chơi</label>
             <select id="loto-type" onchange="calcLoto()">
-                <optgroup label="Nhóm Lô"><option value="Lô 2 số" data-rate="99" data-cost="27">Lô 2 số (27 giải) - 1 ăn 99</option><option value="Lô 2 số 1k" data-rate="3.7" data-cost="27">Lô 2 số 1k (27 giải) - 1 ăn 3.7</option><option value="Lô 3 số" data-rate="980" data-cost="23">Lô 3 số (23 giải) - 1 ăn 980</option><option value="Lô 4 số" data-rate="8880" data-cost="20">Lô 4 số (20 giải) - 1 ăn 8880</option></optgroup>
-                <optgroup label="Nhóm Lô Xiên"><option value="Xiên 2" data-rate="16" data-cost="1" data-xien="2">Xiên 2 - 1 ăn 16</option><option value="Xiên 3" data-rate="65" data-cost="1" data-xien="3">Xiên 3 - 1 ăn 65</option><option value="Xiên 4" data-rate="222" data-cost="1" data-xien="4">Xiên 4 - 1 ăn 222</option></optgroup>
-                <optgroup label="Nhóm Đề"><option value="Đề đặc biệt" data-rate="99" data-cost="1">Đề Đặc Biệt - 1 ăn 99</option><option value="Đề giải nhất" data-rate="99" data-cost="1">Đề Giải Nhất - 1 ăn 99</option><option value="Đề giải 7" data-rate="99" data-cost="4">Đề Giải 7 (4 giải) - 1 ăn 99</option></optgroup>
-                <optgroup label="Nhóm Càng / Đầu Đuôi"><option value="3 Càng Đặc Biệt" data-rate="970" data-cost="1">3 Càng Đặc Biệt - 1 ăn 970</option><option value="4 Càng Đặc Biệt" data-rate="8870" data-cost="1">4 Càng Đặc Biệt - 1 ăn 8870</option><option value="Đầu" data-rate="9.5" data-cost="1">Đầu - 1 ăn 9.5</option><option value="Đuôi" data-rate="9.5" data-cost="1">Đuôi - 1 ăn 9.5</option></optgroup>
+                <optgroup label="Nhóm Lô">
+                    <option value="Lô 2 số" data-rate="99" data-cost="27">Lô 2 số (27 giải) - 1 ăn 99</option>
+                    <option value="Lô 2 số 1k" data-rate="3.7" data-cost="27">Lô 2 số 1k (27 giải) - 1 ăn 3.7</option>
+                    <option value="Lô 3 số" data-rate="980" data-cost="23">Lô 3 số (23 giải) - 1 ăn 980</option>
+                    <option value="Lô 4 số" data-rate="8880" data-cost="20">Lô 4 số (20 giải) - 1 ăn 8880</option>
+                </optgroup>
+                <optgroup label="Nhóm Lô Xiên">
+                    <option value="Xiên 2" data-rate="16" data-cost="1" data-xien="2">Xiên 2 - 1 ăn 16</option>
+                    <option value="Xiên 3" data-rate="65" data-cost="1" data-xien="3">Xiên 3 - 1 ăn 65</option>
+                    <option value="Xiên 4" data-rate="222" data-cost="1" data-xien="4">Xiên 4 - 1 ăn 222</option>
+                </optgroup>
+                <optgroup label="Nhóm Đề">
+                    <option value="Đề đặc biệt" data-rate="99" data-cost="1">Đề Đặc Biệt - 1 ăn 99</option>
+                    <option value="Đề giải nhất" data-rate="99" data-cost="1">Đề Giải Nhất - 1 ăn 99</option>
+                    <option value="Đề giải 7" data-rate="99" data-cost="4">Đề Giải 7 (4 giải) - 1 ăn 99</option>
+                </optgroup>
+                <optgroup label="Nhóm Càng / Đầu Đuôi">
+                    <option value="3 Càng Đặc Biệt" data-rate="970" data-cost="1">3 Càng Đặc Biệt - 1 ăn 970</option>
+                    <option value="4 Càng Đặc Biệt" data-rate="8870" data-cost="1">4 Càng Đặc Biệt - 1 ăn 8870</option>
+                    <option value="Đầu" data-rate="9.5" data-cost="1">Đầu - 1 ăn 9.5</option>
+                    <option value="Đuôi" data-rate="9.5" data-cost="1">Đuôi - 1 ăn 9.5</option>
+                </optgroup>
             </select>
         </div>
-        <div id="loto-hint" style="font-size: 13px; color: var(--text-muted); margin: -12px 0 20px 4px; font-weight: 600;"></div>
-        <div class="input-box"><label>Số cược (Cách nhau dấu phẩy)</label><input type="text" id="loto-nums" placeholder="VD: 68, 86, 99" oninput="calcLoto()"></div>
-        <div class="input-box"><label>Tiền cược (Mỗi số)</label><input type="text" id="loto-amount" inputmode="numeric" placeholder="0" oninput="formatInput(this); calcLoto();" style="font-size:32px; color:var(--brand-primary);"></div>
-        <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid var(--brand-primary); padding: 16px; border-radius: 16px; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="color: var(--text-muted); font-size: 14px;">Tổng thanh toán:</span><span style="font-weight: 900; font-size: 16px;" id="loto-total">0 ₫</span></div>
-            <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-muted); font-size: 14px;">Thắng dự kiến:</span><span style="font-weight: 900; color: var(--brand-primary); font-size: 16px;" id="loto-win">0 ₫</span></div>
+        
+        <div id="loto-hint" style="font-size: 13px; color: var(--brand-primary); margin: -10px 0 24px 4px; font-weight: 700;"></div>
+        
+        <div class="input-box">
+            <label>Số cược (Cách nhau dấu phẩy)</label>
+            <input type="text" id="loto-nums" placeholder="VD: 68, 86, 99" oninput="calcLoto()">
         </div>
+        
+        <div class="input-box">
+            <label>Tiền cược (Mỗi số)</label>
+            <input type="text" id="loto-amount" inputmode="numeric" placeholder="0" oninput="formatInput(this); calcLoto();" style="font-size:36px; color:var(--brand-primary);">
+        </div>
+        
+        <div style="background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.3); padding: 20px; border-radius: 16px; margin-bottom: 24px; backdrop-filter: blur(10px);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                <span style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Tổng thanh toán:</span>
+                <span style="font-weight: 900; font-size: 18px; color: #fff;" id="loto-total">0 ₫</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Thắng dự kiến:</span>
+                <span style="font-weight: 900; color: var(--brand-primary); font-size: 18px;" id="loto-win">0 ₫</span>
+            </div>
+        </div>
+        
         <button class="btn-submit" id="btn-loto" onclick="submitLoto()">XÁC NHẬN CƯỢC</button>
         <div class="sys-msg" id="msg-loto"></div>
     </div>
 
-    <!-- CỦA TÔI (PROFILE) -->
+     <!-- ================= CỦA TÔI (PROFILE) ================= -->
     <div id="view-profile" class="page-view">
-        <div style="padding: 40px 20px 24px; text-align: center; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
-            <div id="displayEmail" style="font-size: 18px; font-weight: 900; margin-bottom: 12px;"></div>
-            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">TỔNG SỐ DƯ (VND)</div>
-            <div id="displayBalanceBig" style="font-size: 40px; font-weight: 900; color: var(--brand-primary); text-shadow: 0 0 20px rgba(245, 158, 11, 0.4);">0</div>
+        <div style="padding: 40px 20px 30px; text-align: center; border-bottom: 1px solid var(--border-color); background: rgba(17,24,39,0.4);">
+            <div id="displayEmail" style="font-size: 18px; font-weight: 900; margin-bottom: 16px; letter-spacing: 0.5px;"></div>
+            <div style="font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 2px;">TỔNG SỐ DƯ (VND)</div>
+            <div id="displayBalanceBig" style="font-size: 46px; font-weight: 900; color: var(--brand-primary); text-shadow: 0 0 30px rgba(245, 166, 35, 0.5);">0</div>
         </div>
+        
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 24px 20px;">
-            <div onclick="navigate('add')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-wallet" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Nạp Tiền</div>
-            <div onclick="navigate('withdraw')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-hand-holding-usd" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Rút Tiền</div>
-            <div onclick="navigate('bank')" style="background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 10px;border-radius:16px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-university" style="font-size:26px;color:var(--brand-primary);display:block;margin-bottom:10px;"></i>Ngân Hàng</div>
+            <div onclick="navigate('add')" style="background:var(--bg-surface); border:1px solid var(--border-color); padding:20px 10px; border-radius:20px; text-align:center; font-weight:800; font-size:13px; cursor:pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                <i class="fas fa-wallet" style="font-size:28px; color:var(--brand-primary); display:block; margin-bottom:12px; filter: drop-shadow(0 0 8px rgba(245,166,35,0.4));"></i>Nạp Tiền
+            </div>
+            <div onclick="navigate('withdraw')" style="background:var(--bg-surface); border:1px solid var(--border-color); padding:20px 10px; border-radius:20px; text-align:center; font-weight:800; font-size:13px; cursor:pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                <i class="fas fa-hand-holding-usd" style="font-size:28px; color:var(--brand-primary); display:block; margin-bottom:12px; filter: drop-shadow(0 0 8px rgba(245,166,35,0.4));"></i>Rút Tiền
+            </div>
+            <div onclick="navigate('bank')" style="background:var(--bg-surface); border:1px solid var(--border-color); padding:20px 10px; border-radius:20px; text-align:center; font-weight:800; font-size:13px; cursor:pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                <i class="fas fa-university" style="font-size:28px; color:var(--brand-primary); display:block; margin-bottom:12px; filter: drop-shadow(0 0 8px rgba(245,166,35,0.4));"></i>Ngân Hàng
+            </div>
         </div>
+        
         <div style="padding: 0 20px;">
-            <div style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">QUẢN LÝ LỊCH SỬ</div>
-            <div onclick="navigate('history-deposit')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(52,211,153,0.1);color:#34d399;"><i class="fas fa-arrow-down"></i></div><div style="flex: 1;">Lịch sử Nạp Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
-            <div onclick="navigate('history-withdraw')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(248,113,113,0.1);color:#f87171;"><i class="fas fa-arrow-up"></i></div><div style="flex: 1;">Lịch sử Rút Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
-            <div onclick="navigate('history-bet')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(245,158,11,0.1);color:#f59e0b;"><i class="fas fa-dice"></i></div><div style="flex: 1;">Lịch sử Đặt Cược</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
-            <div onclick="navigate('pwd')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:16px 20px;border-radius:16px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;"><div style="width:44px;height:44px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(255,255,255,0.1);color:#fff;"><i class="fas fa-lock"></i></div><div style="flex: 1;">Đổi mật khẩu</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i></div>
-            <button class="btn-submit" style="background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); margin-top: 24px; box-shadow: none;" onclick="confirmLogout()"><i class="fas fa-power-off"></i> ĐĂNG XUẤT TÀI KHOẢN</button>
+            <div style="font-weight: 900; text-transform: uppercase; margin: 10px 0 16px; border-left: 4px solid var(--brand-primary); padding-left: 12px; font-size: 16px;">QUẢN LÝ TÀI KHOẢN</div>
+            
+            <div onclick="navigate('history-deposit')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:18px 20px;border-radius:20px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;">
+                <div style="width:48px;height:48px;border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(16,185,129,0.1);color:#10b981;"><i class="fas fa-arrow-down"></i></div>
+                <div style="flex: 1;">Lịch sử Nạp Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+            </div>
+            <div onclick="navigate('history-withdraw')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:18px 20px;border-radius:20px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;">
+                <div style="width:48px;height:48px;border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(239,68,68,0.1);color:#ef4444;"><i class="fas fa-arrow-up"></i></div>
+                <div style="flex: 1;">Lịch sử Rút Tiền</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+            </div>
+            <div onclick="navigate('history-bet')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:18px 20px;border-radius:20px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;">
+                <div style="width:48px;height:48px;border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(245,166,35,0.1);color:var(--brand-primary);"><i class="fas fa-dice"></i></div>
+                <div style="flex: 1;">Lịch sử Đặt Cược</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+            </div>
+            <div onclick="navigate('pwd')" style="display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-color);padding:18px 20px;border-radius:20px;font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer;">
+                <div style="width:48px;height:48px;border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:20px;margin-right:16px;background:rgba(255,255,255,0.08);color:#fff;"><i class="fas fa-lock"></i></div>
+                <div style="flex: 1;">Đổi mật khẩu</div><i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+            </div>
+            
+            <button style="width:100%; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 18px; border-radius: 16px; font-weight: 900; font-size: 15px; margin-top: 24px; cursor: pointer;" onclick="confirmLogout()">
+                <i class="fas fa-power-off"></i> ĐĂNG XUẤT TÀI KHOẢN
+            </button>
         </div>
     </div>
 
+    <!-- ================= CÁC FORM PHỤ ================= -->
+    
     <!-- NẠP TIỀN -->
     <div id="view-add" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">NẠP TIỀN</div></div>
-        <div class="input-box"><label>Số tiền nạp (VND)</label><input type="text" id="amount-add" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:32px; color:var(--brand-primary);"></div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px;">
-            <button onclick="setAmount('amount-add', 50000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">50K</button>
-            <button onclick="setAmount('amount-add', 100000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">100K</button>
-            <button onclick="setAmount('amount-add', 200000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">200K</button>
-            <button onclick="setAmount('amount-add', 500000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">500K</button>
-            <button onclick="setAmount('amount-add', 1000000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">1 TRIỆU</button>
-            <button onclick="setAmount('amount-add', 5000000)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-color);padding:12px 0;border-radius:12px;font-weight:700;color:var(--text-muted);cursor:pointer;">5 TRIỆU</button>
+        <div style="display: flex; align-items: center; margin-bottom: 30px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">NẠP TIỀN</div></div>
+        <div class="input-box"><label>Số tiền nạp (VND)</label><input type="text" id="amount-add" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:36px; color:var(--brand-primary);"></div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px;">
+            <button onclick="setAmount('amount-add', 50000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">50K</button>
+            <button onclick="setAmount('amount-add', 100000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">100K</button>
+            <button onclick="setAmount('amount-add', 200000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">200K</button>
+            <button onclick="setAmount('amount-add', 500000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">500K</button>
+            <button onclick="setAmount('amount-add', 1000000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">1 TRIỆU</button>
+            <button onclick="setAmount('amount-add', 5000000)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:14px 0;border-radius:12px;font-weight:800;color:var(--text-main);cursor:pointer;">5 TRIỆU</button>
         </div>
         <button class="btn-submit" id="btn-add" onclick="submitDeposit()">TẠO LỆNH NẠP</button>
         <div class="sys-msg" id="msg-add"></div>
@@ -160,57 +334,55 @@
 
     <!-- RÚT TIỀN -->
     <div id="view-withdraw" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">RÚT TIỀN</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 30px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">RÚT TIỀN</div></div>
         <div class="input-box"><label>Ngân hàng nhận tiền</label><select id="wd-bank"><option value="">Vui lòng thêm ngân hàng trước</option></select></div>
-        <div class="input-box"><label>Số tiền rút (VND)</label><input type="text" id="amount-wd" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:32px; color:var(--brand-primary);"></div>
+        <div class="input-box"><label>Số tiền rút (VND)</label><input type="text" id="amount-wd" inputmode="numeric" placeholder="0" oninput="formatInput(this)" style="font-size:36px; color:var(--brand-primary);"></div>
         <button class="btn-submit" id="btn-wd" onclick="submitWithdraw()">TẠO LỆNH RÚT</button>
         <div class="sys-msg" id="msg-wd"></div>
     </div>
 
     <!-- NGÂN HÀNG -->
     <div id="view-bank" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">NGÂN HÀNG</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 30px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">NGÂN HÀNG</div></div>
         <div id="bank-list-container"></div>
-        <div id="bank-form-section" style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px; margin-top: 10px; display: none;">
-            <div style="font-weight: 900; text-transform: uppercase; margin-bottom: 16px; border-left: 4px solid var(--brand-primary); padding-left: 10px;">CẬP NHẬT TÀI KHOẢN MỚI</div>
-            <div class="input-box"><label>Tên Ngân hàng</label><input type="text" id="bk-name" placeholder="VD: Vietcombank, MB Bank"></div>
+        <div id="bank-form-section" style="display: none; margin-top: 20px;">
+            <div style="font-weight: 900; text-transform: uppercase; margin-bottom: 16px; border-left: 4px solid var(--brand-primary); padding-left: 12px;">CẬP NHẬT TÀI KHOẢN MỚI</div>
+            <div class="input-box"><label>Tên Ngân hàng</label><input type="text" id="bk-name" placeholder="VD: Vietcombank"></div>
             <div class="input-box"><label>Số tài khoản</label><input type="text" id="bk-acc" placeholder="Nhập số tài khoản"></div>
             <div class="input-box"><label>Tên Chủ Tài Khoản</label><input type="text" id="bk-owner" placeholder="NGUYEN VAN A" style="text-transform: uppercase;"></div>
             <div class="input-box"><label>Chi nhánh</label><input type="text" id="bk-branch" placeholder="Hà Nội"></div>
-            <button class="btn-submit" id="btn-bank" onclick="submitBank()">CẬP NHẬT NGÂN HÀNG</button>
+            <button class="btn-submit" id="btn-bank" onclick="submitBank()">LƯU NGÂN HÀNG</button>
             <div class="sys-msg" id="msg-bank"></div>
         </div>
     </div>
 
-    <!-- ĐỔI MẬT KHẨU -->
+    <!-- ĐỔI MK -->
     <div id="view-pwd" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">ĐỔI MẬT KHẨU</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 30px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">ĐỔI MẬT KHẨU</div></div>
         <div class="input-box"><label>Mật khẩu hiện tại</label><input type="password" id="old-pwd" placeholder="Nhập mật khẩu đang sử dụng"></div>
         <div class="input-box"><label>Mật khẩu mới</label><input type="password" id="new-pwd" placeholder="Nhập ít nhất 6 ký tự"></div>
         <div class="input-box"><label>Xác nhận mật khẩu mới</label><input type="password" id="confirm-pwd" placeholder="Nhập lại mật khẩu mới"></div>
-        <button class="btn-submit" id="pwdBtn" onclick="changePassword()">CẬP NHẬT MẬT KHẨU</button>
+        <button class="btn-submit" id="pwdBtn" onclick="changePassword()">CẬP NHẬT</button>
         <div class="sys-msg" id="pwd-msg"></div>
     </div>
 
-    <!-- LỊCH SỬ NẠP TIỀN -->
+    <!-- 3 TRANG LỊCH SỬ -->
     <div id="view-history-deposit" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ NẠP TIỀN</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">LỊCH SỬ NẠP TIỀN</div></div>
         <div id="historyList-deposit"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
     </div>
 
-    <!-- LỊCH SỬ RÚT TIỀN -->
     <div id="view-history-withdraw" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ RÚT TIỀN</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">LỊCH SỬ RÚT TIỀN</div></div>
         <div id="historyList-withdraw"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
     </div>
 
-    <!-- LỊCH SỬ ĐẶT CƯỢC -->
     <div id="view-history-bet" class="page-view" style="padding: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 40px;">LỊCH SỬ ĐẶT CƯỢC</div></div>
+        <div style="display: flex; align-items: center; margin-bottom: 24px;"><button class="btn-back" onclick="navigate('profile')"><i class="fas fa-chevron-left"></i></button><div style="font-size: 20px; font-weight: 900; flex: 1; text-align: center; padding-right: 44px;">LỊCH SỬ ĐẶT CƯỢC</div></div>
         <div id="historyList-bet"><div style="text-align: center; color: var(--text-muted); padding: 40px;">Đang tải...</div></div>
     </div>
 
-    <!-- CHI TIẾT GIAO DỊCH (GLASSMORPHISM PANEL) -->
+    <!-- ================= CHI TIẾT GIAO DỊCH VIP ================= -->
     <div id="view-detail" class="page-view" style="padding: 20px; align-items: center;">
         <div style="width: 100%; display: flex; justify-content: flex-start; margin-bottom: 10px;">
             <button class="btn-back" onclick="navigate('profile')" style="border: none; background: rgba(255,255,255,0.1);"><i class="fas fa-times"></i></button>
@@ -218,7 +390,7 @@
         
         <div class="receipt-panel">
             <div id="rc-icon-wrapper" class="rc-icon-wrap"></div>
-            <div id="rc-title-status" style="font-size: 16px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">...</div>
+            <div id="rc-title-status" style="font-size: 16px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">...</div>
             <div id="rc-amount-row" class="rc-amount">0 ₫</div>
             
             <div class="rc-divider"></div>
@@ -243,13 +415,13 @@
                 <span class="rc-value" id="rc-time" style="font-weight: 600; font-size: 13px;">...</span>
             </div>
             
-            <div style="text-align:center; font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 32px; font-weight: 800; letter-spacing: 1px;">
+            <div style="text-align:center; font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 32px; font-weight: 800; letter-spacing: 1px;">
                 <i class="fas fa-shield-alt" style="margin-right: 4px;"></i> XÁC NHẬN BỞI HỆ THỐNG
             </div>
         </div>
     </div>
 
-    <!-- BOTTOM NAV -->
+    <!-- BOTTOM NAV NỔI -->
     <nav class="bottom-nav" id="main-nav">
         <button class="nav-item active" id="nav-home" onclick="navigate('home')"><i class="fas fa-home"></i><span>Trang chủ</span></button>
         <button class="nav-item" id="nav-loto" onclick="navigate('loto')"><i class="fas fa-bowling-ball"></i><span>Đặt cược</span></button>
@@ -261,7 +433,7 @@
   </div>
 
   <script>
-    // ================= URL API GOOGLE SCRIPT =================
+// ================= URL API GOOGLE SCRIPT =================
     const API_URL = "https://script.google.com/macros/s/AKfycbzrZ9KEhDa0GD_aahb-2BbTGi8e46NZwYz-xRs5KBl_WVnSRuyn1aWuVKjziwvwgDvK7Q/exec";
     
     let userBalance = 0; let userBanks = []; let userHistoryArray = []; let isFetching = false;
@@ -282,21 +454,18 @@
         if(viewId === 'detail') {
             document.getElementById('main-header').style.display = 'none';
             document.getElementById('main-nav').style.display = 'none';
-            document.body.style.backgroundImage = 'none';
-            document.querySelector('.app-container').style.background = '#05080f';
-            document.querySelector('.app-container').style.backgroundImage = 'radial-gradient(circle at 50% -20%, rgba(245, 158, 11, 0.15), transparent 70%)';
+            document.querySelector('.app-container').style.paddingBottom = '20px';
         } else {
             document.getElementById('main-header').style.display = 'flex';
             document.getElementById('main-nav').style.display = 'flex';
-            document.body.style.backgroundImage = 'none';
-            document.querySelector('.app-container').style.background = 'var(--bg-body)';
-            document.querySelector('.app-container').style.backgroundImage = 'radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08), transparent 50%)';
+            document.querySelector('.app-container').style.paddingBottom = '100px';
         }
 
         document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
         document.getElementById('view-' + viewId).classList.add('active');
         document.querySelectorAll('.sys-msg').forEach(m => m.innerText = '');
         window.scrollTo(0,0);
+        
         if(viewId === 'loto') calcLoto();
         if(viewId === 'history-deposit') renderHistoryByType('Nạp tiền', 'historyList-deposit');
         if(viewId === 'history-withdraw') renderHistoryByType('Rút tiền', 'historyList-withdraw');
@@ -340,21 +509,21 @@
             else if(rawSt.includes("từ chối") || rawSt.includes("hủy") || rawSt.includes("thất bại") || rawSt.includes("trượt")) stClass = "failed";
 
             let icon = "fa-exchange-alt", color = "var(--text-muted)";
-            if(item.type === "Nạp tiền") { icon = "fa-arrow-down"; color = "#34d399"; }
-            if(item.type === "Rút tiền") { icon = "fa-arrow-up"; color = "#f87171"; }
-            if(item.type === "Đặt cược") { icon = "fa-dice"; color = "#f59e0b"; }
+            if(item.type === "Nạp tiền") { icon = "fa-arrow-down"; color = "#10b981"; }
+            if(item.type === "Rút tiền") { icon = "fa-arrow-up"; color = "#ef4444"; }
+            if(item.type === "Đặt cược") { icon = "fa-dice"; color = "var(--brand-primary)"; }
             let displayId = item.id; if(!displayId.match(/(TXN|IN|OUT|BET)/)) displayId = "#" + displayId;
 
             container.innerHTML += `
-            <div style="background: rgba(255,255,255,0.02); border-radius: 16px; padding: 16px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 16px;" onclick="openDetail('${item.id}')">
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <span style="color: ${color}; font-weight: 800; font-size: 14px;"><i class="fas ${icon}"></i> ${item.type}</span>
+            <div style="background: rgba(255,255,255,0.02); border-radius: 16px; padding: 16px 20px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 16px; transition:0.2s;" onclick="openDetail('${item.id}')" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <span style="color: ${color}; font-weight: 900; font-size: 14px; text-transform:uppercase; letter-spacing:0.5px;"><i class="fas ${icon}"></i> ${item.type}</span>
                     <span style="font-size: 11px; color: var(--text-muted);">${displayId} | ${item.time}</span>
-                    <span style="font-weight:bold; color: #fff; font-size: 13px;">${item.detail}</span>
+                    <span style="font-weight:bold; color: #fff; font-size: 14px;">${item.detail}</span>
                 </div>
-                <div style="text-align: right; display: flex; flex-direction: column; gap: 6px;">
-                    <span style="font-weight: 900; font-size: 16px; color: var(--text-main);">${amountFmt} ₫</span>
-                    <span style="font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; display:inline-block; margin-left:auto; background:var(--status-${stClass}-bg); color:var(--status-${stClass}-text); border:1px solid rgba(255,255,255,0.1)">${stText}</span>
+                <div style="text-align: right; display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-weight: 900; font-size: 17px; color: var(--text-main);">${amountFmt} ₫</span>
+                    <span style="font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 8px; display:inline-block; margin-left:auto; background:var(--status-${stClass}-bg); color:var(--status-${stClass}-text); border:1px solid rgba(255,255,255,0.1)">${stText}</span>
                 </div>
             </div>`;
         });
@@ -369,18 +538,18 @@
         
         const titleEl = document.getElementById("rc-title-status"); const iconWrap = document.getElementById("rc-icon-wrapper");
         let rawSt = tx.status ? tx.status.toLowerCase() : ""; titleEl.innerText = tx.status || "Chờ xử lý";
-        // Thay đổi hiệu ứng Phát sáng (Glow) tùy trạng thái
+        
         if(rawSt.includes("thành công") || rawSt.includes("hoàn tất") || rawSt.includes("thắng") || rawSt.includes("trúng")) { 
-            titleEl.style.color = "#34d399"; iconWrap.style.background = "rgba(52, 211, 153, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(52, 211, 153, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-check" style="font-size:36px; color:#34d399; filter:drop-shadow(0 0 10px #34d399);"></i>'; 
-            document.styleSheets[0].insertRule('.receipt-panel::before { background: #34d399 !important; box-shadow: 0 0 20px #34d399 !important; }', document.styleSheets[0].cssRules.length);
+            titleEl.style.color = "#10b981"; iconWrap.style.background = "rgba(16, 185, 129, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(16, 185, 129, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-check" style="font-size:36px; color:#10b981; filter:drop-shadow(0 0 10px #10b981);"></i>'; 
+            document.styleSheets[1].insertRule('.receipt-panel::before { background: #10b981 !important; box-shadow: 0 0 20px #10b981 !important; }', document.styleSheets[1].cssRules.length);
         } 
         else if (rawSt.includes("từ chối") || rawSt.includes("hủy") || rawSt.includes("thất bại") || rawSt.includes("trượt")) { 
-            titleEl.style.color = "#f87171"; iconWrap.style.background = "rgba(248, 113, 113, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(248, 113, 113, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-times" style="font-size:36px; color:#f87171; filter:drop-shadow(0 0 10px #f87171);"></i>'; 
-            document.styleSheets[0].insertRule('.receipt-panel::before { background: #f87171 !important; box-shadow: 0 0 20px #f87171 !important; }', document.styleSheets[0].cssRules.length);
+            titleEl.style.color = "#ef4444"; iconWrap.style.background = "rgba(239, 68, 68, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(239, 68, 68, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-times" style="font-size:36px; color:#ef4444; filter:drop-shadow(0 0 10px #ef4444);"></i>'; 
+            document.styleSheets[1].insertRule('.receipt-panel::before { background: #ef4444 !important; box-shadow: 0 0 20px #ef4444 !important; }', document.styleSheets[1].cssRules.length);
         } 
         else { 
-            titleEl.style.color = "#fbbf24"; iconWrap.style.background = "rgba(251, 191, 36, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(251, 191, 36, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-clock" style="font-size:36px; color:#fbbf24; filter:drop-shadow(0 0 10px #fbbf24);"></i>'; 
-            document.styleSheets[0].insertRule('.receipt-panel::before { background: #fbbf24 !important; box-shadow: 0 0 20px #fbbf24 !important; }', document.styleSheets[0].cssRules.length);
+            titleEl.style.color = "var(--brand-primary)"; iconWrap.style.background = "rgba(245, 166, 35, 0.1)"; iconWrap.style.boxShadow = "0 0 40px rgba(245, 166, 35, 0.5)"; iconWrap.innerHTML = '<i class="fas fa-clock" style="font-size:36px; color:var(--brand-primary); filter:drop-shadow(0 0 10px var(--brand-primary));"></i>'; 
+            document.styleSheets[1].insertRule('.receipt-panel::before { background: var(--brand-primary) !important; box-shadow: 0 0 20px var(--brand-primary) !important; }', document.styleSheets[1].cssRules.length);
         }
         navigate('detail');
     }
@@ -389,7 +558,14 @@
         const container = document.getElementById("bank-list-container"); const formSection = document.getElementById("bank-form-section");
         if(userBanks.length > 0) {
             let bk = userBanks[0];
-            container.innerHTML = `<div style="background:var(--bg-surface); border:1px solid var(--brand-primary); padding:16px; border-radius:16px; margin-bottom:16px; border-left: 4px solid var(--brand-primary);"><div style="font-size:16px; font-weight:900; color:var(--brand-primary); margin-bottom:4px;">${bk.bankName}</div><div style="font-family:monospace; font-size:16px; font-weight:bold; color:white;">${bk.accountNumber} - ${bk.accountName}</div><div style="margin-top:12px; font-size:12px; color:#fbbf24;">* Mỗi tài khoản chỉ được liên kết 1 ngân hàng.</div><button onclick="document.getElementById('bank-form-section').style.display='block'" style="margin-top:12px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:8px 12px; border-radius:8px; color:white; cursor:pointer; font-weight:bold; width:100%;">THAY ĐỔI</button></div>`;
+            container.innerHTML = `
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); padding:20px; border-radius:20px; margin-bottom:16px; border-left: 4px solid var(--brand-primary); box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                <div style="font-size:18px; font-weight:900; color:var(--brand-primary); margin-bottom:8px;">${bk.bankName}</div>
+                <div style="font-family:monospace; font-size:18px; font-weight:bold; color:white; letter-spacing: 1px;">${bk.accountNumber}</div>
+                <div style="font-size:14px; font-weight:bold; color:white; margin-top: 4px;">${bk.accountName}</div>
+                <div style="margin-top:16px; font-size:12px; color:var(--text-muted); font-weight: 600;"><i class="fas fa-info-circle"></i> Mỗi tài khoản chỉ liên kết 1 ngân hàng.</div>
+                <button onclick="document.getElementById('bank-form-section').style.display='block'" style="margin-top:16px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:12px; color:white; cursor:pointer; font-weight:800; width:100%; transition: 0.3s;">THAY ĐỔI NGÂN HÀNG</button>
+            </div>`;
             formSection.style.display = "none";
         } else { 
             container.innerHTML = '<div style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Bạn chưa có ngân hàng.</div>'; formSection.style.display = "block"; 
@@ -404,40 +580,40 @@
 
     async function submitDeposit() {
         let amountStr = document.getElementById('amount-add').value.replace(/\D/g, ''); let amount = parseInt(amountStr); let msgBox = document.getElementById('msg-add');
-        if(!amountStr || amount < 2000) return (msgBox.style.color="#f87171", msgBox.innerText="Nạp tối thiểu 2.000đ!");
+        if(!amountStr || amount < 2000) return (msgBox.style.color="#ef4444", msgBox.innerText="Nạp tối thiểu 2.000đ!");
         let content = "MB" + Math.floor(100000 + Math.random() * 900000); document.getElementById('btn-add').innerText = 'ĐANG XỬ LÝ...'; document.getElementById('btn-add').disabled = true;
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "create_payment", email: localStorage.getItem("userEmail"), userId: localStorage.getItem("userId"), amount: amount, content: content }) });
             const result = await res.json();
             if(result.status === "success") { showToast("Thành công!"); document.getElementById('amount-add').value=''; setTimeout(()=>navigate('history-deposit'), 1000); loadAppData(); } 
-            else { msgBox.style.color="#f87171"; msgBox.innerText=result.message; }
-        } catch(e) { msgBox.style.color="#f87171"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-add').innerText='TẠO LỆNH NẠP'; document.getElementById('btn-add').disabled = false; }
+            else { msgBox.style.color="#ef4444"; msgBox.innerText=result.message; }
+        } catch(e) { msgBox.style.color="#ef4444"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-add').innerText='TẠO LỆNH NẠP'; document.getElementById('btn-add').disabled = false; }
     }
 
     async function submitWithdraw() {
         let amountStr = document.getElementById('amount-wd').value.replace(/\D/g, ''); let amount = parseInt(amountStr); let bankIdx = document.getElementById('wd-bank').value; let msgBox = document.getElementById('msg-wd');
-        if(userBanks.length === 0 || bankIdx === "") return (msgBox.style.color="#f87171", msgBox.innerText="Vui lòng thêm ngân hàng!");
-        if(!amountStr || amount < 100000) return (msgBox.style.color="#f87171", msgBox.innerText="Rút tối thiểu 100.000đ!");
-        if(amount > userBalance) return (msgBox.style.color="#f87171", msgBox.innerText="Số dư không đủ!");
+        if(userBanks.length === 0 || bankIdx === "") return (msgBox.style.color="#ef4444", msgBox.innerText="Vui lòng thêm ngân hàng!");
+        if(!amountStr || amount < 100000) return (msgBox.style.color="#ef4444", msgBox.innerText="Rút tối thiểu 100.000đ!");
+        if(amount > userBalance) return (msgBox.style.color="#ef4444", msgBox.innerText="Số dư không đủ!");
         let selectedBank = userBanks[bankIdx]; document.getElementById('btn-wd').innerText = 'ĐANG XỬ LÝ...'; document.getElementById('btn-wd').disabled = true;
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "create_withdraw", email: localStorage.getItem("userEmail"), userId: localStorage.getItem("userId"), amount: amount, bankName: selectedBank.bankName, accountNumber: selectedBank.accountNumber, accountName: selectedBank.accountName, content: "Rút tiền" }) });
             const result = await res.json();
             if(result.status === "success") { showToast("Thành công!"); document.getElementById('amount-wd').value=''; setTimeout(()=>navigate('history-withdraw'), 1000); loadAppData(); } 
-            else { msgBox.style.color="#f87171"; msgBox.innerText=result.message; }
-        } catch(e) { msgBox.style.color="#f87171"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-wd').innerText='TẠO LỆNH RÚT'; document.getElementById('btn-wd').disabled = false; }
+            else { msgBox.style.color="#ef4444"; msgBox.innerText=result.message; }
+        } catch(e) { msgBox.style.color="#ef4444"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-wd').innerText='TẠO LỆNH RÚT'; document.getElementById('btn-wd').disabled = false; }
     }
 
     async function submitBank() {
         let name = document.getElementById('bk-name').value.trim(); let acc = document.getElementById('bk-acc').value.trim(); let owner = document.getElementById('bk-owner').value.trim().toUpperCase(); let branch = document.getElementById('bk-branch').value.trim(); let msgBox = document.getElementById('msg-bank');
-        if(!name || !acc || !owner) return (msgBox.style.color="#f87171", msgBox.innerText="Nhập đủ Tên NH, STK và Tên Chủ TK!");
+        if(!name || !acc || !owner) return (msgBox.style.color="#ef4444", msgBox.innerText="Nhập đủ Tên NH, STK và Tên Chủ TK!");
         document.getElementById('btn-bank').innerText = 'ĐANG XỬ LÝ...'; document.getElementById('btn-bank').disabled = true;
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "add_bank", email: localStorage.getItem("userEmail"), userId: localStorage.getItem("userId"), bankName: name, bin: "", accountNumber: acc, accountName: owner, branch: branch }) });
             const result = await res.json();
             if(result.status === "success") { showToast("Cập nhật thành công!"); setTimeout(()=>navigate('profile'), 1000); loadAppData(); } 
-            else { msgBox.style.color="#f87171"; msgBox.innerText=result.message; }
-        } catch(e) { msgBox.style.color="#f87171"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-bank').innerText='CẬP NHẬT NGÂN HÀNG'; document.getElementById('btn-bank').disabled = false; }
+            else { msgBox.style.color="#ef4444"; msgBox.innerText=result.message; }
+        } catch(e) { msgBox.style.color="#ef4444"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-bank').innerText='LƯU NGÂN HÀNG'; document.getElementById('btn-bank').disabled = false; }
     }
 
     function calcLoto() {
@@ -463,33 +639,33 @@
         let rate = parseFloat(opt.getAttribute("data-rate")); let cost = parseInt(opt.getAttribute("data-cost")); let xien = opt.getAttribute("data-xien");
         let count = nums.split(',').filter(s => s.trim() !== "").length;
 
-        if(!nums || count === 0) return (msgBox.style.color="#f87171", msgBox.innerText="Vui lòng nhập số!");
-        if (xien && count !== parseInt(xien)) return (msgBox.style.color="#f87171", msgBox.innerText=`Lô Xiên ${xien} bắt buộc nhập ${xien} số!`);
-        if(amount < 1000) return (msgBox.style.color="#f87171", msgBox.innerText="Cược tối thiểu 1.000đ!");
+        if(!nums || count === 0) return (msgBox.style.color="#ef4444", msgBox.innerText="Vui lòng nhập số!");
+        if (xien && count !== parseInt(xien)) return (msgBox.style.color="#ef4444", msgBox.innerText=`Lô Xiên ${xien} bắt buộc nhập ${xien} số!`);
+        if(amount < 1000) return (msgBox.style.color="#ef4444", msgBox.innerText="Cược tối thiểu 1.000đ!");
         let totalPay = xien ? amount : (amount * cost * count);
-        if(totalPay > userBalance) return (msgBox.style.color="#f87171", msgBox.innerText=`Số dư không đủ! (Cần ${new Intl.NumberFormat('vi-VN').format(totalPay)}đ)`);
+        if(totalPay > userBalance) return (msgBox.style.color="#ef4444", msgBox.innerText=`Số dư không đủ! (Cần ${new Intl.NumberFormat('vi-VN').format(totalPay)}đ)`);
 
         document.getElementById('btn-loto').innerText = 'ĐANG CHỐT ĐƠN...'; document.getElementById('btn-loto').disabled = true;
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "place_bet", email: localStorage.getItem("userEmail"), userId: localStorage.getItem("userId"), gameType: opt.value, rate: xien?rate:(rate/cost), betNumbers: nums, amount: totalPay }) });
             const result = await res.json();
             if(result.status === "success") { showToast("Cược thành công!"); document.getElementById('loto-nums').value=''; document.getElementById('loto-amount').value=''; calcLoto(); setTimeout(()=>navigate('history-bet'), 1500); loadAppData(); } 
-            else { msgBox.style.color="#f87171"; msgBox.innerText=result.message; }
-        } catch(e) { msgBox.style.color="#f87171"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-loto').innerText='XÁC NHẬN CƯỢC'; document.getElementById('btn-loto').disabled = false; }
+            else { msgBox.style.color="#ef4444"; msgBox.innerText=result.message; }
+        } catch(e) { msgBox.style.color="#ef4444"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('btn-loto').innerText='XÁC NHẬN CƯỢC'; document.getElementById('btn-loto').disabled = false; }
     }
 
     async function changePassword() {
         const oldPwd = document.getElementById("old-pwd").value; const newPwd = document.getElementById("new-pwd").value; const confirmPwd = document.getElementById("confirm-pwd").value; const msgBox = document.getElementById("pwd-msg");
-        if(!oldPwd || !newPwd || !confirmPwd) return (msgBox.style.color="#f87171", msgBox.innerText="Nhập đủ thông tin!");
-        if(newPwd !== confirmPwd) return (msgBox.style.color="#f87171", msgBox.innerText="Mật khẩu không khớp!");
-        if(newPwd.length < 6) return (msgBox.style.color="#f87171", msgBox.innerText="Ít nhất 6 ký tự!");
+        if(!oldPwd || !newPwd || !confirmPwd) return (msgBox.style.color="#ef4444", msgBox.innerText="Nhập đủ thông tin!");
+        if(newPwd !== confirmPwd) return (msgBox.style.color="#ef4444", msgBox.innerText="Mật khẩu không khớp!");
+        if(newPwd.length < 6) return (msgBox.style.color="#ef4444", msgBox.innerText="Ít nhất 6 ký tự!");
         document.getElementById('pwdBtn').innerText = 'ĐANG XỬ LÝ...'; document.getElementById('pwdBtn').disabled = true;
         try {
             const res = await fetch(API_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "change_password", email: localStorage.getItem("userEmail"), userId: localStorage.getItem("userId"), oldPassword: oldPwd, newPassword: newPwd }) });
             const result = await res.json();
             if(result.status === "success") { showToast("Đổi thành công!"); setTimeout(()=>navigate('profile'), 1500); } 
-            else { msgBox.style.color="#f87171"; msgBox.innerText=result.message; }
-        } catch(e) { msgBox.style.color="#f87171"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('pwdBtn').innerText='CẬP NHẬT MẬT KHẨU'; document.getElementById('pwdBtn').disabled = false; }
+            else { msgBox.style.color="#ef4444"; msgBox.innerText=result.message; }
+        } catch(e) { msgBox.style.color="#ef4444"; msgBox.innerText="Lỗi kết nối!"; } finally { document.getElementById('pwdBtn').innerText='CẬP NHẬT MẬT KHẨU'; document.getElementById('pwdBtn').disabled = false; }
     }
   </script>
 </body>
